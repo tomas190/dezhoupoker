@@ -1,0 +1,12 @@
+{
+  "LogLevel": "debug",
+  "LogPath": "",
+  "WSAddr": "0.0.0.0:8888",
+  "HTTPPort": "1236",
+  "MaxConnNum": 20000,
+
+  "MongoDBAddr": "172.16.100.5:27017",
+  "MongoDBAuth": "",
+  "MongoDBUser": "rbdz",
+  "MongoDBPwd": "123456"
+}

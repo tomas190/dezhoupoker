@@ -1,0 +1,175 @@
+syntax = "proto3";
+
+package msg;
+
+// 消息ID
+enum MessageID {
+    MSG_Ping = 0;
+    MSG_Pong = 1;
+    MSG_MsgInfo_S2C = 2;
+    MSG_LoginInfo_C2S = 3;
+    MSG_LoginInfo_S2C = 4;
+}
+
+message Ping {
+}
+
+message Pong {
+    int64 serverTime = 1; // 服务器时间戳
+}
+
+message MsgInfo_S2C {
+    string msg = 1; // 普通消息
+    string error = 2; // 错误消息
+    string data = 3; // 消息参数
+}
+
+message Login_C2S {
+    string Id = 1;
+    string PassWord = 2;
+    string Token = 3;
+}
+
+message PlayerInfo {
+    string Id = 1;
+    string nickName = 2;
+    string headImg = 3;
+    double account = 4;
+}
+
+message Login_S2C {
+    PlayerInfo playerInfo = 1;
+}
+
+message Logout_C2S {
+}
+
+message Logout_S2C {
+}
+
+// 牌型
+enum CardSuit {
+    XXX_Card = 0;
+    HighCard = 1; // 高牌
+    OnePair = 2; // 一对
+    TwoPairs = 3; // 两对
+    ThreeKind = 4; // 三条
+    Straight = 5; // 顺子
+    Flush = 6; // 同花
+    FullHouse = 7; // 葫芦
+    FourKind = 8; // 四条
+    StraightFlush = 9; // 同花顺
+    RoyalFlush = 10; // 皇家同花顺
+}
+
+// 游戏阶段
+enum GameStep {
+    Waiting = 0; // 等待牌局开始
+    PreFlop = 1; // 翻牌前，看手牌,下盲注
+    Flop = 2; // 翻牌圈，牌桌上发3张公牌
+    Turn = 3; // 转牌圈，牌桌上发第4张公共牌
+    River = 4; // 河牌圈，牌桌上发第5张公共牌
+    ShowDown = 5; // 摊开底牌，开牌比大小
+}
+
+// 玩家操作状态
+enum ActionStatus {
+    WAITING = 0; // 尚未表态
+    RAISE = 1; // 加注
+    CALL = 2; // 跟牌
+    CHECK = 3; // 过牌
+    FOLD = 4; // 弃牌
+    SHOWDOWN = 5; // 摊牌
+}
+
+// 盲注类型
+enum BlindType {
+    No_Blind = 0; // 不是盲注
+    Small_Blind = 1; // 小盲注
+    Big_Blind = 2; // 大盲注
+}
+
+// 牌型数据
+message CardSuitData {
+    repeated int32 handCardKeys = 1; // 玩家手牌
+    repeated int32 publicCardKeys = 2; // 组成牌型的公牌
+    CardSuit suitPattern = 3; // 牌型
+}
+
+message PlayerData {
+    PlayerInfo playerInfo = 1;
+    int32 seatNum = 2; // 玩家座位号 (未入座给-1)
+    ActionStatus actionStatus = 3; // 玩家行动状态
+    double downBets = 4; // 玩家跟牌、加注最终下的的金额
+    repeated int32 handCards = 5; // 玩家手牌
+    CardSuitData cardSuitData = 6; // 玩家手牌和公牌能组成的牌型数据
+    double resultMoney = 7; // 本局结束结算的金额
+    BlindType blindType = 8; // 盲注类型
+    bool IsButton = 9; // 是否庄家
+    bool IsAllIn = 10; // 是否AllIn
+    bool IsWinner = 11; // 是否赢家
+}
+
+message RoomData {
+    string roomId = 1;
+    string cfgId = 2; // 房间设定
+    GameStep gameStep = 3; // 当前游戏阶段状态
+    double minRaise = 4; // 加注最小值（本轮水位）
+    int32 actionSeat = 5; // 当前正在行动的玩家座位号
+    double potMoney = 6; // 赌注池当前总共有多少钱
+    repeated int32 publicCards = 7; // 桌面公牌
+    repeated PlayerData playerData = 8; // 房间玩家数据
+}
+
+message QuickStart_C2S {
+    string cfgId = 1;
+}
+
+message EnterRoom_S2C {
+    RoomData roomData = 1;
+}
+
+message LeaveRoom_C2S {
+    string Id = 1;
+}
+
+message LeaveRoom_S2C {
+    PlayerInfo playerInfo = 1;
+}
+
+message SitDown_C2S {
+
+}
+
+message SitDown_S2C {
+    string Id = 1;
+}
+
+message StandUp_C2S {
+
+}
+
+message StandUp_S2C {
+    string Id = 1;
+}
+
+message PlayerAction_C2S {
+    double betAmount = 1;
+    ActionStatus action = 2;
+}
+
+message PlayerAction_S2C {
+    string Id = 1;
+    double account = 2;
+    double potMoney = 3; // 底池
+}
+
+// 阶段变更
+message GameStepChange_S2C {
+    RoomData roomData = 1;
+}
+
+// 游戏结算数据
+message GameResultData_S2C {
+    RoomData roomData = 1;
+}
