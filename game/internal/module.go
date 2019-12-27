@@ -8,6 +8,8 @@ import (
 var (
 	skeleton = base.NewSkeleton()
 	ChanRPC  = skeleton.ChanRPCServer
+
+	hall = NewHall()
 )
 
 type Module struct {
@@ -16,6 +18,9 @@ type Module struct {
 
 func (m *Module) OnInit() {
 	m.Skeleton = skeleton
+
+	// 初始连接数据库
+	InitMongoDB()
 }
 
 func (m *Module) OnDestroy() {

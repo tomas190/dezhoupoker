@@ -12,11 +12,17 @@ func init() {
 
 func rpcNewAgent(args []interface{}) {
 	a := args[0].(gate.Agent)
-	log.Debug("---------------新链接请求连接-----------------")
+	log.Debug("<-------------新链接请求连接--------------->")
 
+	p := &Player{}
+	p.ConnAgent = a
+	a.SetUserData(p)
 }
 
 func rpcCloseAgent(args []interface{}) {
 	a := args[0].(gate.Agent)
-	_ = a
+	p, ok := a.UserData().(*Player)
+	if ok && p.ConnAgent == a {
+		log.Debug("<-------------%v主动断开链接--------------->", p.Id)
+	}
 }

@@ -16,6 +16,11 @@ var Server struct {
 	MaxConnNum  int
 	ConsolePort int
 	ProfilePath string
+
+	MongoDBAddr string
+	MongoDBAuth string
+	MongoDBUser string
+	MongoDBPwd  string
 }
 
 func init() {

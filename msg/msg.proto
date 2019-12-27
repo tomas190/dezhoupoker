@@ -18,10 +18,20 @@ message Pong {
     int64 serverTime = 1; // 服务器时间戳
 }
 
-message MsgInfo_S2C {
-    string msg = 1; // 普通消息
-    string error = 2; // 错误消息
-    string data = 3; // 消息参数
+enum ErrorMsg {
+    SUCCESS = 0;
+
+    UserRepeatLogin = 101; // 重复链接登录
+    UserRemoteLogin = 102; // 重复用户登录
+
+    ChipsInsufficient = 103; // 玩家筹码不足
+    ChairAlreadyFull = 104; // 桌子位置已满
+    UserNotChangeTable = 105; // 玩家不能换桌
+}
+
+message Error_S2C {
+    ErrorMsg error = 1; // 错误消息
+    string data = 2; // 消息参数
 }
 
 message Login_C2S {
@@ -98,7 +108,7 @@ message CardSuitData {
 
 message PlayerData {
     PlayerInfo playerInfo = 1;
-    int32 seatNum = 2; // 玩家座位号 (未入座给-1)
+    int32 chair = 2; // 玩家座位号 (未入座给-1)
     ActionStatus actionStatus = 3; // 玩家行动状态
     double downBets = 4; // 玩家跟牌、加注最终下的的金额
     repeated int32 handCards = 5; // 玩家手牌
@@ -125,12 +135,15 @@ message QuickStart_C2S {
     string cfgId = 1;
 }
 
+message ChangeTable_C2S {
+
+}
+
 message EnterRoom_S2C {
     RoomData roomData = 1;
 }
 
 message LeaveRoom_C2S {
-    string Id = 1;
 }
 
 message LeaveRoom_S2C {
@@ -142,7 +155,7 @@ message SitDown_C2S {
 }
 
 message SitDown_S2C {
-    string Id = 1;
+    RoomData roomData = 1;
 }
 
 message StandUp_C2S {
@@ -150,7 +163,7 @@ message StandUp_C2S {
 }
 
 message StandUp_S2C {
-    string Id = 1;
+    RoomData roomData = 1;
 }
 
 message PlayerAction_C2S {
@@ -170,6 +183,6 @@ message GameStepChange_S2C {
 }
 
 // 游戏结算数据
-message GameResultData_S2C {
+message ResultGameData_S2C {
     RoomData roomData = 1;
 }
