@@ -6,9 +6,23 @@ package msg;
 enum MessageID {
     MSG_Ping = 0;
     MSG_Pong = 1;
-    MSG_MsgInfo_S2C = 2;
-    MSG_LoginInfo_C2S = 3;
-    MSG_LoginInfo_S2C = 4;
+    MSG_Error_S2C = 2;
+    MSG_Login_C2S = 3;
+    MSG_Login_S2C = 4;
+    MSG_Logout_C2S = 5;
+    MSG_Logout_S2C = 6;
+    MSG_QuickStart_C2S = 7;
+    MSG_ChangeTable_C2S = 8;
+    MSG_EnterRoom_S2C = 9;
+    MSG_LeaveRoom_C2S = 10;
+    MSG_LeaveRoom_S2C = 11;
+    MSG_SitDown_C2S = 12;
+    MSG_SitDown_S2C = 13;
+    MSG_StandUp_C2S = 14;
+    MSG_StandUp_S2C = 15;
+    MSG_PlayerAction_C2S = 16;
+    MSG_GameStepChange_S2C = 17;
+    MSG_ResultGameData_S2C = 18;
 }
 
 message Ping {
@@ -27,6 +41,8 @@ enum ErrorMsg {
     ChipsInsufficient = 103; // 玩家筹码不足
     ChairAlreadyFull = 104; // 桌子位置已满
     UserNotChangeTable = 105; // 玩家不能换桌
+    UserTimeOutFoldCard = 106; // 玩家超时弃牌
+    UserStandUpTimeOut = 107; // 玩家站起超时
 }
 
 message Error_S2C {
@@ -87,7 +103,7 @@ enum ActionStatus {
     WAITING = 0; // 尚未表态
     RAISE = 1; // 加注
     CALL = 2; // 跟牌
-    CHECK = 3; // 过牌
+    CHECK = 3; // 让牌
     FOLD = 4; // 弃牌
     SHOWDOWN = 5; // 摊牌
 }

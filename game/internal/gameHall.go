@@ -22,6 +22,11 @@ func NewHall() *GameHall {
 	}
 }
 
+func HallInit() { // 大厅初始化增加一个房间
+	r := &Room{}
+	hall.RoomRecord.Store("0", r)
+}
+
 //ReplacePlayerAgent 替换用户链接
 func (hall *GameHall) ReplacePlayerAgent(Id string, agent gate.Agent) error {
 	log.Debug("用户重连或顶替，正在替换agent %+v", Id)
@@ -56,12 +61,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	data := SetRoomConfig(cfgId)
 	if p.Account < data.MinTakeIn {
 		ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
+		return
 	}
 
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)
-		if r.cfgId == cfgId && r.IsCanJoin() {
-			r.PlayerJoinRoom(p)
+		if r != nil {
+			if r.cfgId == cfgId && r.IsCanJoin() {
+				r.PlayerJoinRoom(p)
+			} else {
+				hall.PlayerCreateRoom(cfgId, p)
+			}
 		} else {
 			hall.PlayerCreateRoom(cfgId, p)
 		}
@@ -76,7 +86,6 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
 	hall.RoomRecord.Store(r.roomId, r)
-	hall.UserRoom[p.Id] = r.roomId
 
 	r.PlayerJoinRoom(p)
 }

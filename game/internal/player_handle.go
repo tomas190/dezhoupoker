@@ -31,14 +31,20 @@ func (p *Player) PlayerExitRoom() {
 //ClearPlayerData 清除玩家数据
 func (p *Player) ClearPlayerData() {
 	p.chips = 0
-	p.actStatus = 0
+	p.chair = 0
 	p.historyChair = 0
+	p.standUPNum = 0
+	p.actStatus = msg.ActionStatus_WAITING
+	p.gameStep = emNotGaming
 	p.downBets = 0
+	p.totalDownBet = 0
+	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0
 	p.blindType = msg.BlindType_No_Blind
 	p.IsAllIn = false
 	p.IsButton = false
 	p.IsWinner = false
+	p.HandValue = 0
 }
 
 //SitDownTable 玩家坐下座位
@@ -57,7 +63,7 @@ func (p *Player) SitDownTable() {
 		r.PlayerList[p.chair] = p
 
 		sitDown := &msg.SitDown_S2C{}
-		sitDown.RoomData = r.RespRoomData(p)
+		sitDown.RoomData = r.RespRoomData()
 		p.SendMsg(sitDown)
 	}
 }
@@ -80,7 +86,7 @@ func (p *Player) StandUpTable() {
 		p.chair = -1
 
 		standUp := &msg.StandUp_S2C{}
-		standUp.RoomData = r.RespRoomData(p)
+		standUp.RoomData = r.RespRoomData()
 		p.SendMsg(standUp)
 	}
 }

@@ -21,6 +21,7 @@ func (m *Module) OnInit() {
 
 	// 初始连接数据库
 	InitMongoDB()
+	HallInit()
 }
 
 func (m *Module) OnDestroy() {

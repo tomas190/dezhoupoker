@@ -17,6 +17,7 @@ var (
 const (
 	dbName          = "dezhoupoker"
 	playerInfo      = "playerInfo"
+	roomSettle      = "roomSettle"
 	settleWinMoney  = "settleWinMoney"
 	settleLoseMoney = "settleLoseMoney"
 	accessDB        = "accessData"
@@ -73,6 +74,14 @@ func (p *Player) FindPlayerID() {
 		SurplusPool -= 6
 		log.Debug("<----- 数据库用户ID数据成功 ~ ----->")
 	}
+}
+
+func (r *Room) InsertRoomData() error{
+	s, c := connect(dbName, roomSettle)
+	defer s.Close()
+
+	err := c.Insert(r)
+	return err
 }
 
 //InsertWinMoney 插入房间数据

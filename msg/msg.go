@@ -23,6 +23,7 @@ func init() {
 	Processor.Register(&StandUp_C2S{})        //--14
 	Processor.Register(&StandUp_S2C{})        //--15
 	Processor.Register(&PlayerAction_C2S{})   //--16
-	Processor.Register(&GameStepChange_S2C{}) //--17
-	Processor.Register(&ResultGameData_S2C{}) //--18
+	Processor.Register(&PlayerAction_S2C{})   //--17
+	Processor.Register(&GameStepChange_S2C{}) //--18
+	Processor.Register(&ResultGameData_S2C{}) //--19
 }

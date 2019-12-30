@@ -42,6 +42,8 @@ func handleLogin(args []interface{}) {
 	m := args[0].(*msg.Login_C2S)
 	a := args[1].(gate.Agent)
 
+	pl := a.UserData().(*Player)
+
 	log.Debug("handleLogin 用户登入游戏~ :%v", m.Id)
 	v, ok := hall.UserRecord.Load(m.Id)
 	if ok { // 说明用户已存在
@@ -56,38 +58,44 @@ func handleLogin(args []interface{}) {
 				log.Error("用户链接替换错误", err)
 			}
 
-			//v, _ := hall.UserRecord.Load(p.Id)
-			//p := v.(*Player)
+			login := &msg.Login_S2C{}
+			login.PlayerInfo = new(msg.PlayerInfo)
+			login.PlayerInfo.Id = p.Id
+			login.PlayerInfo.NickName = p.NickName
+			login.PlayerInfo.HeadImg = p.HeadImg
+			login.PlayerInfo.Account = p.Account
+			a.WriteMsg(login)
 
-			msg := &msg.Login_S2C{}
-			msg.PlayerInfo.Id = p.Id
-			msg.PlayerInfo.NickName = p.NickName
-			msg.PlayerInfo.HeadImg = p.HeadImg
-			msg.PlayerInfo.Account = p.Account
-			a.WriteMsg(msg)
-
-			// 返回房间数据
-			//if rId, ok := hall.UserRoom[p.Id]; ok {
-			//	msg.
-			//}
+			rId := hall.UserRoom[p.Id]
+			v, _ := hall.RoomRecord.Load(rId)
+			if v != nil {
+				// 玩家如果已在游戏中，则返回房间数据
+				r := v.(*Room)
+				enter := &msg.EnterRoom_S2C{}
+				enter.RoomData = r.RespRoomData()
+				a.WriteMsg(enter)
+			}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
-		p := v.(*Player)
+		//p := v.(*Player)
 		// 中心服登入
 		//c4c.UserLogin()
+		pl.Id = m.Id
+		pl.Account = 4000
 
 		// 重新绑定信息
-		p.ConnAgent = a
-		a.SetUserData(p)
+		pl.ConnAgent = a
+		a.SetUserData(pl)
 
-		hall.UserRecord.Store(p.Id, p)
+		hall.UserRecord.Store(pl.Id, pl)
 
-		msg := &msg.Login_S2C{}
-		msg.PlayerInfo.Id = p.Id
-		msg.PlayerInfo.NickName = p.NickName
-		msg.PlayerInfo.HeadImg = p.HeadImg
-		msg.PlayerInfo.Account = p.Account
-		a.WriteMsg(msg)
+		login := &msg.Login_S2C{}
+		login.PlayerInfo = new(msg.PlayerInfo)
+		login.PlayerInfo.Id = pl.Id
+		login.PlayerInfo.NickName = pl.NickName
+		login.PlayerInfo.HeadImg = pl.HeadImg
+		login.PlayerInfo.Account = pl.Account
+		a.WriteMsg(login)
 	}
 
 }
@@ -101,6 +109,10 @@ func handleQuickStart(args []interface{}) {
 	a := args[1].(gate.Agent)
 
 	p := a.UserData().(*Player)
+
+	//p.Id = strconv.Itoa(int(time.Now().UnixNano()))
+	//p.Account = 4000
+
 	log.Debug("handleQuickStart 快速匹配房间~ :%v", p.Id)
 
 	rId := hall.UserRoom[p.Id]
@@ -108,7 +120,7 @@ func handleQuickStart(args []interface{}) {
 	if v != nil {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
-		data := r.RespRoomData(p)
+		data := r.RespRoomData()
 
 		enter := &msg.EnterRoom_S2C{}
 		enter.RoomData = data
@@ -181,6 +193,7 @@ func handleAction(args []interface{}) {
 	log.Debug("handleAction 玩家开始行动~ :%v", p.Id)
 
 	if ok {
-		p.SetPlayerAction(m)
+		p.downBets = m.BetAmount
+		p.action <- m.Action
 	}
 }
