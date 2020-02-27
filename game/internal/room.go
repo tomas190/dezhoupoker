@@ -4,7 +4,6 @@ import (
 	"dezhoupoker/game/internal/algorithm"
 	"dezhoupoker/msg"
 	"fmt"
-	"github.com/golang/glog"
 	"github.com/name5566/leaf/log"
 	"math/rand"
 	"time"
@@ -23,14 +22,13 @@ type Room struct {
 	Status      msg.GameStep // 房间当前阶段  就直接判断是否在等待状态
 
 	Cards    algorithm.Cards
-	preChips float64  // 当前回合，上个玩家下注金额
-	remain   int32    // 记录每个阶段玩家的下注的数量
-	allin    int32    // allin玩家的数量
-	Chips    []uint32 // 所有玩家本局下的总筹码,对应player玩家
-	Pot      []uint32 // 奖池筹码数,第一项为主池，其他项(若存在)为边池
-	Button   int32    // 庄家座位号
-	SB       float64  // 小盲注
-	BB       float64  // 大盲注
+	preChips float64 // 当前回合，上个玩家下注金额
+	remain   int32   // 记录每个阶段玩家的下注的数量
+	allin    int32   // allin玩家的数量
+	Chips    []int   // 所有玩家本局下的总筹码,奖池筹码数,第一项为主池，其他项(若存在)为边池
+	Button   int32   // 庄家座位号
+	SB       float64 // 小盲注
+	BB       float64 // 大盲注
 
 	clock *time.Ticker
 }
@@ -63,8 +61,7 @@ func (r *Room) Init(cfgId string) {
 	r.preChips = 0
 	r.remain = 0
 	r.allin = 0
-	r.Chips = make([]uint32, MaxPlayer)
-	r.Pot = []uint32{}
+	r.Chips = make([]int, MaxPlayer)
 	r.Button = 0
 	r.SB = rd.SB
 	r.BB = rd.BB
@@ -101,7 +98,7 @@ func (r *Room) PlayerLength() int32 {
 			num++
 		}
 	}
-	log.Debug("num :%v", num)
+	log.Debug("房间号:%v  玩家人数:%v", r.roomId, num)
 	return num
 }
 
@@ -121,11 +118,11 @@ func (r *Room) TakeInRoomChips(p *Player) float64 {
 }
 
 //FindAbleChair 寻找可用座位
-func (r *Room) FindAbleChair(seatNum int32) int32 {
+func (r *Room) FindAbleChair() int32 {
 	// 先判断玩家历史座位是否已存在其他玩家，如果没有还是坐下历史座位
-	if r.PlayerList[seatNum] == nil {
-		return seatNum
-	}
+	//if r.PlayerList[seatNum] == nil {
+	//	return seatNum
+	//}
 
 	for chair, p := range r.PlayerList {
 		if p == nil {
@@ -169,8 +166,7 @@ func (r *Room) ClearRoomData() {
 	r.preChips = 0
 	r.remain = 0
 	r.allin = 0
-	r.Chips = make([]uint32, MaxPlayer)
-	r.Pot = nil
+	r.Chips = make([]int, MaxPlayer)
 
 	for _, v := range r.AllPlayer {
 		if v != nil {
@@ -238,10 +234,15 @@ func (r *Room) SetPlayerStatus() {
 
 func (r *Room) Each(pos int, f func(p *Player) bool) {
 	//房间最大限定人数
-	volume := MaxPlayer
-	end := (volume + pos - 1) % volume
+	num := 0
 	i := pos
-	for ; i != end; i = (i + 1) % volume {
+	for ; i < MaxPlayer; i = (i + 1) % MaxPlayer {
+		if i == pos {
+			num++
+			if num == 2 {
+				return
+			}
+		}
 		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && !f(r.PlayerList[i]) {
 			return
 		}
@@ -278,20 +279,6 @@ func (r *Room) betting(p *Player, blind float64) {
 	p.totalDownBet = p.totalDownBet + blind
 	//总筹码变动
 	r.potMoney = r.potMoney + blind
-	//玩家筹码池
-	r.Chips[p.chair] += uint32(blind)
-}
-
-//calc 筹码池
-func (r *Room) calc() (pots []handPot) {
-	pots = calcPot(r.Chips)
-	r.Pot = r.Pot[:]
-	var ps []uint32
-	for _, pot := range pots {
-		r.Pot = append(r.Pot, pot.Pot)
-		ps = append(ps, pot.Pot)
-	}
-	return
 }
 
 //readyPlay 准备阶段
@@ -317,6 +304,10 @@ func (r *Room) action(pos int) {
 		pos = int(r.Button%MaxPlayer + 1)
 	}
 
+	//玩家行动
+	waitTime := ActionTime
+	ticker := time.Second * time.Duration(waitTime)
+
 	r.Each(pos, func(p *Player) bool {
 		//3、行动玩家是根据庄家的下一位玩家
 		r.activeSeat = p.chair
@@ -333,10 +324,6 @@ func (r *Room) action(pos int) {
 		if p.chips == 0 { // p.chair == int32(skip) ||
 			return true
 		}
-
-		//玩家行动
-		waitTime := ActionTime
-		ticker := time.Second * time.Duration(waitTime)
 
 		p.GetAction(r, ticker)
 
@@ -355,51 +342,80 @@ func (r *Room) action(pos int) {
 }
 
 //showdown 玩家摊牌结算
-func (r *Room) showdown() {
-	pots := r.calc()
+func (r *Room) ShowDown() {
+	//1.统计玩家下注情况
+	r.CalBet()
+
+	//2.计算分池
+	pots := CalPots(r.Chips)
+
+	r.PrintPots(pots)
 
 	for i := range r.Chips {
 		r.Chips[i] = 0
 	}
 
 	for _, pot := range pots {
-		var maxO *Player
-		for _, pos := range pot.OPos {
-			o := r.PlayerList[pos]
-			if o != nil && len(o.cards) > 0 {
-				if maxO == nil {
-					maxO = o
+		var maxPlayer *Player
+		for _, pos := range pot.Pos {
+			player := r.PlayerList[pos]
+			if player != nil {
+				if maxPlayer == nil {
+					maxPlayer = player
 					continue
 				}
-				if o.HandValue > maxO.HandValue {
-					maxO = o
+				if player.HandValue > maxPlayer.HandValue {
+					maxPlayer = player
 				}
 			}
 		}
+		var winners []int
 
-		var winners []uint8
-
-		for _, pos := range pot.OPos {
-			o := r.PlayerList[pos]
-			if o != nil && o.HandValue == maxO.HandValue && o.gameStep == emInGaming { //&& o.IsGameing()
-				winners = append(winners, uint8(o.chair))
+		for _, pos := range pot.Pos {
+			player := r.PlayerList[pos]
+			if player != nil && player.HandValue == maxPlayer.HandValue && player.gameStep == emInGaming {
+				winners = append(winners, int(player.chair))
 			}
 		}
-
 		if len(winners) == 0 {
-			glog.Errorln("!!!no winners!!!")
+			log.Debug("no winners~")
 			return
 		}
 
-		for _, winner := range winners {
-			r.Chips[winner] += pot.Pot / uint32(len(winners))
+		//多个玩家组合牌相等平分奖池
+		for _, pos := range winners {
+			r.Chips[pos] += pot.Bet / len(winners)
 		}
-		r.Chips[winners[0]] += pot.Pot % uint32(len(winners)) // odd chips
+		r.Chips[winners[0]] += pot.Bet % len(winners) // odd chips
 	}
 
+	log.Debug("比牌结果:")
 	for i := range r.Chips {
 		if r.PlayerList[i] != nil {
 			r.PlayerList[i].chips += float64(r.Chips[i])
+			log.Debug("uid:%v, chair:%v,result:%v  win:%v, chips:%v\n", r.PlayerList[i].Id, r.PlayerList[i].chair, r.PlayerList[i].HandValue, r.PlayerList[i].resultMoney, r.PlayerList[i].chips)
+		}
+	}
+}
+
+func (r *Room) PrintPots(pots []PotNode) {
+	for k, v := range pots {
+		fmt.Printf("分池%d:(%d) ", k, v.Bet)
+		fmt.Print("参与玩家(座位号):")
+		for _, pos := range v.Pos {
+			fmt.Printf("%d ", pos)
+		}
+		fmt.Println()
+	}
+}
+
+func (r *Room) CalBet() {
+	for i, v := range r.PlayerList {
+		if v != nil {
+			r.Chips[i] = int(v.totalDownBet)
+			fmt.Printf("i: %d bet:%d\n", i, r.Chips[i])
+		} else {
+			r.Chips[i] = 0
 		}
 	}
 }

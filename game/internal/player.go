@@ -113,7 +113,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) {
 				r.allin++
 			}
 			//玩家本局下注的总筹码数
-			r.Chips[p.chair] += uint32(r.preChips)
+			//r.Chips[p.chair] += uint32(r.preChips)
 			return
 		case <-after.C:
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))

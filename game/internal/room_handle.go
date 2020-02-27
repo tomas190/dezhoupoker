@@ -14,15 +14,13 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 
 	hall.UserRoom[p.Id] = r.roomId
 
-	// 查找用户是否存在，如果存在就插入数据库
-	p.FindPlayerID()
-
 	// 玩家带入筹码
 	p.chips = r.TakeInRoomChips(p)
 
-	p.chair = r.FindAbleChair(p.historyChair)
+	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
-	p.historyChair = p.chair
+	//p.historyChair = p.chair
+
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
 
@@ -54,6 +52,10 @@ func (r *Room) StartGameRun() {
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}
+	log.Debug("游戏开始，玩家开始行动~")
+
+	r.allin = 0
+	r.remain = 0
 
 	// 设置玩家状态
 	r.SetPlayerStatus()
@@ -63,15 +65,12 @@ func (r *Room) StartGameRun() {
 
 	//2、产生庄家
 	var dealer *Player
-	button := r.Button - 1
-	r.Each(int(button+1)%MaxPlayer, func(p *Player) bool {
+	r.Each(int(r.Button)%MaxPlayer, func(p *Player) bool {
 		r.Button = p.chair
 		dealer = p
 		dealer.IsButton = true
-		log.Debug("玩家信息:%v", dealer)
 		return false
 	})
-
 	log.Debug("庄家的座位号为 :%v", dealer.chair)
 
 	//3、产生小盲注
@@ -111,8 +110,8 @@ func (r *Room) StartGameRun() {
 		p.SendMsg(game)
 		return true
 	})
-	//3、行动、下注
-	r.action(0)
+	//3、行动、下注 (这里应该小盲下一位开始下注)
+	r.action(int(bb.chair))
 
 	// 如果玩家全部摊牌直接比牌
 	if r.remain <= 1 {
@@ -121,7 +120,7 @@ func (r *Room) StartGameRun() {
 	}
 
 	//4、设置桌面筹码池
-	r.calc()
+	//r.calc()
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	//1、准备阶段
@@ -155,7 +154,7 @@ func (r *Room) StartGameRun() {
 	}
 
 	//4、设置桌面筹码池
-	r.calc()
+	//r.calc()
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	//1、准备阶段
@@ -189,7 +188,7 @@ func (r *Room) StartGameRun() {
 	}
 
 	//4、设置桌面筹码池
-	r.calc()
+	//r.calc()
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	//1、准备阶段
@@ -221,10 +220,10 @@ func (r *Room) StartGameRun() {
 	// showdown 摊开底牌,开牌比大小
 showdown:
 	log.Debug("开始摊牌，开牌比大小 ~")
-	r.showdown()
+	r.ShowDown()
 
 	// 打印数据
-	r.PlantData()
+	//r.PlantData()
 
 	r.Status = msg.GameStep_ShowDown
 
@@ -245,6 +244,7 @@ showdown:
 
 	// 延时5秒，重新开始游戏
 	time.AfterFunc(time.Second*5, func() {
+		r.Button += 1
 		r.StartGameRun()
 	})
 }
@@ -257,13 +257,14 @@ func (r *Room) ExitFromRoom(p *Player) {
 	}
 
 	for k, v := range r.AllPlayer {
-		if v != nil {
+		if v != nil && v.Id == p.Id {
 			r.AllPlayer = append(r.AllPlayer[:k], r.AllPlayer[k+1:]...)
 		}
 	}
 
 	delete(hall.UserRoom, p.Id)
-	hall.UserRecord.Delete(p.Id)
+
+	//hall.UserRecord.Delete(p.Id)  todo 玩家登出执行
 
 	// 如果房间总人数为0，删除房间缓存
 	if len(r.AllPlayer) == 0 {
@@ -274,14 +275,6 @@ func (r *Room) ExitFromRoom(p *Player) {
 	p.Account += p.chips
 	// 清除用户数据
 	p.ClearPlayerData()
-
-	leave := &msg.LeaveRoom_S2C{}
-	leave.PlayerInfo = new(msg.PlayerInfo)
-	leave.PlayerInfo.Id = p.Id
-	leave.PlayerInfo.NickName = p.NickName
-	leave.PlayerInfo.HeadImg = p.HeadImg
-	leave.PlayerInfo.Account = p.Account
-	p.SendMsg(leave)
 }
 
 func (r *Room) PlantData() {

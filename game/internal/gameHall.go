@@ -56,6 +56,32 @@ func (hall *GameHall) agentExist(a gate.Agent) bool {
 	return exist
 }
 
+//PlayerChangeTable 玩家进行换桌
+func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
+	data := SetRoomConfig(r.cfgId)
+	if p.Account < data.MinTakeIn {
+		ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
+		return
+	}
+
+	// 玩家退出当前房间
+	r.ExitFromRoom(p)
+
+	hall.RoomRecord.Range(func(key, value interface{}) bool {
+		room := value.(*Room)
+		if room != nil {
+			if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+				room.PlayerJoinRoom(p)
+			} else {
+				hall.PlayerCreateRoom(r.cfgId, p)
+			}
+		} else {
+			hall.PlayerCreateRoom(r.cfgId, p)
+		}
+		return true
+	})
+}
+
 //PlayerQuickStart 快速匹配房间
 func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	data := SetRoomConfig(cfgId)
@@ -64,16 +90,33 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		return
 	}
 
+	rId := hall.UserRoom[p.Id]
+	v, _ := hall.RoomRecord.Load(rId)
+	if v != nil {
+		// 玩家如果已在游戏中，则返回房间数据
+		r := v.(*Room)
+		log.Debug("Room:%v",r)
+		data := r.RespRoomData()
+
+		enter := &msg.EnterRoom_S2C{}
+		enter.RoomData = data
+		p.SendMsg(enter)
+		return
+	}
+
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
+				log.Debug("1")
 				r.PlayerJoinRoom(p)
 			} else {
 				hall.PlayerCreateRoom(cfgId, p)
+				log.Debug("2")
 			}
 		} else {
 			hall.PlayerCreateRoom(cfgId, p)
+			log.Debug("3")
 		}
 		return true
 	})

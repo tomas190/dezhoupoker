@@ -21,8 +21,9 @@ enum MessageID {
     MSG_StandUp_C2S = 14;
     MSG_StandUp_S2C = 15;
     MSG_PlayerAction_C2S = 16;
-    MSG_GameStepChange_S2C = 17;
-    MSG_ResultGameData_S2C = 18;
+    MSG_PlayerAction_S2C = 17;
+    MSG_GameStepChange_S2C = 18;
+    MSG_ResultGameData_S2C = 19;
 }
 
 message Ping {

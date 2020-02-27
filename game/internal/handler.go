@@ -80,12 +80,17 @@ func handleLogin(args []interface{}) {
 		//p := v.(*Player)
 		// 中心服登入
 		//c4c.UserLogin()
-		pl.Id = m.Id
+		pl.Id = m.Id       // todo
 		pl.Account = 4000
+		pl.NickName = m.Id
+		pl.HeadImg = "0"
 
 		// 重新绑定信息
 		pl.ConnAgent = a
 		a.SetUserData(pl)
+
+		// 查找用户是否存在，如果存在就插入数据库
+		pl.FindPlayerInfo()
 
 		hall.UserRecord.Store(pl.Id, pl)
 
@@ -108,27 +113,12 @@ func handleQuickStart(args []interface{}) {
 	m := args[0].(*msg.QuickStart_C2S)
 	a := args[1].(gate.Agent)
 
-	p := a.UserData().(*Player)
-
-	//p.Id = strconv.Itoa(int(time.Now().UnixNano()))
-	//p.Account = 4000
-
+	p,ok := a.UserData().(*Player)
 	log.Debug("handleQuickStart 快速匹配房间~ :%v", p.Id)
 
-	rId := hall.UserRoom[p.Id]
-	v, _ := hall.RoomRecord.Load(rId)
-	if v != nil {
-		// 玩家如果已在游戏中，则返回房间数据
-		r := v.(*Room)
-		data := r.RespRoomData()
-
-		enter := &msg.EnterRoom_S2C{}
-		enter.RoomData = data
-		a.WriteMsg(enter)
-		return
+	if ok {
+		hall.PlayerQuickStart(m.CfgId, p)
 	}
-
-	hall.PlayerQuickStart(m.CfgId, p)
 }
 
 func handleChangeTable(args []interface{}) {
@@ -147,7 +137,7 @@ func handleChangeTable(args []interface{}) {
 		v, _ := hall.RoomRecord.Load(rId)
 		if v != nil {
 			r := v.(*Room)
-			hall.PlayerQuickStart(r.cfgId, p)
+			hall.PlayerChangeTable(r, p)
 		}
 	}
 }

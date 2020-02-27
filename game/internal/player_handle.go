@@ -22,6 +22,14 @@ func (p *Player) PlayerExitRoom() {
 
 		} else {
 			r.ExitFromRoom(p)
+
+			leave := &msg.LeaveRoom_S2C{}
+			leave.PlayerInfo = new(msg.PlayerInfo)
+			leave.PlayerInfo.Id = p.Id
+			leave.PlayerInfo.NickName = p.NickName
+			leave.PlayerInfo.HeadImg = p.HeadImg
+			leave.PlayerInfo.Account = p.Account
+			p.SendMsg(leave)
 		}
 	} else {
 		log.Debug("Player Exit Room, But Not Found Player Room~")
@@ -59,7 +67,7 @@ func (p *Player) SitDownTable() {
 			ErrorResp(p.ConnAgent, msg.ErrorMsg_ChairAlreadyFull, "桌面位置已满")
 			return
 		}
-		p.chair = r.FindAbleChair(p.historyChair)
+		p.chair = r.FindAbleChair()
 		r.PlayerList[p.chair] = p
 
 		sitDown := &msg.SitDown_S2C{}

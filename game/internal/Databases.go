@@ -52,28 +52,46 @@ func connect(dbName, cName string) (*mgo.Session, *mgo.Collection) {
 	return s, c
 }
 
-func (p *Player) InsertPlayerID() error {
+func (p *Player) FindPlayerInfo() {
 	s, c := connect(dbName, playerInfo)
 	defer s.Close()
 
-	err := c.Insert(p.Id)
+	player := &msg.PlayerInfo{}
+	player.Id = p.Id
+	player.NickName = p.NickName
+	player.HeadImg = p.HeadImg
+	player.Account = p.Account
+
+	err := c.Find(bson.M{"id": player.Id}).One(player)
+	if err != nil {
+		err2 := InsertPlayerInfo(player)
+		if err2 != nil {
+			log.Error("<----- 插入用户信息数据失败 ~ ----->:%v", err)
+			return
+		}
+		log.Debug("<----- 插入用户信息数据成功 ~ ----->")
+	}
+}
+
+func InsertPlayerInfo(player *msg.PlayerInfo) error {
+	s, c := connect(dbName, playerInfo)
+	defer s.Close()
+
+	err := c.Insert(player)
 	return err
 }
 
-func (p *Player) FindPlayerID() {
+//LoadPlayerCount 获取玩家数量
+func LoadPlayerCount() int32 {
 	s, c := connect(dbName, playerInfo)
 	defer s.Close()
 
-	err := c.Find(bson.M{"id": p.Id})
+	n, err := c.Find(nil).Count()
 	if err != nil {
-		err2 := p.InsertPlayerID()
-		if err2 != nil {
-			log.Error("<----- 数据库用户ID数据失败 ~ ----->:%v", err)
-			return
-		}
-		SurplusPool -= 6
-		log.Debug("<----- 数据库用户ID数据成功 ~ ----->")
+		log.Debug("not Found Player Count, Maybe don't have Player")
+		return 0
 	}
+	return int32(n)
 }
 
 func (r *Room) InsertRoomData() error{
