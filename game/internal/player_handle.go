@@ -13,23 +13,11 @@ func (p *Player) PlayerExitRoom() {
 		r := v.(*Room)
 		if p.gameStep == emInGaming {
 			leave := &msg.LeaveRoom_S2C{}
-			leave.PlayerInfo = new(msg.PlayerInfo)
-			leave.PlayerInfo.Id = p.Id
-			leave.PlayerInfo.NickName = p.NickName
-			leave.PlayerInfo.HeadImg = p.HeadImg
-			leave.PlayerInfo.Account = p.Account
+			leave.PlayerData = p.RespPlayerData()
 			p.SendMsg(leave)
 
 		} else {
 			r.ExitFromRoom(p)
-
-			leave := &msg.LeaveRoom_S2C{}
-			leave.PlayerInfo = new(msg.PlayerInfo)
-			leave.PlayerInfo.Id = p.Id
-			leave.PlayerInfo.NickName = p.NickName
-			leave.PlayerInfo.HeadImg = p.HeadImg
-			leave.PlayerInfo.Account = p.Account
-			p.SendMsg(leave)
 		}
 	} else {
 		log.Debug("Player Exit Room, But Not Found Player Room~")
@@ -39,8 +27,8 @@ func (p *Player) PlayerExitRoom() {
 //ClearPlayerData 清除玩家数据
 func (p *Player) ClearPlayerData() {
 	p.chips = 0
+	p.roomChips = 0
 	p.chair = 0
-	p.historyChair = 0
 	p.standUPNum = 0
 	p.actStatus = msg.ActionStatus_WAITING
 	p.gameStep = emNotGaming
@@ -52,6 +40,7 @@ func (p *Player) ClearPlayerData() {
 	p.IsAllIn = false
 	p.IsButton = false
 	p.IsWinner = false
+	p.timerCount = 0
 	p.HandValue = 0
 }
 
@@ -67,12 +56,26 @@ func (p *Player) SitDownTable() {
 			ErrorResp(p.ConnAgent, msg.ErrorMsg_ChairAlreadyFull, "桌面位置已满")
 			return
 		}
+		// 玩家坐下筹码重置为房间最少带入金额
+		data := SetRoomConfig(r.cfgId)
+		p.roomChips += p.chips
+		p.chips = data.MinTakeIn
+		p.roomChips -= p.chips
+
 		p.chair = r.FindAbleChair()
 		r.PlayerList[p.chair] = p
+		p.standUPNum = 0
+
+		if r.Status == msg.GameStep_Waiting {
+			r.StartGameRun()
+		} else {
+			// 如果玩家中途加入游戏，则玩家视为弃牌状态
+			p.actStatus = msg.ActionStatus_FOLD
+		}
 
 		sitDown := &msg.SitDown_S2C{}
-		sitDown.RoomData = r.RespRoomData()
-		p.SendMsg(sitDown)
+		sitDown.PlayerData = p.RespPlayerData()
+		r.Broadcast(sitDown)
 	}
 }
 
@@ -84,9 +87,20 @@ func (p *Player) StandUpTable() {
 	if v != nil {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
+
+		if r.Status != msg.GameStep_Waiting {
+			ErrorResp(p.ConnAgent, msg.ErrorMsg_UserInGameNotStandUp, "玩家正在游戏中,不能站起")
+			return
+		}
+
+		if p.chair == -1 { // 防止客戶端重复点击多次
+			return
+		}
+
 		if r.activeSeat == p.chair {
 			p.actStatus = msg.ActionStatus_FOLD
 		}
+
 		r.PlayerList[p.chair] = nil
 
 		//站起改变状态，座位为 -1，视为观战
@@ -94,12 +108,7 @@ func (p *Player) StandUpTable() {
 		p.chair = -1
 
 		standUp := &msg.StandUp_S2C{}
-		standUp.RoomData = r.RespRoomData()
-		p.SendMsg(standUp)
+		standUp.PlayerData = p.RespPlayerData()
+		r.Broadcast(standUp)
 	}
-}
-
-//SetPlayerAction 设置玩家行动
-func (p *Player) SetPlayerAction(m *msg.PlayerAction_C2S) {
-
 }

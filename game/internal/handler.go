@@ -21,6 +21,7 @@ func init() {
 	handlerReg(&msg.SitDown_C2S{}, handleSitDown)
 	handlerReg(&msg.StandUp_C2S{}, handleStandUp)
 	handlerReg(&msg.PlayerAction_C2S{}, handleAction)
+	handlerReg(&msg.AddChips_C2S{}, handleAddChips)
 }
 
 // 注册消息处理函数
@@ -66,21 +67,24 @@ func handleLogin(args []interface{}) {
 			login.PlayerInfo.Account = p.Account
 			a.WriteMsg(login)
 
-			rId := hall.UserRoom[p.Id]
-			v, _ := hall.RoomRecord.Load(rId)
-			if v != nil {
-				// 玩家如果已在游戏中，则返回房间数据
-				r := v.(*Room)
-				enter := &msg.EnterRoom_S2C{}
-				enter.RoomData = r.RespRoomData()
-				a.WriteMsg(enter)
-			}
+			// todo 玩家login不用直接返回房间
+			//rId := hall.UserRoom[p.Id]
+			//v, _ := hall.RoomRecord.Load(rId)
+			//if v != nil {
+			//	// 玩家如果已在游戏中，则返回房间数据
+			//	r := v.(*Room)
+			//	roomData := r.RespRoomData()
+			//
+			//	enter := &msg.EnterRoom_S2C{}
+			//	enter.RoomData = roomData
+			//	a.WriteMsg(enter)
+			//}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
 		//p := v.(*Player)
 		// 中心服登入
 		//c4c.UserLogin()
-		pl.Id = m.Id       // todo
+		pl.Id = m.Id // todo
 		pl.Account = 4000
 		pl.NickName = m.Id
 		pl.HeadImg = "0"
@@ -113,7 +117,7 @@ func handleQuickStart(args []interface{}) {
 	m := args[0].(*msg.QuickStart_C2S)
 	a := args[1].(gate.Agent)
 
-	p,ok := a.UserData().(*Player)
+	p, ok := a.UserData().(*Player)
 	log.Debug("handleQuickStart 快速匹配房间~ :%v", p.Id)
 
 	if ok {
@@ -185,5 +189,27 @@ func handleAction(args []interface{}) {
 	if ok {
 		p.downBets = m.BetAmount
 		p.action <- m.Action
+	}
+}
+
+func handleAddChips(args []interface{}) {
+	m := args[0].(*msg.AddChips_C2S)
+	a := args[1].(gate.Agent)
+
+	p, ok := a.UserData().(*Player)
+	log.Debug("handleAction 玩家添加筹码~ :%v", p.Id)
+
+	if ok {
+		p.chips += m.AddChips
+		p.roomChips -= m.AddChips
+
+		data := &msg.AddChips_S2C{}
+		data.Chair = p.chair
+		data.AddChips = m.AddChips
+		data.Chips = p.chips
+		data.RoomChips = p.roomChips
+		data.SysBuyChips = m.SysBuyChips
+
+		p.SendMsg(data)
 	}
 }

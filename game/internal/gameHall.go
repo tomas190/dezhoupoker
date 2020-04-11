@@ -65,7 +65,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	}
 
 	// 玩家退出当前房间
-	r.ExitFromRoom(p)
+	p.PlayerExitRoom()
 
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		room := value.(*Room)
@@ -96,11 +96,12 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
 		log.Debug("Room:%v",r)
-		data := r.RespRoomData()
+		roomData := r.RespRoomData()
 
 		enter := &msg.EnterRoom_S2C{}
-		enter.RoomData = data
+		enter.RoomData = roomData
 		p.SendMsg(enter)
+
 		return
 	}
 
@@ -108,15 +109,12 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
-				log.Debug("1")
 				r.PlayerJoinRoom(p)
 			} else {
 				hall.PlayerCreateRoom(cfgId, p)
-				log.Debug("2")
 			}
 		} else {
 			hall.PlayerCreateRoom(cfgId, p)
-			log.Debug("3")
 		}
 		return true
 	})

@@ -24,25 +24,36 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type MessageID int32
 
 const (
-	MessageID_MSG_Ping               MessageID = 0
-	MessageID_MSG_Pong               MessageID = 1
-	MessageID_MSG_Error_S2C          MessageID = 2
-	MessageID_MSG_Login_C2S          MessageID = 3
-	MessageID_MSG_Login_S2C          MessageID = 4
-	MessageID_MSG_Logout_C2S         MessageID = 5
-	MessageID_MSG_Logout_S2C         MessageID = 6
-	MessageID_MSG_QuickStart_C2S     MessageID = 7
-	MessageID_MSG_ChangeTable_C2S    MessageID = 8
-	MessageID_MSG_EnterRoom_S2C      MessageID = 9
-	MessageID_MSG_LeaveRoom_C2S      MessageID = 10
-	MessageID_MSG_LeaveRoom_S2C      MessageID = 11
-	MessageID_MSG_SitDown_C2S        MessageID = 12
-	MessageID_MSG_SitDown_S2C        MessageID = 13
-	MessageID_MSG_StandUp_C2S        MessageID = 14
-	MessageID_MSG_StandUp_S2C        MessageID = 15
-	MessageID_MSG_PlayerAction_C2S   MessageID = 16
-	MessageID_MSG_GameStepChange_S2C MessageID = 17
-	MessageID_MSG_ResultGameData_S2C MessageID = 18
+	MessageID_MSG_Ping                   MessageID = 0
+	MessageID_MSG_Pong                   MessageID = 1
+	MessageID_MSG_Error_S2C              MessageID = 2
+	MessageID_MSG_Login_C2S              MessageID = 3
+	MessageID_MSG_Login_S2C              MessageID = 4
+	MessageID_MSG_Logout_C2S             MessageID = 5
+	MessageID_MSG_Logout_S2C             MessageID = 6
+	MessageID_MSG_QuickStart_C2S         MessageID = 7
+	MessageID_MSG_ChangeTable_C2S        MessageID = 8
+	MessageID_MSG_JoinRoom_S2C           MessageID = 9
+	MessageID_MSG_EnterRoom_S2C          MessageID = 10
+	MessageID_MSG_NoticeJoin_S2C         MessageID = 11
+	MessageID_MSG_LeaveRoom_C2S          MessageID = 12
+	MessageID_MSG_LeaveRoom_S2C          MessageID = 13
+	MessageID_MSG_NoticeLeave_S2C        MessageID = 14
+	MessageID_MSG_SitDown_C2S            MessageID = 15
+	MessageID_MSG_SitDown_S2C            MessageID = 16
+	MessageID_MSG_StandUp_C2S            MessageID = 17
+	MessageID_MSG_StandUp_S2C            MessageID = 18
+	MessageID_MSG_CreatBanker_S2C        MessageID = 19
+	MessageID_MSG_PlayerAction_C2S       MessageID = 20
+	MessageID_MSG_PlayerAction_S2C       MessageID = 21
+	MessageID_MSG_PlayerActionChange_S2C MessageID = 22
+	MessageID_MSG_AddChips_C2S           MessageID = 23
+	MessageID_MSG_AddChips_S2C           MessageID = 24
+	MessageID_MSG_GameStepChange_S2C     MessageID = 25
+	MessageID_MSG_ResultGameData_S2C     MessageID = 26
+	MessageID_MSG_ReadyTime_S2C          MessageID = 27
+	MessageID_MSG_SettleTime_S2C         MessageID = 28
+	MessageID_MSG_PushCardTime_S2C       MessageID = 29
 )
 
 var MessageID_name = map[int32]string{
@@ -55,38 +66,60 @@ var MessageID_name = map[int32]string{
 	6:  "MSG_Logout_S2C",
 	7:  "MSG_QuickStart_C2S",
 	8:  "MSG_ChangeTable_C2S",
-	9:  "MSG_EnterRoom_S2C",
-	10: "MSG_LeaveRoom_C2S",
-	11: "MSG_LeaveRoom_S2C",
-	12: "MSG_SitDown_C2S",
-	13: "MSG_SitDown_S2C",
-	14: "MSG_StandUp_C2S",
-	15: "MSG_StandUp_S2C",
-	16: "MSG_PlayerAction_C2S",
-	17: "MSG_GameStepChange_S2C",
-	18: "MSG_ResultGameData_S2C",
+	9:  "MSG_JoinRoom_S2C",
+	10: "MSG_EnterRoom_S2C",
+	11: "MSG_NoticeJoin_S2C",
+	12: "MSG_LeaveRoom_C2S",
+	13: "MSG_LeaveRoom_S2C",
+	14: "MSG_NoticeLeave_S2C",
+	15: "MSG_SitDown_C2S",
+	16: "MSG_SitDown_S2C",
+	17: "MSG_StandUp_C2S",
+	18: "MSG_StandUp_S2C",
+	19: "MSG_CreatBanker_S2C",
+	20: "MSG_PlayerAction_C2S",
+	21: "MSG_PlayerAction_S2C",
+	22: "MSG_PlayerActionChange_S2C",
+	23: "MSG_AddChips_C2S",
+	24: "MSG_AddChips_S2C",
+	25: "MSG_GameStepChange_S2C",
+	26: "MSG_ResultGameData_S2C",
+	27: "MSG_ReadyTime_S2C",
+	28: "MSG_SettleTime_S2C",
+	29: "MSG_PushCardTime_S2C",
 }
 
 var MessageID_value = map[string]int32{
-	"MSG_Ping":               0,
-	"MSG_Pong":               1,
-	"MSG_Error_S2C":          2,
-	"MSG_Login_C2S":          3,
-	"MSG_Login_S2C":          4,
-	"MSG_Logout_C2S":         5,
-	"MSG_Logout_S2C":         6,
-	"MSG_QuickStart_C2S":     7,
-	"MSG_ChangeTable_C2S":    8,
-	"MSG_EnterRoom_S2C":      9,
-	"MSG_LeaveRoom_C2S":      10,
-	"MSG_LeaveRoom_S2C":      11,
-	"MSG_SitDown_C2S":        12,
-	"MSG_SitDown_S2C":        13,
-	"MSG_StandUp_C2S":        14,
-	"MSG_StandUp_S2C":        15,
-	"MSG_PlayerAction_C2S":   16,
-	"MSG_GameStepChange_S2C": 17,
-	"MSG_ResultGameData_S2C": 18,
+	"MSG_Ping":                   0,
+	"MSG_Pong":                   1,
+	"MSG_Error_S2C":              2,
+	"MSG_Login_C2S":              3,
+	"MSG_Login_S2C":              4,
+	"MSG_Logout_C2S":             5,
+	"MSG_Logout_S2C":             6,
+	"MSG_QuickStart_C2S":         7,
+	"MSG_ChangeTable_C2S":        8,
+	"MSG_JoinRoom_S2C":           9,
+	"MSG_EnterRoom_S2C":          10,
+	"MSG_NoticeJoin_S2C":         11,
+	"MSG_LeaveRoom_C2S":          12,
+	"MSG_LeaveRoom_S2C":          13,
+	"MSG_NoticeLeave_S2C":        14,
+	"MSG_SitDown_C2S":            15,
+	"MSG_SitDown_S2C":            16,
+	"MSG_StandUp_C2S":            17,
+	"MSG_StandUp_S2C":            18,
+	"MSG_CreatBanker_S2C":        19,
+	"MSG_PlayerAction_C2S":       20,
+	"MSG_PlayerAction_S2C":       21,
+	"MSG_PlayerActionChange_S2C": 22,
+	"MSG_AddChips_C2S":           23,
+	"MSG_AddChips_S2C":           24,
+	"MSG_GameStepChange_S2C":     25,
+	"MSG_ResultGameData_S2C":     26,
+	"MSG_ReadyTime_S2C":          27,
+	"MSG_SettleTime_S2C":         28,
+	"MSG_PushCardTime_S2C":       29,
 }
 
 func (x MessageID) String() string {
@@ -100,14 +133,16 @@ func (MessageID) EnumDescriptor() ([]byte, []int) {
 type ErrorMsg int32
 
 const (
-	ErrorMsg_SUCCESS             ErrorMsg = 0
-	ErrorMsg_UserRepeatLogin     ErrorMsg = 101
-	ErrorMsg_UserRemoteLogin     ErrorMsg = 102
-	ErrorMsg_ChipsInsufficient   ErrorMsg = 103
-	ErrorMsg_ChairAlreadyFull    ErrorMsg = 104
-	ErrorMsg_UserNotChangeTable  ErrorMsg = 105
-	ErrorMsg_UserTimeOutFoldCard ErrorMsg = 106
-	ErrorMsg_UserStandUpTimeOut  ErrorMsg = 107
+	ErrorMsg_SUCCESS               ErrorMsg = 0
+	ErrorMsg_UserRepeatLogin       ErrorMsg = 101
+	ErrorMsg_UserRemoteLogin       ErrorMsg = 102
+	ErrorMsg_ChipsInsufficient     ErrorMsg = 103
+	ErrorMsg_ChairAlreadyFull      ErrorMsg = 104
+	ErrorMsg_UserNotChangeTable    ErrorMsg = 105
+	ErrorMsg_UserTimeOutFoldCard   ErrorMsg = 106
+	ErrorMsg_UserStandUpTimeOut    ErrorMsg = 107
+	ErrorMsg_UserInGameNotStandUp  ErrorMsg = 108
+	ErrorMsg_UserInGameStandUpFold ErrorMsg = 109
 )
 
 var ErrorMsg_name = map[int32]string{
@@ -119,17 +154,21 @@ var ErrorMsg_name = map[int32]string{
 	105: "UserNotChangeTable",
 	106: "UserTimeOutFoldCard",
 	107: "UserStandUpTimeOut",
+	108: "UserInGameNotStandUp",
+	109: "UserInGameStandUpFold",
 }
 
 var ErrorMsg_value = map[string]int32{
-	"SUCCESS":             0,
-	"UserRepeatLogin":     101,
-	"UserRemoteLogin":     102,
-	"ChipsInsufficient":   103,
-	"ChairAlreadyFull":    104,
-	"UserNotChangeTable":  105,
-	"UserTimeOutFoldCard": 106,
-	"UserStandUpTimeOut":  107,
+	"SUCCESS":               0,
+	"UserRepeatLogin":       101,
+	"UserRemoteLogin":       102,
+	"ChipsInsufficient":     103,
+	"ChairAlreadyFull":      104,
+	"UserNotChangeTable":    105,
+	"UserTimeOutFoldCard":   106,
+	"UserStandUpTimeOut":    107,
+	"UserInGameNotStandUp":  108,
+	"UserInGameStandUpFold": 109,
 }
 
 func (x ErrorMsg) String() string {
@@ -693,15 +732,21 @@ func (m *CardSuitData) GetSuitPattern() CardSuit {
 type PlayerData struct {
 	PlayerInfo           *PlayerInfo   `protobuf:"bytes,1,opt,name=playerInfo,proto3" json:"playerInfo,omitempty"`
 	Chair                int32         `protobuf:"varint,2,opt,name=chair,proto3" json:"chair,omitempty"`
-	ActionStatus         ActionStatus  `protobuf:"varint,3,opt,name=actionStatus,proto3,enum=msg.ActionStatus" json:"actionStatus,omitempty"`
-	DownBets             float64       `protobuf:"fixed64,4,opt,name=downBets,proto3" json:"downBets,omitempty"`
-	HandCards            []int32       `protobuf:"varint,5,rep,packed,name=handCards,proto3" json:"handCards,omitempty"`
-	CardSuitData         *CardSuitData `protobuf:"bytes,6,opt,name=cardSuitData,proto3" json:"cardSuitData,omitempty"`
-	ResultMoney          float64       `protobuf:"fixed64,7,opt,name=resultMoney,proto3" json:"resultMoney,omitempty"`
-	BlindType            BlindType     `protobuf:"varint,8,opt,name=blindType,proto3,enum=msg.BlindType" json:"blindType,omitempty"`
-	IsButton             bool          `protobuf:"varint,9,opt,name=IsButton,proto3" json:"IsButton,omitempty"`
-	IsAllIn              bool          `protobuf:"varint,10,opt,name=IsAllIn,proto3" json:"IsAllIn,omitempty"`
-	IsWinner             bool          `protobuf:"varint,11,opt,name=IsWinner,proto3" json:"IsWinner,omitempty"`
+	StandUPNum           int32         `protobuf:"varint,3,opt,name=standUPNum,proto3" json:"standUPNum,omitempty"`
+	Chips                float64       `protobuf:"fixed64,4,opt,name=chips,proto3" json:"chips,omitempty"`
+	RoomChips            float64       `protobuf:"fixed64,5,opt,name=roomChips,proto3" json:"roomChips,omitempty"`
+	ActionStatus         ActionStatus  `protobuf:"varint,6,opt,name=actionStatus,proto3,enum=msg.ActionStatus" json:"actionStatus,omitempty"`
+	GameStep             int32         `protobuf:"varint,7,opt,name=gameStep,proto3" json:"gameStep,omitempty"`
+	DownBets             float64       `protobuf:"fixed64,8,opt,name=downBets,proto3" json:"downBets,omitempty"`
+	TotalDownBet         float64       `protobuf:"fixed64,9,opt,name=totalDownBet,proto3" json:"totalDownBet,omitempty"`
+	HandCards            []int32       `protobuf:"varint,10,rep,packed,name=handCards,proto3" json:"handCards,omitempty"`
+	CardSuitData         *CardSuitData `protobuf:"bytes,11,opt,name=cardSuitData,proto3" json:"cardSuitData,omitempty"`
+	ResultMoney          float64       `protobuf:"fixed64,12,opt,name=resultMoney,proto3" json:"resultMoney,omitempty"`
+	BlindType            BlindType     `protobuf:"varint,13,opt,name=blindType,proto3,enum=msg.BlindType" json:"blindType,omitempty"`
+	IsButton             bool          `protobuf:"varint,14,opt,name=IsButton,proto3" json:"IsButton,omitempty"`
+	IsAllIn              bool          `protobuf:"varint,15,opt,name=IsAllIn,proto3" json:"IsAllIn,omitempty"`
+	IsWinner             bool          `protobuf:"varint,16,opt,name=IsWinner,proto3" json:"IsWinner,omitempty"`
+	TimerCount           int32         `protobuf:"varint,17,opt,name=timerCount,proto3" json:"timerCount,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
@@ -746,6 +791,27 @@ func (m *PlayerData) GetChair() int32 {
 	return 0
 }
 
+func (m *PlayerData) GetStandUPNum() int32 {
+	if m != nil {
+		return m.StandUPNum
+	}
+	return 0
+}
+
+func (m *PlayerData) GetChips() float64 {
+	if m != nil {
+		return m.Chips
+	}
+	return 0
+}
+
+func (m *PlayerData) GetRoomChips() float64 {
+	if m != nil {
+		return m.RoomChips
+	}
+	return 0
+}
+
 func (m *PlayerData) GetActionStatus() ActionStatus {
 	if m != nil {
 		return m.ActionStatus
@@ -753,9 +819,23 @@ func (m *PlayerData) GetActionStatus() ActionStatus {
 	return ActionStatus_WAITING
 }
 
+func (m *PlayerData) GetGameStep() int32 {
+	if m != nil {
+		return m.GameStep
+	}
+	return 0
+}
+
 func (m *PlayerData) GetDownBets() float64 {
 	if m != nil {
 		return m.DownBets
+	}
+	return 0
+}
+
+func (m *PlayerData) GetTotalDownBet() float64 {
+	if m != nil {
+		return m.TotalDownBet
 	}
 	return 0
 }
@@ -809,15 +889,25 @@ func (m *PlayerData) GetIsWinner() bool {
 	return false
 }
 
+func (m *PlayerData) GetTimerCount() int32 {
+	if m != nil {
+		return m.TimerCount
+	}
+	return 0
+}
+
 type RoomData struct {
 	RoomId               string        `protobuf:"bytes,1,opt,name=roomId,proto3" json:"roomId,omitempty"`
 	CfgId                string        `protobuf:"bytes,2,opt,name=cfgId,proto3" json:"cfgId,omitempty"`
 	GameStep             GameStep      `protobuf:"varint,3,opt,name=gameStep,proto3,enum=msg.GameStep" json:"gameStep,omitempty"`
 	MinRaise             float64       `protobuf:"fixed64,4,opt,name=minRaise,proto3" json:"minRaise,omitempty"`
-	ActionSeat           int32         `protobuf:"varint,5,opt,name=actionSeat,proto3" json:"actionSeat,omitempty"`
-	PotMoney             float64       `protobuf:"fixed64,6,opt,name=potMoney,proto3" json:"potMoney,omitempty"`
-	PublicCards          []int32       `protobuf:"varint,7,rep,packed,name=publicCards,proto3" json:"publicCards,omitempty"`
-	PlayerData           []*PlayerData `protobuf:"bytes,8,rep,name=playerData,proto3" json:"playerData,omitempty"`
+	PreChips             float64       `protobuf:"fixed64,5,opt,name=preChips,proto3" json:"preChips,omitempty"`
+	ActionSeat           int32         `protobuf:"varint,6,opt,name=actionSeat,proto3" json:"actionSeat,omitempty"`
+	Banker               int32         `protobuf:"varint,7,opt,name=banker,proto3" json:"banker,omitempty"`
+	BigBlind             float64       `protobuf:"fixed64,8,opt,name=bigBlind,proto3" json:"bigBlind,omitempty"`
+	PotMoney             float64       `protobuf:"fixed64,9,opt,name=potMoney,proto3" json:"potMoney,omitempty"`
+	PublicCards          []int32       `protobuf:"varint,10,rep,packed,name=publicCards,proto3" json:"publicCards,omitempty"`
+	PlayerData           []*PlayerData `protobuf:"bytes,11,rep,name=playerData,proto3" json:"playerData,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
 	XXX_unrecognized     []byte        `json:"-"`
 	XXX_sizecache        int32         `json:"-"`
@@ -876,9 +966,30 @@ func (m *RoomData) GetMinRaise() float64 {
 	return 0
 }
 
+func (m *RoomData) GetPreChips() float64 {
+	if m != nil {
+		return m.PreChips
+	}
+	return 0
+}
+
 func (m *RoomData) GetActionSeat() int32 {
 	if m != nil {
 		return m.ActionSeat
+	}
+	return 0
+}
+
+func (m *RoomData) GetBanker() int32 {
+	if m != nil {
+		return m.Banker
+	}
+	return 0
+}
+
+func (m *RoomData) GetBigBlind() float64 {
+	if m != nil {
+		return m.BigBlind
 	}
 	return 0
 }
@@ -974,6 +1085,45 @@ func (m *ChangeTable_C2S) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ChangeTable_C2S proto.InternalMessageInfo
 
+type JoinRoom_S2C struct {
+	RoomData             *RoomData `protobuf:"bytes,1,opt,name=roomData,proto3" json:"roomData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *JoinRoom_S2C) Reset()         { *m = JoinRoom_S2C{} }
+func (m *JoinRoom_S2C) String() string { return proto.CompactTextString(m) }
+func (*JoinRoom_S2C) ProtoMessage()    {}
+func (*JoinRoom_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{13}
+}
+
+func (m *JoinRoom_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_JoinRoom_S2C.Unmarshal(m, b)
+}
+func (m *JoinRoom_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_JoinRoom_S2C.Marshal(b, m, deterministic)
+}
+func (m *JoinRoom_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_JoinRoom_S2C.Merge(m, src)
+}
+func (m *JoinRoom_S2C) XXX_Size() int {
+	return xxx_messageInfo_JoinRoom_S2C.Size(m)
+}
+func (m *JoinRoom_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_JoinRoom_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_JoinRoom_S2C proto.InternalMessageInfo
+
+func (m *JoinRoom_S2C) GetRoomData() *RoomData {
+	if m != nil {
+		return m.RoomData
+	}
+	return nil
+}
+
 type EnterRoom_S2C struct {
 	RoomData             *RoomData `protobuf:"bytes,1,opt,name=roomData,proto3" json:"roomData,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
@@ -985,7 +1135,7 @@ func (m *EnterRoom_S2C) Reset()         { *m = EnterRoom_S2C{} }
 func (m *EnterRoom_S2C) String() string { return proto.CompactTextString(m) }
 func (*EnterRoom_S2C) ProtoMessage()    {}
 func (*EnterRoom_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{13}
+	return fileDescriptor_c06e4cca6c2cc899, []int{14}
 }
 
 func (m *EnterRoom_S2C) XXX_Unmarshal(b []byte) error {
@@ -1013,6 +1163,45 @@ func (m *EnterRoom_S2C) GetRoomData() *RoomData {
 	return nil
 }
 
+type NoticeJoin_S2C struct {
+	PlayerData           *PlayerData `protobuf:"bytes,1,opt,name=playerData,proto3" json:"playerData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *NoticeJoin_S2C) Reset()         { *m = NoticeJoin_S2C{} }
+func (m *NoticeJoin_S2C) String() string { return proto.CompactTextString(m) }
+func (*NoticeJoin_S2C) ProtoMessage()    {}
+func (*NoticeJoin_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{15}
+}
+
+func (m *NoticeJoin_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NoticeJoin_S2C.Unmarshal(m, b)
+}
+func (m *NoticeJoin_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NoticeJoin_S2C.Marshal(b, m, deterministic)
+}
+func (m *NoticeJoin_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NoticeJoin_S2C.Merge(m, src)
+}
+func (m *NoticeJoin_S2C) XXX_Size() int {
+	return xxx_messageInfo_NoticeJoin_S2C.Size(m)
+}
+func (m *NoticeJoin_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_NoticeJoin_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NoticeJoin_S2C proto.InternalMessageInfo
+
+func (m *NoticeJoin_S2C) GetPlayerData() *PlayerData {
+	if m != nil {
+		return m.PlayerData
+	}
+	return nil
+}
+
 type LeaveRoom_C2S struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1023,7 +1212,7 @@ func (m *LeaveRoom_C2S) Reset()         { *m = LeaveRoom_C2S{} }
 func (m *LeaveRoom_C2S) String() string { return proto.CompactTextString(m) }
 func (*LeaveRoom_C2S) ProtoMessage()    {}
 func (*LeaveRoom_C2S) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{14}
+	return fileDescriptor_c06e4cca6c2cc899, []int{16}
 }
 
 func (m *LeaveRoom_C2S) XXX_Unmarshal(b []byte) error {
@@ -1045,7 +1234,7 @@ func (m *LeaveRoom_C2S) XXX_DiscardUnknown() {
 var xxx_messageInfo_LeaveRoom_C2S proto.InternalMessageInfo
 
 type LeaveRoom_S2C struct {
-	PlayerInfo           *PlayerInfo `protobuf:"bytes,1,opt,name=playerInfo,proto3" json:"playerInfo,omitempty"`
+	PlayerData           *PlayerData `protobuf:"bytes,1,opt,name=playerData,proto3" json:"playerData,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
 	XXX_unrecognized     []byte      `json:"-"`
 	XXX_sizecache        int32       `json:"-"`
@@ -1055,7 +1244,7 @@ func (m *LeaveRoom_S2C) Reset()         { *m = LeaveRoom_S2C{} }
 func (m *LeaveRoom_S2C) String() string { return proto.CompactTextString(m) }
 func (*LeaveRoom_S2C) ProtoMessage()    {}
 func (*LeaveRoom_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{15}
+	return fileDescriptor_c06e4cca6c2cc899, []int{17}
 }
 
 func (m *LeaveRoom_S2C) XXX_Unmarshal(b []byte) error {
@@ -1076,9 +1265,48 @@ func (m *LeaveRoom_S2C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_LeaveRoom_S2C proto.InternalMessageInfo
 
-func (m *LeaveRoom_S2C) GetPlayerInfo() *PlayerInfo {
+func (m *LeaveRoom_S2C) GetPlayerData() *PlayerData {
 	if m != nil {
-		return m.PlayerInfo
+		return m.PlayerData
+	}
+	return nil
+}
+
+type NoticeLeave_S2C struct {
+	PlayerData           *PlayerData `protobuf:"bytes,1,opt,name=playerData,proto3" json:"playerData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *NoticeLeave_S2C) Reset()         { *m = NoticeLeave_S2C{} }
+func (m *NoticeLeave_S2C) String() string { return proto.CompactTextString(m) }
+func (*NoticeLeave_S2C) ProtoMessage()    {}
+func (*NoticeLeave_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{18}
+}
+
+func (m *NoticeLeave_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NoticeLeave_S2C.Unmarshal(m, b)
+}
+func (m *NoticeLeave_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NoticeLeave_S2C.Marshal(b, m, deterministic)
+}
+func (m *NoticeLeave_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NoticeLeave_S2C.Merge(m, src)
+}
+func (m *NoticeLeave_S2C) XXX_Size() int {
+	return xxx_messageInfo_NoticeLeave_S2C.Size(m)
+}
+func (m *NoticeLeave_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_NoticeLeave_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NoticeLeave_S2C proto.InternalMessageInfo
+
+func (m *NoticeLeave_S2C) GetPlayerData() *PlayerData {
+	if m != nil {
+		return m.PlayerData
 	}
 	return nil
 }
@@ -1093,7 +1321,7 @@ func (m *SitDown_C2S) Reset()         { *m = SitDown_C2S{} }
 func (m *SitDown_C2S) String() string { return proto.CompactTextString(m) }
 func (*SitDown_C2S) ProtoMessage()    {}
 func (*SitDown_C2S) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{16}
+	return fileDescriptor_c06e4cca6c2cc899, []int{19}
 }
 
 func (m *SitDown_C2S) XXX_Unmarshal(b []byte) error {
@@ -1115,17 +1343,17 @@ func (m *SitDown_C2S) XXX_DiscardUnknown() {
 var xxx_messageInfo_SitDown_C2S proto.InternalMessageInfo
 
 type SitDown_S2C struct {
-	RoomData             *RoomData `protobuf:"bytes,1,opt,name=roomData,proto3" json:"roomData,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	PlayerData           *PlayerData `protobuf:"bytes,1,opt,name=playerData,proto3" json:"playerData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *SitDown_S2C) Reset()         { *m = SitDown_S2C{} }
 func (m *SitDown_S2C) String() string { return proto.CompactTextString(m) }
 func (*SitDown_S2C) ProtoMessage()    {}
 func (*SitDown_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{17}
+	return fileDescriptor_c06e4cca6c2cc899, []int{20}
 }
 
 func (m *SitDown_S2C) XXX_Unmarshal(b []byte) error {
@@ -1146,9 +1374,9 @@ func (m *SitDown_S2C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_SitDown_S2C proto.InternalMessageInfo
 
-func (m *SitDown_S2C) GetRoomData() *RoomData {
+func (m *SitDown_S2C) GetPlayerData() *PlayerData {
 	if m != nil {
-		return m.RoomData
+		return m.PlayerData
 	}
 	return nil
 }
@@ -1163,7 +1391,7 @@ func (m *StandUp_C2S) Reset()         { *m = StandUp_C2S{} }
 func (m *StandUp_C2S) String() string { return proto.CompactTextString(m) }
 func (*StandUp_C2S) ProtoMessage()    {}
 func (*StandUp_C2S) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{18}
+	return fileDescriptor_c06e4cca6c2cc899, []int{21}
 }
 
 func (m *StandUp_C2S) XXX_Unmarshal(b []byte) error {
@@ -1185,17 +1413,17 @@ func (m *StandUp_C2S) XXX_DiscardUnknown() {
 var xxx_messageInfo_StandUp_C2S proto.InternalMessageInfo
 
 type StandUp_S2C struct {
-	RoomData             *RoomData `protobuf:"bytes,1,opt,name=roomData,proto3" json:"roomData,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_unrecognized     []byte    `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	PlayerData           *PlayerData `protobuf:"bytes,1,opt,name=playerData,proto3" json:"playerData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *StandUp_S2C) Reset()         { *m = StandUp_S2C{} }
 func (m *StandUp_S2C) String() string { return proto.CompactTextString(m) }
 func (*StandUp_S2C) ProtoMessage()    {}
 func (*StandUp_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{19}
+	return fileDescriptor_c06e4cca6c2cc899, []int{22}
 }
 
 func (m *StandUp_S2C) XXX_Unmarshal(b []byte) error {
@@ -1216,11 +1444,50 @@ func (m *StandUp_S2C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_StandUp_S2C proto.InternalMessageInfo
 
-func (m *StandUp_S2C) GetRoomData() *RoomData {
+func (m *StandUp_S2C) GetPlayerData() *PlayerData {
 	if m != nil {
-		return m.RoomData
+		return m.PlayerData
 	}
 	return nil
+}
+
+type CreatBanker_S2C struct {
+	BankerSeat           int32    `protobuf:"varint,1,opt,name=bankerSeat,proto3" json:"bankerSeat,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreatBanker_S2C) Reset()         { *m = CreatBanker_S2C{} }
+func (m *CreatBanker_S2C) String() string { return proto.CompactTextString(m) }
+func (*CreatBanker_S2C) ProtoMessage()    {}
+func (*CreatBanker_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{23}
+}
+
+func (m *CreatBanker_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreatBanker_S2C.Unmarshal(m, b)
+}
+func (m *CreatBanker_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreatBanker_S2C.Marshal(b, m, deterministic)
+}
+func (m *CreatBanker_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreatBanker_S2C.Merge(m, src)
+}
+func (m *CreatBanker_S2C) XXX_Size() int {
+	return xxx_messageInfo_CreatBanker_S2C.Size(m)
+}
+func (m *CreatBanker_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreatBanker_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreatBanker_S2C proto.InternalMessageInfo
+
+func (m *CreatBanker_S2C) GetBankerSeat() int32 {
+	if m != nil {
+		return m.BankerSeat
+	}
+	return 0
 }
 
 type PlayerAction_C2S struct {
@@ -1235,7 +1502,7 @@ func (m *PlayerAction_C2S) Reset()         { *m = PlayerAction_C2S{} }
 func (m *PlayerAction_C2S) String() string { return proto.CompactTextString(m) }
 func (*PlayerAction_C2S) ProtoMessage()    {}
 func (*PlayerAction_C2S) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{20}
+	return fileDescriptor_c06e4cca6c2cc899, []int{24}
 }
 
 func (m *PlayerAction_C2S) XXX_Unmarshal(b []byte) error {
@@ -1271,19 +1538,22 @@ func (m *PlayerAction_C2S) GetAction() ActionStatus {
 }
 
 type PlayerAction_S2C struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=Id,proto3" json:"Id,omitempty"`
-	Account              float64  `protobuf:"fixed64,2,opt,name=account,proto3" json:"account,omitempty"`
-	PotMoney             float64  `protobuf:"fixed64,3,opt,name=potMoney,proto3" json:"potMoney,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Id                   string       `protobuf:"bytes,1,opt,name=Id,proto3" json:"Id,omitempty"`
+	Chair                int32        `protobuf:"varint,2,opt,name=chair,proto3" json:"chair,omitempty"`
+	Chips                float64      `protobuf:"fixed64,3,opt,name=chips,proto3" json:"chips,omitempty"`
+	DownBet              float64      `protobuf:"fixed64,4,opt,name=downBet,proto3" json:"downBet,omitempty"`
+	PotMoney             float64      `protobuf:"fixed64,5,opt,name=potMoney,proto3" json:"potMoney,omitempty"`
+	ActionType           ActionStatus `protobuf:"varint,6,opt,name=actionType,proto3,enum=msg.ActionStatus" json:"actionType,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *PlayerAction_S2C) Reset()         { *m = PlayerAction_S2C{} }
 func (m *PlayerAction_S2C) String() string { return proto.CompactTextString(m) }
 func (*PlayerAction_S2C) ProtoMessage()    {}
 func (*PlayerAction_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{21}
+	return fileDescriptor_c06e4cca6c2cc899, []int{25}
 }
 
 func (m *PlayerAction_S2C) XXX_Unmarshal(b []byte) error {
@@ -1311,9 +1581,23 @@ func (m *PlayerAction_S2C) GetId() string {
 	return ""
 }
 
-func (m *PlayerAction_S2C) GetAccount() float64 {
+func (m *PlayerAction_S2C) GetChair() int32 {
 	if m != nil {
-		return m.Account
+		return m.Chair
+	}
+	return 0
+}
+
+func (m *PlayerAction_S2C) GetChips() float64 {
+	if m != nil {
+		return m.Chips
+	}
+	return 0
+}
+
+func (m *PlayerAction_S2C) GetDownBet() float64 {
+	if m != nil {
+		return m.DownBet
 	}
 	return 0
 }
@@ -1321,6 +1605,172 @@ func (m *PlayerAction_S2C) GetAccount() float64 {
 func (m *PlayerAction_S2C) GetPotMoney() float64 {
 	if m != nil {
 		return m.PotMoney
+	}
+	return 0
+}
+
+func (m *PlayerAction_S2C) GetActionType() ActionStatus {
+	if m != nil {
+		return m.ActionType
+	}
+	return ActionStatus_WAITING
+}
+
+// 当前玩家行动变更
+type PlayerActionChange_S2C struct {
+	RoomData             *RoomData `protobuf:"bytes,1,opt,name=roomData,proto3" json:"roomData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *PlayerActionChange_S2C) Reset()         { *m = PlayerActionChange_S2C{} }
+func (m *PlayerActionChange_S2C) String() string { return proto.CompactTextString(m) }
+func (*PlayerActionChange_S2C) ProtoMessage()    {}
+func (*PlayerActionChange_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{26}
+}
+
+func (m *PlayerActionChange_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PlayerActionChange_S2C.Unmarshal(m, b)
+}
+func (m *PlayerActionChange_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PlayerActionChange_S2C.Marshal(b, m, deterministic)
+}
+func (m *PlayerActionChange_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PlayerActionChange_S2C.Merge(m, src)
+}
+func (m *PlayerActionChange_S2C) XXX_Size() int {
+	return xxx_messageInfo_PlayerActionChange_S2C.Size(m)
+}
+func (m *PlayerActionChange_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_PlayerActionChange_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PlayerActionChange_S2C proto.InternalMessageInfo
+
+func (m *PlayerActionChange_S2C) GetRoomData() *RoomData {
+	if m != nil {
+		return m.RoomData
+	}
+	return nil
+}
+
+// 玩家添加筹码
+type AddChips_C2S struct {
+	AddChips             float64  `protobuf:"fixed64,1,opt,name=addChips,proto3" json:"addChips,omitempty"`
+	SysBuyChips          int32    `protobuf:"varint,2,opt,name=sysBuyChips,proto3" json:"sysBuyChips,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AddChips_C2S) Reset()         { *m = AddChips_C2S{} }
+func (m *AddChips_C2S) String() string { return proto.CompactTextString(m) }
+func (*AddChips_C2S) ProtoMessage()    {}
+func (*AddChips_C2S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{27}
+}
+
+func (m *AddChips_C2S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddChips_C2S.Unmarshal(m, b)
+}
+func (m *AddChips_C2S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddChips_C2S.Marshal(b, m, deterministic)
+}
+func (m *AddChips_C2S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddChips_C2S.Merge(m, src)
+}
+func (m *AddChips_C2S) XXX_Size() int {
+	return xxx_messageInfo_AddChips_C2S.Size(m)
+}
+func (m *AddChips_C2S) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddChips_C2S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddChips_C2S proto.InternalMessageInfo
+
+func (m *AddChips_C2S) GetAddChips() float64 {
+	if m != nil {
+		return m.AddChips
+	}
+	return 0
+}
+
+func (m *AddChips_C2S) GetSysBuyChips() int32 {
+	if m != nil {
+		return m.SysBuyChips
+	}
+	return 0
+}
+
+type AddChips_S2C struct {
+	Chair                int32    `protobuf:"varint,1,opt,name=chair,proto3" json:"chair,omitempty"`
+	AddChips             float64  `protobuf:"fixed64,2,opt,name=addChips,proto3" json:"addChips,omitempty"`
+	Chips                float64  `protobuf:"fixed64,3,opt,name=chips,proto3" json:"chips,omitempty"`
+	RoomChips            float64  `protobuf:"fixed64,4,opt,name=roomChips,proto3" json:"roomChips,omitempty"`
+	SysBuyChips          int32    `protobuf:"varint,5,opt,name=sysBuyChips,proto3" json:"sysBuyChips,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AddChips_S2C) Reset()         { *m = AddChips_S2C{} }
+func (m *AddChips_S2C) String() string { return proto.CompactTextString(m) }
+func (*AddChips_S2C) ProtoMessage()    {}
+func (*AddChips_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{28}
+}
+
+func (m *AddChips_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddChips_S2C.Unmarshal(m, b)
+}
+func (m *AddChips_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddChips_S2C.Marshal(b, m, deterministic)
+}
+func (m *AddChips_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddChips_S2C.Merge(m, src)
+}
+func (m *AddChips_S2C) XXX_Size() int {
+	return xxx_messageInfo_AddChips_S2C.Size(m)
+}
+func (m *AddChips_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddChips_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddChips_S2C proto.InternalMessageInfo
+
+func (m *AddChips_S2C) GetChair() int32 {
+	if m != nil {
+		return m.Chair
+	}
+	return 0
+}
+
+func (m *AddChips_S2C) GetAddChips() float64 {
+	if m != nil {
+		return m.AddChips
+	}
+	return 0
+}
+
+func (m *AddChips_S2C) GetChips() float64 {
+	if m != nil {
+		return m.Chips
+	}
+	return 0
+}
+
+func (m *AddChips_S2C) GetRoomChips() float64 {
+	if m != nil {
+		return m.RoomChips
+	}
+	return 0
+}
+
+func (m *AddChips_S2C) GetSysBuyChips() int32 {
+	if m != nil {
+		return m.SysBuyChips
 	}
 	return 0
 }
@@ -1337,7 +1787,7 @@ func (m *GameStepChange_S2C) Reset()         { *m = GameStepChange_S2C{} }
 func (m *GameStepChange_S2C) String() string { return proto.CompactTextString(m) }
 func (*GameStepChange_S2C) ProtoMessage()    {}
 func (*GameStepChange_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{22}
+	return fileDescriptor_c06e4cca6c2cc899, []int{29}
 }
 
 func (m *GameStepChange_S2C) XXX_Unmarshal(b []byte) error {
@@ -1377,7 +1827,7 @@ func (m *ResultGameData_S2C) Reset()         { *m = ResultGameData_S2C{} }
 func (m *ResultGameData_S2C) String() string { return proto.CompactTextString(m) }
 func (*ResultGameData_S2C) ProtoMessage()    {}
 func (*ResultGameData_S2C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_c06e4cca6c2cc899, []int{23}
+	return fileDescriptor_c06e4cca6c2cc899, []int{30}
 }
 
 func (m *ResultGameData_S2C) XXX_Unmarshal(b []byte) error {
@@ -1405,6 +1855,118 @@ func (m *ResultGameData_S2C) GetRoomData() *RoomData {
 	return nil
 }
 
+// 游戏准备时间
+type ReadyTime_S2C struct {
+	ReadyTime            int32    `protobuf:"varint,1,opt,name=readyTime,proto3" json:"readyTime,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ReadyTime_S2C) Reset()         { *m = ReadyTime_S2C{} }
+func (m *ReadyTime_S2C) String() string { return proto.CompactTextString(m) }
+func (*ReadyTime_S2C) ProtoMessage()    {}
+func (*ReadyTime_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{31}
+}
+
+func (m *ReadyTime_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ReadyTime_S2C.Unmarshal(m, b)
+}
+func (m *ReadyTime_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ReadyTime_S2C.Marshal(b, m, deterministic)
+}
+func (m *ReadyTime_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ReadyTime_S2C.Merge(m, src)
+}
+func (m *ReadyTime_S2C) XXX_Size() int {
+	return xxx_messageInfo_ReadyTime_S2C.Size(m)
+}
+func (m *ReadyTime_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_ReadyTime_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ReadyTime_S2C proto.InternalMessageInfo
+
+func (m *ReadyTime_S2C) GetReadyTime() int32 {
+	if m != nil {
+		return m.ReadyTime
+	}
+	return 0
+}
+
+// 游戏结算时间
+type SettleTime_S2C struct {
+	SettleTime           int32    `protobuf:"varint,1,opt,name=settleTime,proto3" json:"settleTime,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SettleTime_S2C) Reset()         { *m = SettleTime_S2C{} }
+func (m *SettleTime_S2C) String() string { return proto.CompactTextString(m) }
+func (*SettleTime_S2C) ProtoMessage()    {}
+func (*SettleTime_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{32}
+}
+
+func (m *SettleTime_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SettleTime_S2C.Unmarshal(m, b)
+}
+func (m *SettleTime_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SettleTime_S2C.Marshal(b, m, deterministic)
+}
+func (m *SettleTime_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SettleTime_S2C.Merge(m, src)
+}
+func (m *SettleTime_S2C) XXX_Size() int {
+	return xxx_messageInfo_SettleTime_S2C.Size(m)
+}
+func (m *SettleTime_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_SettleTime_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SettleTime_S2C proto.InternalMessageInfo
+
+func (m *SettleTime_S2C) GetSettleTime() int32 {
+	if m != nil {
+		return m.SettleTime
+	}
+	return 0
+}
+
+// 发牌时间
+type PushCardTime_S2C struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *PushCardTime_S2C) Reset()         { *m = PushCardTime_S2C{} }
+func (m *PushCardTime_S2C) String() string { return proto.CompactTextString(m) }
+func (*PushCardTime_S2C) ProtoMessage()    {}
+func (*PushCardTime_S2C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_c06e4cca6c2cc899, []int{33}
+}
+
+func (m *PushCardTime_S2C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PushCardTime_S2C.Unmarshal(m, b)
+}
+func (m *PushCardTime_S2C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PushCardTime_S2C.Marshal(b, m, deterministic)
+}
+func (m *PushCardTime_S2C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PushCardTime_S2C.Merge(m, src)
+}
+func (m *PushCardTime_S2C) XXX_Size() int {
+	return xxx_messageInfo_PushCardTime_S2C.Size(m)
+}
+func (m *PushCardTime_S2C) XXX_DiscardUnknown() {
+	xxx_messageInfo_PushCardTime_S2C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PushCardTime_S2C proto.InternalMessageInfo
+
 func init() {
 	proto.RegisterEnum("msg.MessageID", MessageID_name, MessageID_value)
 	proto.RegisterEnum("msg.ErrorMsg", ErrorMsg_name, ErrorMsg_value)
@@ -1425,101 +1987,137 @@ func init() {
 	proto.RegisterType((*RoomData)(nil), "msg.RoomData")
 	proto.RegisterType((*QuickStart_C2S)(nil), "msg.QuickStart_C2S")
 	proto.RegisterType((*ChangeTable_C2S)(nil), "msg.ChangeTable_C2S")
+	proto.RegisterType((*JoinRoom_S2C)(nil), "msg.JoinRoom_S2C")
 	proto.RegisterType((*EnterRoom_S2C)(nil), "msg.EnterRoom_S2C")
+	proto.RegisterType((*NoticeJoin_S2C)(nil), "msg.NoticeJoin_S2C")
 	proto.RegisterType((*LeaveRoom_C2S)(nil), "msg.LeaveRoom_C2S")
 	proto.RegisterType((*LeaveRoom_S2C)(nil), "msg.LeaveRoom_S2C")
+	proto.RegisterType((*NoticeLeave_S2C)(nil), "msg.NoticeLeave_S2C")
 	proto.RegisterType((*SitDown_C2S)(nil), "msg.SitDown_C2S")
 	proto.RegisterType((*SitDown_S2C)(nil), "msg.SitDown_S2C")
 	proto.RegisterType((*StandUp_C2S)(nil), "msg.StandUp_C2S")
 	proto.RegisterType((*StandUp_S2C)(nil), "msg.StandUp_S2C")
+	proto.RegisterType((*CreatBanker_S2C)(nil), "msg.CreatBanker_S2C")
 	proto.RegisterType((*PlayerAction_C2S)(nil), "msg.PlayerAction_C2S")
 	proto.RegisterType((*PlayerAction_S2C)(nil), "msg.PlayerAction_S2C")
+	proto.RegisterType((*PlayerActionChange_S2C)(nil), "msg.PlayerActionChange_S2C")
+	proto.RegisterType((*AddChips_C2S)(nil), "msg.AddChips_C2S")
+	proto.RegisterType((*AddChips_S2C)(nil), "msg.AddChips_S2C")
 	proto.RegisterType((*GameStepChange_S2C)(nil), "msg.GameStepChange_S2C")
 	proto.RegisterType((*ResultGameData_S2C)(nil), "msg.ResultGameData_S2C")
+	proto.RegisterType((*ReadyTime_S2C)(nil), "msg.ReadyTime_S2C")
+	proto.RegisterType((*SettleTime_S2C)(nil), "msg.SettleTime_S2C")
+	proto.RegisterType((*PushCardTime_S2C)(nil), "msg.PushCardTime_S2C")
 }
 
-func init() { proto.RegisterFile("msg.proto", fileDescriptor_c06e4cca6c2cc899) }
+func init() {
+	proto.RegisterFile("msg.proto", fileDescriptor_c06e4cca6c2cc899)
+}
 
 var fileDescriptor_c06e4cca6c2cc899 = []byte{
-	// 1270 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x56, 0xdb, 0x6e, 0xdb, 0x46,
-	0x10, 0x35, 0x75, 0x25, 0x47, 0x17, 0xaf, 0x37, 0x69, 0x4a, 0x04, 0x41, 0x21, 0xb0, 0x40, 0xe0,
-	0x18, 0x45, 0x02, 0xb8, 0x28, 0xd0, 0x16, 0x05, 0x52, 0x59, 0xb6, 0x63, 0x22, 0xbe, 0x28, 0xa4,
-	0x02, 0x1b, 0xe8, 0x83, 0xb1, 0x96, 0xd6, 0x14, 0x6b, 0x8a, 0x2b, 0x90, 0xcb, 0x18, 0xfe, 0x86,
-	0x02, 0xfd, 0x83, 0xbe, 0xf5, 0xa5, 0x5f, 0xd0, 0xdf, 0x2b, 0x66, 0xc9, 0xa5, 0x28, 0x25, 0x2f,
-	0xee, 0x1b, 0xcf, 0x99, 0xd9, 0xd9, 0xd9, 0x33, 0x33, 0xbb, 0x04, 0x6b, 0x91, 0x06, 0xaf, 0x97,
-	0x89, 0x90, 0x82, 0xd6, 0x17, 0x69, 0xe0, 0xb4, 0xa0, 0x31, 0x0e, 0xe3, 0xc0, 0x79, 0x09, 0x8d,
-	0xb1, 0x88, 0x03, 0xfa, 0x0d, 0x40, 0xca, 0x93, 0x4f, 0x3c, 0x99, 0x84, 0x0b, 0x6e, 0x1b, 0x03,
-	0x63, 0xb7, 0xee, 0x55, 0x18, 0xe7, 0x10, 0xac, 0xa3, 0x24, 0x11, 0xc9, 0xb5, 0xbf, 0x3f, 0xa2,
-	0xdf, 0x42, 0x93, 0x23, 0x50, 0x7e, 0xfd, 0xfd, 0xde, 0x6b, 0x0c, 0xae, 0xcc, 0x67, 0x69, 0xe0,
-	0xe5, 0x36, 0x4a, 0xa1, 0x31, 0x63, 0x92, 0xd9, 0xb5, 0x81, 0xb1, 0x6b, 0x79, 0xea, 0xdb, 0x39,
-	0x03, 0xeb, 0x54, 0x04, 0x61, 0x7c, 0x3d, 0xda, 0xf7, 0x69, 0x1f, 0x6a, 0xee, 0x4c, 0x85, 0xb0,
-	0xbc, 0x9a, 0x3b, 0xa3, 0xcf, 0xc1, 0x1c, 0xb3, 0x34, 0xbd, 0x14, 0xc9, 0xac, 0x58, 0x54, 0x62,
-	0xfa, 0x14, 0x9a, 0x13, 0x71, 0xc7, 0x63, 0xbb, 0xae, 0x0c, 0x39, 0x70, 0x22, 0x80, 0x71, 0xc4,
-	0x1e, 0x78, 0xe2, 0xc6, 0xb7, 0xe2, 0x4b, 0xf1, 0xe2, 0x70, 0x7a, 0x77, 0xce, 0x16, 0x5c, 0xc7,
-	0xd3, 0x98, 0xda, 0xd0, 0x9e, 0x73, 0x36, 0x73, 0x17, 0x41, 0x11, 0x51, 0x43, 0xb4, 0xb0, 0xe9,
-	0x54, 0x64, 0xb1, 0xb4, 0x1b, 0x03, 0x63, 0xd7, 0xf0, 0x34, 0x74, 0x7e, 0xd1, 0xc9, 0xa3, 0x04,
-	0x6f, 0x00, 0x96, 0xe5, 0xd6, 0x6a, 0xd3, 0xce, 0xfe, 0xb6, 0xd2, 0x61, 0x95, 0x91, 0x57, 0x71,
-	0x71, 0xba, 0x00, 0xa7, 0x22, 0x10, 0x99, 0xc4, 0xb3, 0x57, 0x90, 0xbf, 0x3f, 0x72, 0xfe, 0x30,
-	0xa0, 0x3b, 0x62, 0xc9, 0xcc, 0xcf, 0x42, 0x79, 0xc8, 0x24, 0xa3, 0x0e, 0x74, 0xe7, 0x2c, 0x9e,
-	0x21, 0xf7, 0x9e, 0x3f, 0xa4, 0xb6, 0x31, 0xa8, 0xef, 0x36, 0xbd, 0x35, 0x8e, 0xbe, 0x84, 0xfe,
-	0x32, 0xbb, 0x89, 0xc2, 0x69, 0xe9, 0x55, 0x53, 0x5e, 0x1b, 0x2c, 0x7d, 0x03, 0x9d, 0x34, 0x0b,
-	0xe5, 0x98, 0x49, 0xc9, 0x93, 0x5c, 0x40, 0x5d, 0x32, 0xbd, 0xa7, 0x57, 0xf5, 0x70, 0xfe, 0xaa,
-	0x6b, 0x59, 0x55, 0x2e, 0x8f, 0x3d, 0x29, 0xd6, 0x6a, 0x3a, 0x67, 0x61, 0xa2, 0x44, 0x6f, 0x7a,
-	0x39, 0xa0, 0x3f, 0x40, 0x97, 0x4d, 0x65, 0x28, 0x62, 0x5f, 0x32, 0x99, 0xa5, 0x45, 0x1e, 0x3b,
-	0x2a, 0xd0, 0xb0, 0x62, 0xf0, 0xd6, 0xdc, 0xb0, 0x88, 0x33, 0x71, 0x1f, 0x1f, 0x70, 0x99, 0x16,
-	0xf5, 0x28, 0x31, 0x7d, 0x01, 0x96, 0x56, 0x24, 0xb5, 0x9b, 0xea, 0xf0, 0x2b, 0x02, 0x37, 0x9c,
-	0x56, 0x34, 0xb5, 0x5b, 0x2a, 0xf3, 0x9d, 0xb5, 0x83, 0xa3, 0xc1, 0x5b, 0x73, 0xa3, 0x03, 0xe8,
-	0x24, 0x3c, 0xcd, 0x22, 0x79, 0x26, 0x62, 0xfe, 0x60, 0xb7, 0xd5, 0x9e, 0x55, 0x8a, 0x7e, 0x07,
-	0xd6, 0x4d, 0x14, 0xc6, 0xb3, 0xc9, 0xc3, 0x92, 0xdb, 0xa6, 0x3a, 0x46, 0x5f, 0x45, 0x3d, 0xd0,
-	0xac, 0xb7, 0x72, 0xc0, 0x03, 0xb8, 0xe9, 0x41, 0x26, 0xa5, 0x88, 0x6d, 0x6b, 0x60, 0xec, 0x9a,
-	0x5e, 0x89, 0xb1, 0xd7, 0xdc, 0x74, 0x18, 0x45, 0x6e, 0x6c, 0x83, 0x32, 0x69, 0x98, 0xaf, 0xba,
-	0x0c, 0xe3, 0x98, 0x27, 0x76, 0x47, 0xaf, 0xca, 0xb1, 0xf3, 0x67, 0x0d, 0x4c, 0x4f, 0x88, 0x85,
-	0x4a, 0xf7, 0x19, 0xb4, 0x12, 0x21, 0x16, 0x65, 0xe3, 0x17, 0x48, 0x15, 0xe1, 0x36, 0x70, 0xf5,
-	0x24, 0xe5, 0x80, 0xbe, 0x02, 0x33, 0x60, 0x0b, 0xee, 0x4b, 0xbe, 0x5c, 0x6b, 0x84, 0x77, 0x05,
-	0xe9, 0x95, 0x66, 0xcc, 0x60, 0x11, 0xc6, 0x1e, 0x0b, 0x53, 0xae, 0x85, 0xd7, 0x18, 0x2f, 0x8b,
-	0xa2, 0x48, 0x9c, 0x49, 0xbb, 0xa9, 0xca, 0x5c, 0x61, 0x70, 0xed, 0x52, 0x14, 0x02, 0xb6, 0xf2,
-	0xb5, 0x1a, 0xa3, 0xbe, 0xab, 0x06, 0x4d, 0xed, 0xb6, 0x2a, 0x5b, 0x95, 0x5a, 0x35, 0x9c, 0x2a,
-	0x9b, 0x39, 0xa8, 0x6f, 0x34, 0x9c, 0x2a, 0x5a, 0xc5, 0xc5, 0x79, 0x09, 0xfd, 0x0f, 0x59, 0x38,
-	0xbd, 0xf3, 0x25, 0x4b, 0xd4, 0x78, 0xad, 0x4e, 0x6f, 0x54, 0x4e, 0xef, 0xec, 0xc0, 0xf6, 0x68,
-	0xce, 0xe2, 0x80, 0x4f, 0xd8, 0x4d, 0xc4, 0xd5, 0x1c, 0xfe, 0x0c, 0xbd, 0xa3, 0x58, 0xf2, 0x04,
-	0xf5, 0x54, 0x73, 0xfd, 0x0a, 0xcc, 0xa4, 0xd0, 0xb6, 0xe8, 0xf5, 0x5c, 0x21, 0x2d, 0xb8, 0x57,
-	0x9a, 0x9d, 0x6d, 0xe8, 0x9d, 0x72, 0xf6, 0x89, 0xab, 0xb5, 0x18, 0xec, 0xd7, 0x2a, 0xf1, 0xbf,
-	0x2e, 0x89, 0x1e, 0x74, 0xfc, 0x50, 0x1e, 0x8a, 0x7b, 0x75, 0x43, 0x3a, 0x3f, 0xae, 0xe0, 0x23,
-	0x73, 0xc3, 0x40, 0x92, 0xc5, 0xb3, 0x8f, 0xcb, 0x32, 0x50, 0x01, 0x1f, 0x19, 0xe8, 0x37, 0x20,
-	0x79, 0xae, 0xf9, 0x8c, 0x2a, 0x75, 0x5f, 0x80, 0x75, 0xc3, 0xe5, 0x70, 0xa1, 0x2e, 0x49, 0x43,
-	0xd5, 0x77, 0x45, 0xd0, 0x57, 0xd0, 0xca, 0x5b, 0x41, 0xb5, 0xde, 0x17, 0x47, 0xbc, 0x70, 0x70,
-	0xae, 0x36, 0x82, 0x63, 0x6e, 0x9b, 0xb7, 0x78, 0xe5, 0x3e, 0xae, 0xad, 0xdd, 0xc7, 0x6b, 0x5d,
-	0x56, 0x5f, 0xef, 0x32, 0xe7, 0x2d, 0x50, 0xdd, 0xd3, 0x79, 0xc9, 0x1f, 0x7b, 0xee, 0xb7, 0x40,
-	0x3d, 0x35, 0xf3, 0x18, 0x06, 0x99, 0x47, 0x06, 0xd8, 0xfb, 0xbb, 0x0e, 0xd6, 0x19, 0x4f, 0x53,
-	0x16, 0x70, 0xf7, 0x90, 0x76, 0xc1, 0x3c, 0xf3, 0xdf, 0x5d, 0xe3, 0x93, 0x4b, 0xb6, 0x4a, 0x24,
-	0xe2, 0x80, 0x18, 0x74, 0x07, 0x7a, 0x88, 0xca, 0xe7, 0x95, 0xd4, 0x34, 0x55, 0xbe, 0x95, 0xa4,
-	0xbe, 0x4e, 0xa1, 0x57, 0x83, 0x52, 0xe8, 0x17, 0x54, 0xf1, 0xac, 0x90, 0xe6, 0x06, 0x87, 0x7e,
-	0x2d, 0xfa, 0x0c, 0x28, 0x72, 0xeb, 0x33, 0x42, 0xda, 0xf4, 0x6b, 0x78, 0x82, 0xfc, 0xc6, 0x4c,
-	0x10, 0x93, 0x7e, 0x05, 0x3b, 0x2a, 0xa3, 0xea, 0x64, 0x10, 0x4b, 0xd3, 0x6b, 0x4d, 0x4f, 0xe0,
-	0x73, 0x1a, 0xbd, 0x3b, 0xf4, 0x09, 0x6c, 0x23, 0x5d, 0xe9, 0x67, 0xd2, 0xdd, 0x24, 0xd1, 0xb3,
-	0x57, 0x92, 0xab, 0x86, 0x25, 0xfd, 0x4d, 0x12, 0x3d, 0xb7, 0xa9, 0x0d, 0x4f, 0x95, 0x70, 0x1b,
-	0x1d, 0x49, 0x08, 0x7d, 0x0e, 0xcf, 0xd0, 0xf2, 0x79, 0xd1, 0xc9, 0x8e, 0xb6, 0x7d, 0x5e, 0x4f,
-	0x42, 0xf7, 0xfe, 0x35, 0xc0, 0xd4, 0x7f, 0x2e, 0xb4, 0x03, 0x6d, 0xff, 0xe3, 0x68, 0x74, 0xe4,
-	0xfb, 0x64, 0x0b, 0x13, 0xf8, 0x98, 0xf2, 0xc4, 0xe3, 0x4b, 0xce, 0xa4, 0x92, 0x9d, 0xf0, 0x15,
-	0xb9, 0x10, 0x92, 0xe7, 0xe4, 0x2d, 0x0a, 0x30, 0x9a, 0x87, 0xcb, 0xd4, 0x8d, 0xd3, 0xec, 0xf6,
-	0x36, 0x9c, 0x86, 0x3c, 0x96, 0x24, 0xa0, 0x4f, 0x81, 0x8c, 0xf0, 0xe9, 0x1b, 0x46, 0x09, 0x67,
-	0xb3, 0x87, 0xe3, 0x2c, 0x8a, 0xc8, 0x1c, 0x8b, 0x81, 0x11, 0xce, 0x85, 0xac, 0xe8, 0x4e, 0x42,
-	0x2c, 0x06, 0xf2, 0xf8, 0xb3, 0x75, 0x91, 0xc9, 0x63, 0x11, 0xa9, 0x67, 0x8c, 0xfc, 0xae, 0x17,
-	0x14, 0x42, 0x14, 0x76, 0x72, 0xb7, 0xf7, 0x8f, 0x01, 0xa6, 0x7e, 0xc7, 0xb0, 0xa3, 0xae, 0xae,
-	0xae, 0xae, 0xd5, 0x12, 0xd5, 0x5f, 0x27, 0x61, 0x30, 0x57, 0xc8, 0xc0, 0x53, 0x5d, 0xc4, 0x7c,
-	0xcc, 0xc2, 0x84, 0xd4, 0xd0, 0x34, 0xb9, 0x17, 0x08, 0x52, 0x52, 0xa7, 0x3d, 0xb0, 0x26, 0xf3,
-	0x84, 0xf3, 0xf7, 0x61, 0x3c, 0x23, 0x0d, 0x34, 0xfa, 0x32, 0x61, 0x61, 0x30, 0x97, 0xa4, 0x49,
-	0x2d, 0x68, 0x1e, 0x47, 0x59, 0x3a, 0x27, 0x2d, 0xf4, 0xc3, 0xf4, 0x4f, 0x44, 0x96, 0x72, 0xd2,
-	0x46, 0xbf, 0x63, 0x91, 0x25, 0x6a, 0x95, 0x89, 0x9d, 0xa9, 0x57, 0xe5, 0xfe, 0x16, 0xed, 0x03,
-	0x78, 0xe2, 0x81, 0x45, 0x39, 0x86, 0xbd, 0x0f, 0x60, 0xea, 0xca, 0x60, 0x3a, 0x97, 0x2c, 0x94,
-	0xf9, 0x24, 0x74, 0xa0, 0x3d, 0x4e, 0xf8, 0x71, 0x24, 0x96, 0xc4, 0xa0, 0x26, 0x34, 0xd4, 0x57,
-	0x0d, 0xbf, 0x26, 0x59, 0x12, 0x93, 0x3a, 0x26, 0xe1, 0x85, 0x9f, 0x78, 0x52, 0x64, 0x37, 0x17,
-	0xf7, 0xd8, 0x38, 0xa4, 0xb9, 0xe7, 0x43, 0xb7, 0x7a, 0xa7, 0xa8, 0xb0, 0x43, 0x77, 0xe2, 0x9e,
-	0xbf, 0x23, 0x5b, 0x6a, 0xd5, 0xd0, 0xf5, 0x8f, 0xf2, 0xa0, 0xa3, 0xe1, 0xe9, 0x29, 0xa9, 0x21,
-	0x39, 0x3a, 0x39, 0x1a, 0xbd, 0x27, 0x75, 0xb5, 0xd3, 0xc5, 0xe9, 0x61, 0x11, 0xf4, 0xe4, 0xe2,
-	0xf2, 0xf0, 0xe2, 0xf2, 0x9c, 0x34, 0xf7, 0x7e, 0x02, 0xab, 0x7c, 0xc4, 0xd1, 0x74, 0x2e, 0xae,
-	0x15, 0x26, 0x5b, 0x74, 0x1b, 0x3a, 0xfe, 0x82, 0x45, 0x51, 0x41, 0x18, 0xa8, 0xc9, 0x41, 0x18,
-	0x14, 0xb0, 0x76, 0xd3, 0x52, 0x3f, 0xd7, 0xdf, 0xff, 0x17, 0x00, 0x00, 0xff, 0xff, 0x64, 0x69,
-	0xaa, 0x84, 0x69, 0x0b, 0x00, 0x00,
+	// 1650 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x58, 0xdd, 0x6e, 0xdb, 0xc8,
+	0x15, 0x0e, 0xf5, 0x63, 0x4b, 0x47, 0x7f, 0xe3, 0x49, 0xe2, 0xe5, 0xba, 0x69, 0x60, 0xb0, 0x40,
+	0xe0, 0x18, 0xed, 0x6e, 0xd7, 0x45, 0x2f, 0xb6, 0x28, 0xba, 0x95, 0x65, 0x3b, 0x56, 0xe3, 0x1f,
+	0x85, 0x74, 0xe0, 0x00, 0xbd, 0x30, 0xc6, 0xd2, 0x98, 0x62, 0x4d, 0x71, 0x04, 0x72, 0x98, 0x40,
+	0xcf, 0xd0, 0xfb, 0xbe, 0x43, 0xaf, 0x7b, 0xd1, 0xe7, 0xe8, 0x0b, 0xf4, 0x09, 0xfa, 0x10, 0xc5,
+	0x39, 0xe4, 0x50, 0x94, 0xec, 0x16, 0x88, 0xef, 0xf4, 0x7d, 0xe7, 0xcc, 0x99, 0xf3, 0x3f, 0xb4,
+	0xa1, 0x39, 0x4b, 0xfc, 0xef, 0xe6, 0xb1, 0xd2, 0x8a, 0x57, 0x67, 0x89, 0xef, 0x6c, 0x40, 0x6d,
+	0x14, 0x44, 0xbe, 0xf3, 0x06, 0x6a, 0x23, 0x15, 0xf9, 0xfc, 0x35, 0x40, 0x22, 0xe3, 0xcf, 0x32,
+	0xbe, 0x0a, 0x66, 0xd2, 0xb6, 0x76, 0xad, 0xbd, 0xaa, 0x5b, 0x62, 0x9c, 0x23, 0x68, 0x1e, 0xc7,
+	0xb1, 0x8a, 0x6f, 0xbc, 0x83, 0x01, 0xff, 0x05, 0xd4, 0x25, 0x02, 0xd2, 0xeb, 0x1e, 0x74, 0xbe,
+	0x43, 0xe3, 0x24, 0x3e, 0x4f, 0x7c, 0x37, 0x93, 0x71, 0x0e, 0xb5, 0x89, 0xd0, 0xc2, 0xae, 0xec,
+	0x5a, 0x7b, 0x4d, 0x97, 0x7e, 0x3b, 0xe7, 0xd0, 0x3c, 0x53, 0x7e, 0x10, 0xdd, 0x0c, 0x0e, 0x3c,
+	0xde, 0x85, 0xca, 0x70, 0x42, 0x26, 0x9a, 0x6e, 0x65, 0x38, 0xe1, 0x3b, 0xd0, 0x18, 0x89, 0x24,
+	0xb9, 0x56, 0xf1, 0x24, 0x3f, 0x54, 0x60, 0xfe, 0x02, 0xea, 0x57, 0xea, 0x5e, 0x46, 0x76, 0x95,
+	0x04, 0x19, 0x70, 0x42, 0x80, 0x51, 0x28, 0x16, 0x32, 0x1e, 0x46, 0x77, 0xea, 0x31, 0x7b, 0x51,
+	0x30, 0xbe, 0xbf, 0x10, 0x33, 0x69, 0xec, 0x19, 0xcc, 0x6d, 0xd8, 0x9c, 0x4a, 0x31, 0x19, 0xce,
+	0xfc, 0xdc, 0xa2, 0x81, 0x28, 0x11, 0xe3, 0xb1, 0x4a, 0x23, 0x6d, 0xd7, 0x76, 0xad, 0x3d, 0xcb,
+	0x35, 0xd0, 0xf9, 0xbd, 0x71, 0x1e, 0x53, 0xf0, 0x3d, 0xc0, 0xbc, 0xb8, 0x9a, 0x2e, 0x6d, 0x1d,
+	0xf4, 0x28, 0x0f, 0x4b, 0x8f, 0xdc, 0x92, 0x8a, 0xd3, 0x06, 0x38, 0x53, 0xbe, 0x4a, 0x35, 0xc6,
+	0x5e, 0x42, 0xde, 0xc1, 0xc0, 0xf9, 0xab, 0x05, 0xed, 0x81, 0x88, 0x27, 0x5e, 0x1a, 0xe8, 0x23,
+	0xa1, 0x05, 0x77, 0xa0, 0x3d, 0x15, 0xd1, 0x04, 0xb9, 0xf7, 0x72, 0x91, 0xd8, 0xd6, 0x6e, 0x75,
+	0xaf, 0xee, 0xae, 0x70, 0xfc, 0x0d, 0x74, 0xe7, 0xe9, 0x6d, 0x18, 0x8c, 0x0b, 0xad, 0x0a, 0x69,
+	0xad, 0xb1, 0xfc, 0x7b, 0x68, 0x25, 0x69, 0xa0, 0x47, 0x42, 0x6b, 0x19, 0x67, 0x09, 0x34, 0x25,
+	0x33, 0x77, 0xba, 0x65, 0x0d, 0xe7, 0x5f, 0x35, 0x93, 0x56, 0xf2, 0xe5, 0x6b, 0x23, 0xc5, 0x5a,
+	0x8d, 0xa7, 0x22, 0x88, 0x29, 0xe9, 0x75, 0x37, 0x03, 0xd4, 0x60, 0x5a, 0x44, 0x93, 0x8f, 0xa3,
+	0x8b, 0x74, 0x46, 0x5e, 0xd4, 0xdd, 0x12, 0x93, 0x9d, 0x0a, 0xe6, 0x49, 0x9e, 0xf5, 0x0c, 0xf0,
+	0x57, 0xd0, 0x8c, 0x95, 0x9a, 0x0d, 0x48, 0x52, 0x27, 0xc9, 0x92, 0xe0, 0xbf, 0x85, 0xb6, 0x18,
+	0xeb, 0x40, 0x45, 0x9e, 0x16, 0x3a, 0x4d, 0xec, 0x0d, 0x8a, 0x6d, 0x8b, 0x9c, 0xeb, 0x97, 0x04,
+	0xee, 0x8a, 0x1a, 0x36, 0x86, 0x2f, 0x66, 0xd2, 0xd3, 0x72, 0x6e, 0x6f, 0x92, 0x23, 0x05, 0x46,
+	0xd9, 0x44, 0x7d, 0x89, 0x0e, 0xa5, 0x4e, 0xec, 0x06, 0xdd, 0x57, 0x60, 0xac, 0x8a, 0x56, 0x5a,
+	0x84, 0x47, 0x19, 0x61, 0x37, 0x49, 0xbe, 0xc2, 0xa1, 0xc3, 0xa6, 0x4a, 0x89, 0x0d, 0x54, 0x90,
+	0x25, 0x81, 0x0e, 0x8f, 0x4b, 0x75, 0xb6, 0x5b, 0x94, 0xcd, 0xad, 0x95, 0x62, 0xa0, 0xc0, 0x5d,
+	0x51, 0xe3, 0xbb, 0xd0, 0x8a, 0x65, 0x92, 0x86, 0xfa, 0x5c, 0x45, 0x72, 0x61, 0xb7, 0xe9, 0xde,
+	0x32, 0xc5, 0x7f, 0x09, 0xcd, 0xdb, 0x30, 0x88, 0x26, 0x57, 0x8b, 0xb9, 0xb4, 0x3b, 0x94, 0x86,
+	0x2e, 0x59, 0x3d, 0x34, 0xac, 0xbb, 0x54, 0xc0, 0x20, 0x87, 0xc9, 0x61, 0xaa, 0xb5, 0x8a, 0xec,
+	0xee, 0xae, 0xb5, 0xd7, 0x70, 0x0b, 0x8c, 0xfd, 0x3f, 0x4c, 0xfa, 0x61, 0x38, 0x8c, 0xec, 0x1e,
+	0x89, 0x0c, 0xcc, 0x4e, 0x5d, 0x07, 0x51, 0x24, 0x63, 0x9b, 0x99, 0x53, 0x19, 0xc6, 0xea, 0xea,
+	0x60, 0x26, 0xe3, 0x01, 0x0d, 0xce, 0x56, 0x56, 0xdd, 0x25, 0xe3, 0xfc, 0xbb, 0x02, 0x0d, 0x57,
+	0xa9, 0x19, 0x85, 0xb3, 0x0d, 0x1b, 0x58, 0xc3, 0x62, 0x58, 0x73, 0x44, 0x2d, 0x70, 0xe7, 0x0f,
+	0xcd, 0xf4, 0x67, 0x80, 0xbf, 0x2d, 0x55, 0xab, 0xdc, 0xbc, 0xef, 0x72, 0x72, 0xb5, 0x78, 0xb3,
+	0x20, 0x72, 0x45, 0x90, 0xc8, 0xbc, 0x8d, 0x0a, 0x8c, 0xb2, 0x79, 0x2c, 0xcb, 0x8d, 0x54, 0x60,
+	0xf4, 0x3e, 0x6f, 0x10, 0x29, 0x34, 0x75, 0x51, 0xdd, 0x2d, 0x31, 0xe8, 0xf0, 0xad, 0x88, 0xee,
+	0x65, 0x9c, 0xb7, 0x4b, 0x8e, 0xd0, 0xe6, 0x6d, 0xe0, 0x53, 0x8a, 0x4d, 0xb3, 0x18, 0x4c, 0xf7,
+	0xa9, 0xbc, 0x60, 0xcd, 0xfc, 0xbe, 0x1c, 0x63, 0x3d, 0x97, 0x43, 0x6a, 0xda, 0xa4, 0x4c, 0x2d,
+	0x87, 0x2e, 0x6f, 0x93, 0xea, 0xda, 0xd0, 0x51, 0x93, 0x94, 0x54, 0x9c, 0x37, 0xd0, 0xfd, 0x90,
+	0x06, 0xe3, 0x7b, 0x4f, 0x8b, 0x98, 0x56, 0xcc, 0x32, 0x9b, 0x56, 0x29, 0x9b, 0xce, 0x16, 0xf4,
+	0x06, 0x53, 0x11, 0xf9, 0xf2, 0x4a, 0xdc, 0x86, 0x92, 0x76, 0xd1, 0x8f, 0xd0, 0xfe, 0x93, 0x0a,
+	0x22, 0x2c, 0x0f, 0xad, 0xb6, 0xb7, 0xd0, 0x88, 0xf3, 0x52, 0xe5, 0xe3, 0x9e, 0x25, 0xdc, 0xd4,
+	0xcf, 0x2d, 0xc4, 0xce, 0xef, 0xa0, 0x73, 0x1c, 0x69, 0x19, 0x3f, 0xe5, 0x6c, 0x1f, 0xba, 0x17,
+	0x4a, 0x07, 0x63, 0x89, 0x97, 0xaf, 0xee, 0xd4, 0xd2, 0xf1, 0xff, 0x1b, 0x74, 0x0f, 0x3a, 0x67,
+	0x52, 0x7c, 0x96, 0x74, 0x3d, 0x86, 0xf2, 0xc7, 0x32, 0xf1, 0x24, 0x93, 0x87, 0xd0, 0xcb, 0xbc,
+	0x22, 0x3b, 0x4f, 0xb3, 0xd1, 0x81, 0x96, 0x17, 0x68, 0xdc, 0x08, 0xe4, 0xd4, 0x1f, 0x96, 0xf0,
+	0xc9, 0xe6, 0x68, 0x4f, 0xce, 0x0b, 0x73, 0x39, 0x7c, 0x92, 0xb9, 0x1f, 0xa0, 0x37, 0x88, 0xa5,
+	0xd0, 0x87, 0xd4, 0xc3, 0x64, 0xe3, 0x35, 0x40, 0xd6, 0xd1, 0xd4, 0xff, 0x56, 0xd6, 0xff, 0x4b,
+	0xc6, 0xf9, 0x33, 0xb0, 0xcc, 0x58, 0xb6, 0x54, 0xa9, 0xbd, 0x5e, 0x41, 0xf3, 0x56, 0xea, 0xfe,
+	0x8c, 0x06, 0xde, 0xca, 0x36, 0x73, 0x41, 0xf0, 0xb7, 0xb0, 0x91, 0xcd, 0x0f, 0xcd, 0xf2, 0xa3,
+	0x3b, 0x39, 0x57, 0x70, 0xfe, 0x69, 0xad, 0x59, 0x47, 0x8f, 0xd6, 0xdf, 0xf2, 0xc7, 0xdf, 0x94,
+	0xe2, 0xcd, 0xa8, 0x96, 0xdf, 0x0c, 0x1b, 0x36, 0xf3, 0x95, 0x6d, 0x5e, 0xf0, 0x1c, 0xae, 0xcc,
+	0x64, 0x7d, 0x6d, 0x26, 0x7f, 0x30, 0x3b, 0x80, 0x56, 0xe8, 0xff, 0x7c, 0x49, 0x4a, 0x4a, 0xce,
+	0x00, 0xb6, 0xcb, 0x8e, 0x67, 0x73, 0xf5, 0xb5, 0x63, 0x70, 0x06, 0xed, 0xfe, 0x64, 0x42, 0x7b,
+	0x88, 0xf2, 0xba, 0x03, 0x0d, 0x91, 0xe3, 0x3c, 0xad, 0x05, 0xc6, 0xbd, 0x91, 0x2c, 0x92, 0xc3,
+	0x74, 0x91, 0x89, 0xb3, 0x5c, 0x94, 0x29, 0xe7, 0x6f, 0x56, 0xc9, 0x1c, 0x7a, 0x52, 0x24, 0xce,
+	0x2a, 0x27, 0xae, 0x7c, 0x49, 0x65, 0xed, 0x92, 0xc7, 0x93, 0xba, 0xf2, 0x10, 0xd7, 0xd6, 0x1f,
+	0xe2, 0x35, 0xc7, 0xea, 0x0f, 0x1d, 0xfb, 0x09, 0xb8, 0x59, 0xd8, 0x4f, 0xcb, 0xd3, 0x4f, 0xc0,
+	0x5d, 0x7a, 0xf0, 0xd0, 0x0c, 0x32, 0x5f, 0x6b, 0xe0, 0x57, 0xd0, 0x71, 0xa5, 0x98, 0x2c, 0xf0,
+	0x73, 0x96, 0xce, 0x62, 0x48, 0x86, 0xc8, 0xd3, 0xb3, 0x24, 0x9c, 0x5f, 0x43, 0xd7, 0x93, 0x5a,
+	0x87, 0xb2, 0xd0, 0xa7, 0x4f, 0x64, 0xc3, 0x98, 0x29, 0x59, 0x32, 0x0e, 0x07, 0x36, 0x4a, 0x93,
+	0x29, 0x2e, 0x70, 0x73, 0x66, 0xff, 0x1f, 0x75, 0x68, 0x9e, 0xcb, 0x24, 0x11, 0xbe, 0x1c, 0x1e,
+	0xf1, 0x36, 0x34, 0xce, 0xbd, 0x77, 0x37, 0xf8, 0xe1, 0xcd, 0x9e, 0x15, 0x48, 0x45, 0x3e, 0xb3,
+	0xf8, 0x16, 0x74, 0x10, 0x15, 0x1f, 0xd9, 0xac, 0x62, 0xa8, 0xe2, 0x8b, 0x99, 0x55, 0x57, 0x29,
+	0xd4, 0xaa, 0x71, 0x0e, 0xdd, 0x9c, 0xca, 0x3f, 0x2e, 0x59, 0x7d, 0x8d, 0x43, 0xbd, 0x0d, 0xbe,
+	0x0d, 0x1c, 0xb9, 0xd5, 0x57, 0x82, 0x6d, 0xf2, 0x6f, 0xe0, 0x39, 0xf2, 0x6b, 0xaf, 0x02, 0x6b,
+	0xf0, 0x17, 0xc0, 0x50, 0x50, 0x7e, 0x1b, 0x58, 0x93, 0xbf, 0x84, 0x2d, 0xf2, 0xb3, 0xbc, 0xf6,
+	0x19, 0x18, 0xeb, 0xab, 0x1b, 0x9d, 0xb5, 0x8c, 0xfa, 0xca, 0x9a, 0x66, 0xed, 0x87, 0x34, 0x6a,
+	0x77, 0x8c, 0x2f, 0x6b, 0x1b, 0x98, 0x75, 0xf9, 0x73, 0xe8, 0xa1, 0xa0, 0xb4, 0x56, 0x59, 0x6f,
+	0x9d, 0x44, 0x4d, 0x56, 0x90, 0xcb, 0x8d, 0xc9, 0xb6, 0xd6, 0x49, 0xd4, 0xe4, 0x45, 0xe0, 0xab,
+	0xcb, 0x90, 0x3d, 0xe7, 0x36, 0xbc, 0xa0, 0xc2, 0xac, 0xad, 0x3c, 0xf6, 0xe2, 0x51, 0x09, 0x9e,
+	0x79, 0xc9, 0x5f, 0xc3, 0xce, 0xba, 0x64, 0xd9, 0xe7, 0x6c, 0xdb, 0x24, 0xb3, 0x3c, 0xea, 0xec,
+	0x9b, 0x07, 0x2c, 0xea, 0xda, 0x7c, 0x07, 0xb6, 0x91, 0x7d, 0x38, 0x2f, 0xec, 0x5b, 0x23, 0x7b,
+	0x38, 0x0a, 0x6c, 0xc7, 0x24, 0x75, 0xa5, 0xcb, 0xd9, 0xcf, 0x4c, 0x69, 0x56, 0xbb, 0x99, 0xbd,
+	0x2a, 0x82, 0x59, 0xeb, 0x59, 0xf6, 0xf3, 0xfd, 0xff, 0x58, 0xd0, 0x30, 0x7f, 0xce, 0xf1, 0x16,
+	0x6c, 0x7a, 0x1f, 0x07, 0x83, 0x63, 0xcf, 0x63, 0xcf, 0x30, 0x91, 0x1f, 0x13, 0x19, 0xbb, 0x72,
+	0x2e, 0x85, 0xa6, 0x2e, 0x64, 0x72, 0x49, 0xce, 0x94, 0x96, 0x19, 0x79, 0x87, 0xce, 0x50, 0x4c,
+	0xc3, 0x28, 0x49, 0xef, 0xee, 0x82, 0x71, 0x20, 0x23, 0xcd, 0x7c, 0x8c, 0x78, 0x80, 0x2b, 0xa8,
+	0x1f, 0xd2, 0xa8, 0x9d, 0xa4, 0x61, 0xc8, 0xa6, 0xe8, 0x22, 0x5a, 0xb8, 0x50, 0xba, 0xd4, 0x86,
+	0x2c, 0xc0, 0x12, 0x21, 0x8f, 0xae, 0x5d, 0xa6, 0xfa, 0x44, 0x85, 0xf4, 0x1d, 0xcd, 0xfe, 0x62,
+	0x0e, 0xe4, 0x05, 0xcd, 0xe5, 0xec, 0x1e, 0x63, 0x42, 0x7e, 0x18, 0x61, 0x6a, 0x2e, 0x94, 0xce,
+	0x15, 0x58, 0xc8, 0xbf, 0x85, 0x97, 0x4b, 0x49, 0x4e, 0xa3, 0x41, 0x36, 0xdb, 0xff, 0xbb, 0x05,
+	0x0d, 0xf3, 0xf5, 0x8d, 0x53, 0xf9, 0xe9, 0xd3, 0xa7, 0x1b, 0xba, 0x87, 0x66, 0xf4, 0x34, 0xf0,
+	0x29, 0x3f, 0xcc, 0xc2, 0x54, 0x5c, 0x46, 0x72, 0x24, 0x82, 0x98, 0x55, 0x50, 0x74, 0xf5, 0x45,
+	0x21, 0x48, 0x58, 0x95, 0x77, 0xa0, 0x79, 0x35, 0x8d, 0xa5, 0x7c, 0x1f, 0x44, 0x13, 0x56, 0x43,
+	0xa1, 0xa7, 0x63, 0x11, 0xf8, 0x53, 0xcd, 0xea, 0xbc, 0x09, 0xf5, 0x93, 0x30, 0x4d, 0xa6, 0x6c,
+	0x03, 0xf5, 0x30, 0xe6, 0x53, 0x95, 0x26, 0x92, 0x6d, 0xa2, 0xde, 0x89, 0x4a, 0x63, 0x3a, 0xd5,
+	0xc0, 0xe9, 0x36, 0xa7, 0x32, 0xfd, 0x26, 0xef, 0x02, 0xb8, 0x6a, 0x21, 0xc2, 0x0c, 0xc3, 0xfe,
+	0x07, 0x68, 0x98, 0xbe, 0x40, 0x77, 0xae, 0x45, 0xa0, 0xb3, 0x6d, 0xd2, 0x82, 0xcd, 0x51, 0x2c,
+	0x4f, 0x42, 0x35, 0x67, 0x16, 0x6f, 0x40, 0x8d, 0x7e, 0x55, 0xf0, 0xd7, 0x55, 0x1a, 0x47, 0xac,
+	0x8a, 0x4e, 0xb8, 0xc1, 0x67, 0x19, 0xe7, 0xde, 0x4d, 0xd5, 0x17, 0x9c, 0x1a, 0x56, 0xdf, 0xf7,
+	0xa0, 0x5d, 0x7e, 0xe2, 0xc8, 0x6c, 0x7f, 0x78, 0x35, 0xbc, 0x78, 0xc7, 0x9e, 0xd1, 0xa9, 0xfe,
+	0xd0, 0x3b, 0xce, 0x8c, 0x0e, 0xfa, 0x67, 0x67, 0xac, 0x82, 0xe4, 0xe0, 0xf4, 0x78, 0xf0, 0x9e,
+	0x55, 0xe9, 0xa6, 0xcb, 0xb3, 0xa3, 0xdc, 0xe8, 0xe9, 0xe5, 0xf5, 0xd1, 0xe5, 0xf5, 0x05, 0xab,
+	0xef, 0xff, 0x08, 0xcd, 0xe2, 0x4f, 0x0f, 0x14, 0x5d, 0xa8, 0x1b, 0xc2, 0xec, 0x19, 0xef, 0x41,
+	0xcb, 0x9b, 0x89, 0x30, 0xcc, 0x09, 0x0b, 0x73, 0x72, 0x18, 0xf8, 0x39, 0xac, 0xdc, 0x6e, 0xd0,
+	0xbf, 0x29, 0x7e, 0xf3, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0x74, 0x4e, 0x79, 0xb1, 0xb3, 0x10,
+	0x00, 0x00,
 }

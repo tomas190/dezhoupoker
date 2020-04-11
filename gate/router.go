@@ -18,4 +18,5 @@ func init() {
 	msg.Processor.SetRouter(&msg.SitDown_C2S{}, game.ChanRPC)
 	msg.Processor.SetRouter(&msg.StandUp_C2S{}, game.ChanRPC)
 	msg.Processor.SetRouter(&msg.PlayerAction_C2S{}, game.ChanRPC)
+	msg.Processor.SetRouter(&msg.AddChips_C2S{}, game.ChanRPC)
 }
