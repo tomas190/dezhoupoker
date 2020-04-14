@@ -40,6 +40,7 @@ func (p *Player) ClearPlayerData() {
 	p.IsAllIn = false
 	p.IsButton = false
 	p.IsWinner = false
+	p.IsTimeOutFold = false
 	p.timerCount = 0
 	p.HandValue = 0
 }
@@ -65,6 +66,7 @@ func (p *Player) SitDownTable() {
 		p.chair = r.FindAbleChair()
 		r.PlayerList[p.chair] = p
 		p.standUPNum = 0
+		p.IsTimeOutFold = false
 
 		if r.Status == msg.GameStep_Waiting {
 			r.StartGameRun()
@@ -105,10 +107,12 @@ func (p *Player) StandUpTable() {
 
 		//站起改变状态，座位为 -1，视为观战
 		p.gameStep = emNotGaming
-		p.chair = -1
 
 		standUp := &msg.StandUp_S2C{}
 		standUp.PlayerData = p.RespPlayerData()
 		r.Broadcast(standUp)
+
+		// 这里发送数据给前端不能发送已经改变的位置
+		p.chair = -1
 	}
 }

@@ -25,7 +25,6 @@ type Room struct {
 	preChips float64   // 当前回合，上个玩家下注金额
 	remain   int32     // 记录每个阶段玩家的下注的数量
 	allin    int32     // allin玩家的数量
-	Pot      []float64 // 奖池筹码数, 第一项为主池，其他项(若存在)为边池
 	Chips    []float64 // 所有玩家本局下的总筹码,奖池筹码数,第一项为主池，其他项(若存在)为边池
 	Banker   int32     // 庄家座位号
 	SB       float64   // 小盲注
@@ -67,7 +66,6 @@ func (r *Room) Init(cfgId string) {
 	r.preChips = 0
 	r.remain = 0
 	r.allin = 0
-	r.Pot = make([]float64, 0, MaxPlayer)
 	r.Chips = make([]float64, MaxPlayer)
 	r.Banker = 0
 	r.SB = rd.SB
@@ -82,7 +80,7 @@ func (r *Room) Init(cfgId string) {
 //BroadCastExcept 向指定玩家之外的玩家广播
 func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 	for _, p := range r.AllPlayer {
-		if p != nil && except.chair != p.chair {
+		if p != nil && except.Id != p.Id {
 			p.SendMsg(msg)
 		}
 	}
@@ -106,7 +104,7 @@ func (r *Room) IsCanJoin() bool {
 func (r *Room) PlayerLength() int32 {
 	var num int32
 	for _, v := range r.PlayerList {
-		if v != nil {
+		if v != nil && v.chair != -1 { //todo
 			num++
 		}
 	}
@@ -147,7 +145,6 @@ func (r *Room) TakeInRoomChips(p *Player) {
 //FindAbleChair 寻找可用座位
 func (r *Room) FindAbleChair() int32 {
 	// 先判断玩家历史座位是否已存在其他玩家，如果没有还是坐下历史座位
-
 	for chair, p := range r.PlayerList {
 		if p == nil {
 			log.Debug("座位号下标为~ :%v", chair)
@@ -219,6 +216,7 @@ func (r *Room) PlayerAddChips() {
 func (r *Room) TimeOutStandUp() {
 	for _, v := range r.PlayerList {
 		if v != nil && v.IsTimeOutFold == true {
+			log.Debug("行动超时玩家站起:%v", v.Id)
 			v.StandUpTable()
 		}
 	}
@@ -308,25 +306,38 @@ func (r *Room) SetPlayerStatus() {
 	}
 }
 
-func (r *Room) calc() (pots []handPot) {
-	pots = calcPot(r.Chips)
-	r.Pot = r.Pot[:]
-	var ps []float64
-	for _, pot := range pots {
-		r.Pot = append(r.Pot, pot.Pot)
-		ps = append(ps, pot.Pot)
+func (r *Room) CalBet() {
+	for i, v := range r.PlayerList {
+		if v != nil {
+			r.Chips[i] = v.totalDownBet
+		} else {
+			r.Chips[i] = 0
+		}
+		//fmt.Printf("i: %d bet:%d\n",i,this.Bets[i])
 	}
-	return
 }
 
-func (r *Room) Each(start int, f func(p *Player) bool) {
-	if start >= 9 {
-		start = start % MaxPlayer
+func (r *Room) PrintPots(pots []PotNode) {
+	for k, v := range pots {
+		fmt.Printf("分池%d:(%f) ", k, v.Bet)
+		fmt.Print("参与玩家(座位号):")
+		for _, pos := range v.Pos {
+			fmt.Printf("%d ", pos)
+		}
+		fmt.Println()
 	}
-	//房间最大限定人数
-	end := (MaxPlayer + start - 1) % MaxPlayer
-	i := start
-	for ; i != end; i = (i + 1) % MaxPlayer {
+}
+
+func (r *Room) Each(pos int, f func(p *Player) bool) {
+	num := 0
+	i := pos
+	for ; i < MaxPlayer; i = (i + 1) % MaxPlayer {
+		if i == pos {
+			num++
+			if num == 2 {
+				return
+			}
+		}
 		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && !f(r.PlayerList[i]) {
 			return
 		}
@@ -362,7 +373,8 @@ func (r *Room) betting(p *Player, blind float64) {
 	//玩家本局总下注额
 	p.totalDownBet = p.totalDownBet + blind
 	//总筹码变动
-	r.potMoney = r.potMoney + blind
+	r.potMoney += blind
+	r.preChips = blind
 
 	action := &msg.PlayerAction_S2C{}
 	action.Id = p.Id
@@ -395,114 +407,109 @@ func (r *Room) action(pos int) {
 	if pos == 0 {
 		pos = int((r.Banker)%MaxPlayer) + 1
 	}
-	//玩家行动
-	waitTime := ActionTime
-	ticker := time.Second * time.Duration(waitTime)
 
-	for {
-		var IsMove bool
-		r.Each(pos, func(p *Player) bool {
-			if r.remain <= 1 {
-				return false
-			}
-			if p.chips == 0 { // p.chair == int32(skip) ||
-				return true
-			}
-			if (r.preChips - p.downBets) == 0 {
-				IsMove = true
-				return true
-			} else {
-				IsMove = false
-			}
-			//3、行动玩家是根据庄家的下一位玩家
-			r.activeSeat = p.chair
-			log.Debug("行动玩家 ~ :%v", r.activeSeat)
+	r.Each(pos, func(p *Player) bool {
+		//玩家行动
+		waitTime := ActionTime
+		ticker := time.Second * time.Duration(waitTime)
 
-			changed := &msg.PlayerActionChange_S2C{}
-			room := r.RespRoomData()
-			changed.RoomData = room
-			r.Broadcast(changed)
-
-			p.GetAction(r, ticker)
-
-			if r.remain <= 1 {
-				return false
-			}
-
-			action := &msg.PlayerAction_S2C{}
-			action.Id = p.Id
-			action.Chair = p.chair
-			action.Chips = p.chips // 这里传入房间筹码金额
-			action.DownBet = p.downBets
-			action.PotMoney = r.potMoney
-			action.ActionType = p.actStatus
-			r.Broadcast(action)
-
+		if r.remain <= 1 {
+			return false
+		}
+		if p.chips == 0 {
 			return true
-		})
-		if IsMove == true {
-			break
 		}
 
-	}
+		//3、行动玩家是根据庄家的下一位玩家
+		r.activeSeat = p.chair
+		log.Debug("行动玩家 ~ :%v", r.activeSeat)
+
+		changed := &msg.PlayerActionChange_S2C{}
+		room := r.RespRoomData()
+		changed.RoomData = room
+		r.Broadcast(changed)
+
+		p.GetAction(r, ticker)
+
+		action := &msg.PlayerAction_S2C{}
+		action.Id = p.Id
+		action.Chair = p.chair
+		action.Chips = p.chips // 这里传入房间筹码金额
+		action.DownBet = p.downBets
+		action.PotMoney = r.potMoney
+		action.ActionType = p.actStatus
+		r.Broadcast(action)
+		log.Debug("玩家行动:%v", action)
+
+		if r.remain <= 1 {
+			return false
+		}
+
+		return true
+	})
 }
 
 //showdown 玩家摊牌结算
 func (r *Room) ShowDown() {
 	//1.统计玩家下注情况
-	pots := r.calc()
+	r.CalBet()
 
 	//2.计算分池
+	pots := CalPots(r.Chips)
+
+	r.PrintPots(pots)
+
 	for i, _ := range r.Chips {
 		r.Chips[i] = 0
 	}
 
 	for _, pot := range pots {
-		var maxO *Player
-		for _, pos := range pot.OPos {
-			o := r.PlayerList[pos]
-			if o != nil && len(o.cards) > 0 {
-				if maxO == nil {
-					maxO = o
+
+		var maxPlayer *Player
+		for _, pos := range pot.Pos {
+			player := r.PlayerList[pos]
+			if player != nil {
+				if maxPlayer == nil {
+					maxPlayer = player
 					continue
 				}
-				if o.HandValue > maxO.HandValue {
-					maxO = o
+				if player.HandValue > maxPlayer.HandValue {
+					maxPlayer = player
 				}
 			}
 		}
-
-		var winners []int32
-
-		for _, pos := range pot.OPos {
-			o := r.PlayerList[pos]
-			if o != nil && o.HandValue == maxO.HandValue && o.gameStep == emInGaming {
-				winners = append(winners, o.chair)
+		var winners []int
+		for _, pos := range pot.Pos {
+			player := r.PlayerList[pos]
+			if player != nil && player.gameStep == 1 && player.HandValue == maxPlayer.HandValue {
+				winners = append(winners, pos)
 			}
 		}
-
 		if len(winners) == 0 {
-			log.Debug("no winner")
+			fmt.Println("no winners")
 			return
 		}
+		fmt.Println("winners", len(winners))
+		//多个玩家组合牌相等平分奖池
+		for _, pos := range winners {
+			r.Chips[pos] += pot.Bet / float64(len(winners))
+		}
 
-		for _, winner := range winners {
-			r.Chips[winner] += pot.Pot / float64(len(winners))
-		}
-		log.Debug("ShowDown:%v,%v", pot.Pot, len(winners))
-		win := float64(len(winners))
-		if pot.Pot > win {
-			r.Chips[winners[0]] += pot.Pot - win
-		} else {
-			r.Chips[winners[0]] = pot.Pot
-		}
-		//r.Chips[winners[0]] += pot.Pot % float64(len(winners)) // odd chips
 	}
-
-	for i, _ := range r.Chips {
-		if r.PlayerList[i] != nil {
-			r.PlayerList[i].chips += r.Chips[i]
+	fmt.Println("比牌结果:")
+	for i, v := range r.Chips {
+		player := r.PlayerList[i]
+		if player == nil {
+			continue
 		}
+		if v > 0 {
+			player := r.PlayerList[i]
+			fmt.Println("333", player.chips, v)
+			player.IsWinner = true
+			player.chips += v
+			player.resultMoney = v
+		}
+		fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
 	}
 }
 

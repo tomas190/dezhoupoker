@@ -34,7 +34,6 @@ func (hall *GameHall) ReplacePlayerAgent(Id string, agent gate.Agent) error {
 	if v, ok := hall.UserRecord.Load(Id); ok {
 		ErrorResp(agent, msg.ErrorMsg_UserRemoteLogin, "异地登录")
 		user := v.(*Player)
-		user.ConnAgent.Destroy()
 		user.ConnAgent = agent
 		user.ConnAgent.SetUserData(v)
 		return nil
@@ -104,6 +103,8 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 
 		return
 	}
+
+	// 问题存在
 
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)

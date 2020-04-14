@@ -20,20 +20,18 @@ func init() {
 	Processor.Register(&NoticeJoin_S2C{})         //--11
 	Processor.Register(&LeaveRoom_C2S{})          //--12
 	Processor.Register(&LeaveRoom_S2C{})          //--13
-	Processor.Register(&NoticeLeave_S2C{})        //--14
-	Processor.Register(&SitDown_C2S{})            //--15
-	Processor.Register(&SitDown_S2C{})            //--16
-	Processor.Register(&StandUp_C2S{})            //--17
-	Processor.Register(&StandUp_S2C{})            //--18
-	Processor.Register(&CreatBanker_S2C{})        //--19
-	Processor.Register(&PlayerAction_C2S{})       //--20
-	Processor.Register(&PlayerAction_S2C{})       //--21
-	Processor.Register(&PlayerActionChange_S2C{}) //--22
-	Processor.Register(&AddChips_C2S{})           //--23
-	Processor.Register(&AddChips_S2C{})           //--24
-	Processor.Register(&GameStepChange_S2C{})     //--25
-	Processor.Register(&ResultGameData_S2C{})     //--26
-	Processor.Register(&ReadyTime_S2C{})          //--27
-	Processor.Register(&SettleTime_S2C{})         //--28
-	Processor.Register(&PushCardTime_S2C{})       //--29
+	Processor.Register(&SitDown_C2S{})            //--14
+	Processor.Register(&SitDown_S2C{})            //--15
+	Processor.Register(&StandUp_C2S{})            //--16
+	Processor.Register(&StandUp_S2C{})            //--17
+	Processor.Register(&PlayerAction_C2S{})       //--18
+	Processor.Register(&PlayerAction_S2C{})       //--19
+	Processor.Register(&PlayerActionChange_S2C{}) //--20
+	Processor.Register(&AddChips_C2S{})           //--21
+	Processor.Register(&AddChips_S2C{})           //--22
+	Processor.Register(&GameStepChange_S2C{})     //--23
+	Processor.Register(&ResultGameData_S2C{})     //--24
+	Processor.Register(&ReadyTime_S2C{})          //--25
+	Processor.Register(&SettleTime_S2C{})         //--26
+	Processor.Register(&PushCardTime_S2C{})       //--27
 }

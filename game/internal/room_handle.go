@@ -29,6 +29,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		enter := &msg.JoinRoom_S2C{}
 		enter.RoomData = roomData
 		p.SendMsg(enter)
+		log.Debug("发送加入房间")
 
 		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
@@ -47,6 +48,8 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		enter := &msg.JoinRoom_S2C{}
 		enter.RoomData = roomData
 		p.SendMsg(enter)
+		log.Debug("发送加入房间")
+
 
 		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
@@ -81,8 +84,8 @@ func (r *Room) StartGameRun() {
 	var dealer *Player
 	banker := r.Banker
 	r.Each(int(banker+1)%MaxPlayer, func(p *Player) bool {
-		r.Banker = dealer.chair
 		dealer = p
+		r.Banker = dealer.chair
 		dealer.IsButton = true
 		return false
 	})
@@ -133,11 +136,6 @@ func (r *Room) GameRunning() {
 	bb.blindType = msg.BlindType_Big_Blind
 	log.Debug("大盲注座位号为 :%v", bb.chair)
 
-	// 广播生成庄家
-	banker := &msg.CreatBanker_S2C{}
-	banker.BankerSeat = r.Banker
-	r.Broadcast(banker)
-
 	//3、小盲注下注
 	r.betting(sb, r.SB)
 	//4、大盲注下注
@@ -151,9 +149,6 @@ func (r *Room) GameRunning() {
 		// 直接摊牌
 		goto showdown
 	}
-
-	//4、设置桌面筹码池
-	r.calc()
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	//1、准备阶段
@@ -175,7 +170,7 @@ func (r *Room) GameRunning() {
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}
 			game.RoomData = r.RespRoomData()
-			p.SendMsg(game)
+			r.Broadcast(game)
 		}
 	}
 
@@ -187,9 +182,6 @@ func (r *Room) GameRunning() {
 		// 直接摊牌
 		goto showdown
 	}
-
-	//4、设置桌面筹码池
-	r.calc()
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	//1、准备阶段
@@ -211,7 +203,7 @@ func (r *Room) GameRunning() {
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}
 			game.RoomData = r.RespRoomData()
-			p.SendMsg(game)
+			r.Broadcast(game)
 		}
 	}
 
@@ -223,9 +215,6 @@ func (r *Room) GameRunning() {
 		// 直接摊牌
 		goto showdown
 	}
-
-	//4、设置桌面筹码池
-	r.calc()
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	//1、准备阶段
@@ -249,7 +238,7 @@ func (r *Room) GameRunning() {
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}
 			game.RoomData = r.RespRoomData()
-			p.SendMsg(game)
+			r.Broadcast(game)
 		}
 	}
 
@@ -306,15 +295,7 @@ func (r *Room) ExitFromRoom(p *Player) {
 		}
 	}
 
-	delete(hall.UserRoom, p.Id)
-
 	//hall.UserRecord.Delete(p.Id)  todo 玩家登出执行
-
-	// 如果房间总人数为0，删除房间缓存
-	if len(r.AllPlayer) == 0 {
-		hall.RoomRecord.Delete(r.roomId)
-		log.Debug("Room Player Number is 0，so Delete this Room~")
-	}
 
 	p.Account += p.chips
 	p.Account += p.roomChips
@@ -322,10 +303,15 @@ func (r *Room) ExitFromRoom(p *Player) {
 	leave := &msg.LeaveRoom_S2C{}
 	leave.PlayerData = p.RespPlayerData()
 	p.SendMsg(leave)
+	r.BroadCastExcept(leave, p)
 
-	noticeLeave := &msg.NoticeLeave_S2C{}
-	noticeLeave.PlayerData = p.RespPlayerData()
-	r.BroadCastExcept(noticeLeave, p)
+	// 如果房间总人数为0，删除房间缓存
+	if len(r.AllPlayer) == 0 {
+		hall.RoomRecord.Delete(r.roomId)
+		log.Debug("Room Player Number is 0，so Delete this Room~")
+	}
+
+	delete(hall.UserRoom, p.Id)
 
 	// 清除用户数据
 	p.ClearPlayerData()

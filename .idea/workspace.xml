@@ -2354,16 +2354,11 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/server.json" beforeDir="false" afterPath="$PROJECT_DIR$/conf/server.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/gameHall.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/gameHall.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/module.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/module.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/player.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/player_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/player_handle.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/pot.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/pot.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/room_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room_handle.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gate/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/gate/router.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/msg/msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/msg/msg.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/msg/msg.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/msg/msg.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/msg/msg.proto" beforeDir="false" afterPath="$PROJECT_DIR$/msg/msg.proto" afterDir="false" />
@@ -3283,38 +3278,38 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1586617084231" />
-    <state width="1237" height="249" key="GridCell.Tab.0.bottom" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.0.bottom" timestamp="1586703845117">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
-    <state width="1237" height="249" key="GridCell.Tab.0.center" timestamp="1585655496021">
+    <state width="1237" height="249" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1586703845117" />
+    <state width="1237" height="249" key="GridCell.Tab.0.center" timestamp="1586703845117">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1585655496021" />
-    <state width="1237" height="249" key="GridCell.Tab.0.left" timestamp="1585655496021">
+    <state width="1237" height="249" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1586703845117" />
+    <state width="1237" height="249" key="GridCell.Tab.0.left" timestamp="1586703845116">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1585655496021" />
-    <state width="1237" height="249" key="GridCell.Tab.0.right" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1586703845116" />
+    <state width="1237" height="249" key="GridCell.Tab.0.right" timestamp="1586703845117">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1586703845117" />
+    <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1586703845119">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
-    <state width="1237" height="249" key="GridCell.Tab.1.center" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1586703845119" />
+    <state width="1237" height="249" key="GridCell.Tab.1.center" timestamp="1586703845119">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.center/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
-    <state width="1237" height="249" key="GridCell.Tab.1.left" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.1.center/0.0.1280.680@0.0.1280.680" timestamp="1586703845119" />
+    <state width="1237" height="249" key="GridCell.Tab.1.left" timestamp="1586703845117">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.left/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
-    <state width="1237" height="249" key="GridCell.Tab.1.right" timestamp="1585655496022">
+    <state width="1237" height="249" key="GridCell.Tab.1.left/0.0.1280.680@0.0.1280.680" timestamp="1586703845117" />
+    <state width="1237" height="249" key="GridCell.Tab.1.right" timestamp="1586703845119">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1585655496022" />
+    <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1586703845119" />
     <state x="142" y="0" key="SettingsEditor" timestamp="1584606857527">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -3323,10 +3318,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="437" y="258" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1280.680@0.0.1280.680" timestamp="1584539338061" />
-    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1586445325762">
+    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1586702609405">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1586445325762" />
+    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1586702609405" />
     <state x="703" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1586611138646">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -3341,7 +3336,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/game/internal/room.go</url>
-          <line>91</line>
+          <line>87</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
