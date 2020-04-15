@@ -163,8 +163,9 @@ message RoomData {
     int32 banker = 7; // 庄家座位号
     double bigBlind = 8; // 大盲注金额
     double potMoney = 9; // 赌注池当前总共有多少钱
-    repeated int32 publicCards = 10; // 桌面公牌
-    repeated PlayerData playerData = 11; // 房间玩家数据
+    int32 isShowDown = 10; // 是否摊牌   // 0 摊牌,1 不摊牌
+    repeated int32 publicCards = 11; // 桌面公牌
+    repeated PlayerData playerData = 12; // 房间玩家数据
 }
 
 message QuickStart_C2S {

@@ -94,7 +94,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	if v != nil {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
-		log.Debug("Room:%v",r)
+		log.Debug("Room:%v", r)
 		roomData := r.RespRoomData()
 
 		enter := &msg.EnterRoom_S2C{}

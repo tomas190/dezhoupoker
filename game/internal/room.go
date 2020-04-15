@@ -21,14 +21,15 @@ type Room struct {
 	publicCards []int32      // 桌面公牌
 	Status      msg.GameStep // 房间当前阶段  就直接判断是否在等待状态
 
-	Cards    algorithm.Cards
-	preChips float64   // 当前回合，上个玩家下注金额
-	remain   int32     // 记录每个阶段玩家的下注的数量
-	allin    int32     // allin玩家的数量
-	Chips    []float64 // 所有玩家本局下的总筹码,奖池筹码数,第一项为主池，其他项(若存在)为边池
-	Banker   int32     // 庄家座位号
-	SB       float64   // 小盲注
-	BB       float64   // 大盲注
+	Cards      algorithm.Cards
+	preChips   float64   // 当前回合, 上个玩家下注金额
+	IsShowDown int32     // 0 为摊牌, 1 为不摊牌
+	remain     int32     // 记录每个阶段玩家的下注的数量
+	allin      int32     // allin玩家的数量
+	Chips      []float64 // 所有玩家本局下的总筹码,奖池筹码数,第一项为主池，其他项(若存在)为边池
+	Banker     int32     // 庄家座位号
+	SB         float64   // 小盲注
+	BB         float64   // 大盲注
 
 	counter int32
 	clock   *time.Ticker
@@ -39,7 +40,7 @@ const (
 )
 
 const (
-	ReadyTime  = 5  // 开始准备时间
+	ReadyTime  = 6  // 开始准备时间
 	SettleTime = 5  // 游戏结算时间
 	ActionTime = 15 // 玩家行动时间
 )
@@ -64,6 +65,7 @@ func (r *Room) Init(cfgId string) {
 	r.publicCards = nil
 	r.Status = msg.GameStep_Waiting
 	r.preChips = 0
+	r.IsShowDown = 0
 	r.remain = 0
 	r.allin = 0
 	r.Chips = make([]float64, MaxPlayer)
@@ -80,6 +82,7 @@ func (r *Room) Init(cfgId string) {
 //BroadCastExcept 向指定玩家之外的玩家广播
 func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 	for _, p := range r.AllPlayer {
+		log.Debug("所有玩家:%v", p)
 		if p != nil && except.Id != p.Id {
 			p.SendMsg(msg)
 		}
@@ -157,7 +160,6 @@ func (r *Room) FindAbleChair() int32 {
 //KickPlayer 剔除房间玩家
 func (r *Room) KickPlayer() {
 	// 遍历桌面玩家，踢掉玩家筹码和房间小于房间最小带入金额
-	//data := SetRoomConfig(r.cfgId)
 	for _, v := range r.PlayerList { // 玩家筹码为0怎么办
 		if v != nil {
 			if v.chips+v.roomChips < 3 {
@@ -171,6 +173,7 @@ func (r *Room) KickPlayer() {
 	for _, v := range r.AllPlayer {
 		if v != nil && v.chair == -1 {
 			v.standUPNum++
+			log.Debug("玩家站起次数:%v", v.standUPNum)
 			if v.standUPNum >= 6 {
 				ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
 				v.PlayerExitRoom()
@@ -178,6 +181,11 @@ func (r *Room) KickPlayer() {
 		}
 	}
 
+	for _, v := range r.PlayerList {
+		if v != nil && v.chair == -1 {
+			r.PlayerList[v.chair] = nil
+		}
+	}
 	// 清理断线玩家
 }
 
@@ -259,6 +267,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 	rd.GameStep = r.Status
 	rd.MinRaise = r.minRaise
 	rd.PreChips = r.preChips
+	rd.IsShowDown = r.IsShowDown
 	rd.ActionSeat = r.activeSeat
 	rd.BigBlind = r.BB
 	rd.Banker = r.Banker
@@ -397,6 +406,76 @@ func (r *Room) readyPlay() {
 	})
 }
 
+func (r *Room) Action(pos int) {
+	if r.allin+1 >= r.remain {
+		return
+	}
+
+	actionPos := pos
+	if actionPos >= MaxPlayer {
+		actionPos = actionPos % MaxPlayer
+	}
+	for {
+		var IsRaised bool
+		var num int32
+		i := actionPos
+		for ; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
+			if i == actionPos {
+				num++
+			}
+			if num == 2 {
+				break
+			}
+			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+				p := r.PlayerList[i]
+				if r.remain <= 1 {
+					return
+				}
+				if p.chips == 0 {
+					continue
+				}
+				//玩家行动
+				waitTime := ActionTime
+				ticker := time.Second * time.Duration(waitTime)
+
+				r.activeSeat = p.chair
+				log.Debug("行动玩家 ~ :%v", r.activeSeat)
+
+				changed := &msg.PlayerActionChange_S2C{}
+				room := r.RespRoomData()
+				changed.RoomData = room
+				r.Broadcast(changed)
+
+				IsRaised = p.GetAction(r, ticker)
+
+				action := &msg.PlayerAction_S2C{}
+				action.Id = p.Id
+				action.Chair = p.chair
+				action.Chips = p.chips // 这里传入房间筹码金额
+				action.DownBet = p.downBets
+				action.PotMoney = r.potMoney
+				action.ActionType = p.actStatus
+				r.Broadcast(action)
+				log.Debug("玩家行动:%v", action)
+
+				if r.remain <= 1 {
+					return
+				}
+			}
+		}
+		if IsRaised == true {
+			for i := actionPos; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
+				if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+					actionPos = int(r.PlayerList[i].chair)
+					break
+				}
+			}
+		} else {
+			return
+		}
+	}
+}
+
 //action 玩家行动
 func (r *Room) action(pos int) {
 
@@ -468,7 +547,7 @@ func (r *Room) ShowDown() {
 		var maxPlayer *Player
 		for _, pos := range pot.Pos {
 			player := r.PlayerList[pos]
-			if player != nil {
+			if player != nil && player.gameStep == emInGaming {
 				if maxPlayer == nil {
 					maxPlayer = player
 					continue
@@ -481,7 +560,7 @@ func (r *Room) ShowDown() {
 		var winners []int
 		for _, pos := range pot.Pos {
 			player := r.PlayerList[pos]
-			if player != nil && player.gameStep == 1 && player.HandValue == maxPlayer.HandValue {
+			if player != nil && player.gameStep == emInGaming && player.HandValue == maxPlayer.HandValue {
 				winners = append(winners, pos)
 			}
 		}
@@ -489,7 +568,6 @@ func (r *Room) ShowDown() {
 			fmt.Println("no winners")
 			return
 		}
-		fmt.Println("winners", len(winners))
 		//多个玩家组合牌相等平分奖池
 		for _, pos := range winners {
 			r.Chips[pos] += pot.Bet / float64(len(winners))
@@ -504,10 +582,11 @@ func (r *Room) ShowDown() {
 		}
 		if v > 0 {
 			player := r.PlayerList[i]
-			fmt.Println("333", player.chips, v)
-			player.IsWinner = true
 			player.chips += v
-			player.resultMoney = v
+			if v-player.totalDownBet > 0 {
+				player.IsWinner = true
+				player.resultMoney = v - player.totalDownBet
+			}
 		}
 		fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
 	}
@@ -527,7 +606,7 @@ func (r *Room) ReadyTimerTask() {
 		for range r.clock.C {
 			r.counter++
 			log.Debug("readyTime clock : %v ", r.counter)
-			if r.counter == 3 {
+			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
 				r.Broadcast(push)
 			}
@@ -562,6 +641,11 @@ func (r *Room) RestartGame() {
 			log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == SettleTime {
 				r.counter = 0
+				// 剔除房间玩家
+				r.KickPlayer()
+				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
+				r.TimeOutStandUp()
+
 				//开始新一轮游戏,重复调用StartGameRun函数
 				r.StartGameRun()
 				return

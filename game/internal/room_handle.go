@@ -50,7 +50,6 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		p.SendMsg(enter)
 		log.Debug("发送加入房间")
 
-
 		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
 			notice.PlayerData = roomData.PlayerData[p.chair]
@@ -62,14 +61,9 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 //StartGameRun 游戏开始运行
 func (r *Room) StartGameRun() {
 
-	// 剔除房间玩家
-	r.KickPlayer()
-	// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
-	r.TimeOutStandUp()
-
 	// 当前房间人数存在两人及两人以上才开始游戏
 	n := r.PlayerLength()
-	if n < 2 {
+	if n < 8 {
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}
@@ -142,10 +136,11 @@ func (r *Room) GameRunning() {
 	r.betting(bb, r.BB)
 
 	//5、行动、下注 (这里应该大盲下一位开始下注)
-	r.action(int(bb.chair) + 1)
+	r.Action(int(bb.chair) + 1)
 
 	// 如果玩家全部摊牌直接比牌
 	if r.remain <= 1 {
+		r.IsShowDown = 1
 		// 直接摊牌
 		goto showdown
 	}
@@ -175,10 +170,11 @@ func (r *Room) GameRunning() {
 	}
 
 	//3、行动、下注
-	r.action(0)
+	r.Action(int(r.Banker + 1))
 
 	// 如果玩家全部摊牌直接比牌
 	if r.remain <= 1 {
+		r.IsShowDown = 1
 		// 直接摊牌
 		goto showdown
 	}
@@ -208,10 +204,11 @@ func (r *Room) GameRunning() {
 	}
 
 	//3、行动、下注
-	r.action(0)
+	r.Action(int(r.Banker + 1))
 
 	// 如果玩家全部摊牌直接比牌
 	if r.remain <= 1 {
+		r.IsShowDown = 1
 		// 直接摊牌
 		goto showdown
 	}
@@ -243,21 +240,21 @@ func (r *Room) GameRunning() {
 	}
 
 	//3、行动、下注
-	r.action(0)
+	r.Action(int(r.Banker + 1))
 
 	// showdown 摊开底牌,开牌比大小
 showdown:
 	log.Debug("开始摊牌，开牌比大小 ~")
 	r.ShowDown()
 
-	// 打印数据
-	//r.PlantData()
-
 	r.Status = msg.GameStep_ShowDown
 
 	result := &msg.ResultGameData_S2C{}
 	result.RoomData = r.RespRoomData()
 	r.Broadcast(result)
+
+	// 打印数据
+	r.PlantData()
 
 	err := r.InsertRoomData()
 	if err != nil {

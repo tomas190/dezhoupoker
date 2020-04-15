@@ -110,13 +110,14 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	return data
 }
 
-func (p *Player) GetAction(r *Room, timeout time.Duration) {
+func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 
 	log.Debug("玩家行动时间: %v", time.Now().Format("2006-01-02 15:04:05"))
 
 	p.timerCount = 0 // todo
 
 	after := time.NewTicker(timeout)
+	var IsRaised bool
 	for {
 		select {
 		case x := <-p.action:
@@ -131,6 +132,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) {
 				r.preChips = p.downBets
 				// 总筹码
 				r.potMoney += p.downBets
+				IsRaised = true
 			case msg.ActionStatus_CALL:
 				p.actStatus = msg.ActionStatus_CALL
 				p.chips -= p.downBets
@@ -151,7 +153,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) {
 			}
 			//玩家本局下注的总筹码数
 			//r.Chips[p.chair] += uint32(r.preChips)
-			return
+			return IsRaised
 
 
 		case <-after.C:
@@ -163,7 +165,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) {
 			p.actStatus = msg.ActionStatus_FOLD
 			p.IsTimeOutFold = true
 			r.remain--
-			return
+			return IsRaised
 		}
 	}
 }
