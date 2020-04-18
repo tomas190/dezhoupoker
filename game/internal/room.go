@@ -246,6 +246,7 @@ func (r *Room) ClearRoomData() {
 			v.actStatus = msg.ActionStatus_WAITING
 			v.gameStep = emNotGaming
 			v.downBets = 0
+			v.lunDownBets = 0
 			v.totalDownBet = 0
 			v.cardData = msg.CardSuitData{}
 			v.resultMoney = 0
@@ -379,6 +380,8 @@ func (r *Room) betting(p *Player, blind float64) {
 	p.chips = p.chips - blind
 	//本轮玩家下注额
 	p.downBets = blind
+	// 本轮游戏总下注金额
+	p.lunDownBets += blind
 	//玩家本局总下注额
 	p.totalDownBet = p.totalDownBet + blind
 	//总筹码变动
@@ -389,7 +392,7 @@ func (r *Room) betting(p *Player, blind float64) {
 	action.Id = p.Id
 	action.Chair = p.chair
 	action.Chips = p.chips // 这里传入房间筹码金额
-	action.DownBet = p.downBets
+	action.DownBet = p.lunDownBets
 	action.PotMoney = r.potMoney
 	action.ActionType = p.actStatus
 	r.Broadcast(action)
@@ -398,8 +401,10 @@ func (r *Room) betting(p *Player, blind float64) {
 //readyPlay 准备阶段
 func (r *Room) readyPlay() {
 	r.preChips = 0
+	r.remain = 0
 	r.Each(0, func(p *Player) bool {
 		p.downBets = 0
+		p.lunDownBets = 0
 		p.HandValue = 0
 		r.remain++
 		return true
@@ -452,7 +457,7 @@ func (r *Room) Action(pos int) {
 				action.Id = p.Id
 				action.Chair = p.chair
 				action.Chips = p.chips // 这里传入房间筹码金额
-				action.DownBet = p.downBets
+				action.DownBet = p.lunDownBets
 				action.PotMoney = r.potMoney
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
@@ -608,6 +613,7 @@ func (r *Room) ReadyTimerTask() {
 			log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
+				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)
 			}
 			if r.counter == ReadyTime {

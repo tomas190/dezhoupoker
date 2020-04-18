@@ -220,7 +220,7 @@ message PlayerAction_S2C {
     string Id = 1;
     int32 chair = 2;
     double chips = 3;
-    double downBet = 4;
+    double downBet = 4;   // 每轮总下注金额,用于客户端显示筹码底
     double potMoney = 5; // 底池
     ActionStatus actionType = 6; // 下注状态
 }
@@ -266,5 +266,5 @@ message SettleTime_S2C {
 
 // 发牌时间
 message PushCardTime_S2C {
-
+    RoomData roomData = 1;
 }

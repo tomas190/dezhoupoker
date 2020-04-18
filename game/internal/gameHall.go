@@ -9,8 +9,8 @@ import (
 )
 
 type GameHall struct {
-	UserRecord sync.Map          // 用户记录
-	RoomRecord sync.Map          // 房间记录
+	UserRecord sync.Map         // 用户记录
+	RoomRecord sync.Map         // 房间记录
 	UserRoom   map[string]string // 用户房间
 }
 
@@ -71,13 +71,15 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 		if room != nil {
 			if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
 				room.PlayerJoinRoom(p)
+				return false
 			} else {
 				hall.PlayerCreateRoom(r.cfgId, p)
+				return false
 			}
 		} else {
 			hall.PlayerCreateRoom(r.cfgId, p)
+			return false
 		}
-		return true
 	})
 }
 
@@ -104,20 +106,20 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		return
 	}
 
-	// 问题存在
-
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
 				r.PlayerJoinRoom(p)
+				return false
 			} else {
 				hall.PlayerCreateRoom(cfgId, p)
+				return false
 			}
 		} else {
 			hall.PlayerCreateRoom(cfgId, p)
+			return false
 		}
-		return true
 	})
 }
 
@@ -126,6 +128,7 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	r := &Room{}
 	r.Init(cfgId)
 	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
+
 
 	hall.RoomRecord.Store(r.roomId, r)
 

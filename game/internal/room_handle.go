@@ -63,7 +63,7 @@ func (r *Room) StartGameRun() {
 
 	// 当前房间人数存在两人及两人以上才开始游戏
 	n := r.PlayerLength()
-	if n < 8 {
+	if n < 2 {
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}
@@ -146,8 +146,6 @@ func (r *Room) GameRunning() {
 	}
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
-	//1、准备阶段
-	r.readyPlay()
 	r.Status = msg.GameStep_Flop
 
 	//2、生成桌面工牌赋值
@@ -168,6 +166,8 @@ func (r *Room) GameRunning() {
 			r.Broadcast(game)
 		}
 	}
+	//1、准备阶段
+	r.readyPlay()
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -180,8 +180,7 @@ func (r *Room) GameRunning() {
 	}
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
-	//1、准备阶段
-	r.readyPlay()
+
 	r.Status = msg.GameStep_Turn
 
 	//2、生成桌面第四张公牌
@@ -202,6 +201,8 @@ func (r *Room) GameRunning() {
 			r.Broadcast(game)
 		}
 	}
+	//1、准备阶段
+	r.readyPlay()
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -214,8 +215,6 @@ func (r *Room) GameRunning() {
 	}
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
-	//1、准备阶段
-	r.readyPlay()
 	r.Status = msg.GameStep_River
 
 	//2、生成桌面第五张公牌
@@ -238,6 +237,8 @@ func (r *Room) GameRunning() {
 			r.Broadcast(game)
 		}
 	}
+	//1、准备阶段
+	r.readyPlay()
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -301,6 +302,7 @@ func (r *Room) ExitFromRoom(p *Player) {
 	leave.PlayerData = p.RespPlayerData()
 	p.SendMsg(leave)
 	r.BroadCastExcept(leave, p)
+	log.Debug("玩家退出房间成功！:%v", p)
 
 	// 如果房间总人数为0，删除房间缓存
 	if len(r.AllPlayer) == 0 {

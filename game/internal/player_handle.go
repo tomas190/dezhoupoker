@@ -33,6 +33,7 @@ func (p *Player) ClearPlayerData() {
 	p.actStatus = msg.ActionStatus_WAITING
 	p.gameStep = emNotGaming
 	p.downBets = 0
+	p.lunDownBets = 0
 	p.totalDownBet = 0
 	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0

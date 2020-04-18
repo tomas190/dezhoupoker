@@ -188,6 +188,7 @@ func handleAction(args []interface{}) {
 
 	if ok {
 		p.downBets = m.BetAmount
+		p.lunDownBets += m.BetAmount
 		p.action <- m.Action
 	}
 }

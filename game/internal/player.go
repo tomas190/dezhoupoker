@@ -34,6 +34,7 @@ type Player struct {
 	actStatus     msg.ActionStatus // 玩家行动状态
 	gameStep      GameStatus       // 玩家游戏状态
 	downBets      float64          // 下注金额
+	lunDownBets   float64          // 每轮总下注
 	totalDownBet  float64          // 下注总金额
 	cardData      msg.CardSuitData // 卡牌数据和类型
 	resultMoney   float64          // 结算金额
@@ -59,6 +60,7 @@ func NewPlayer() *Player {
 		actStatus:     msg.ActionStatus_WAITING,
 		gameStep:      emNotGaming,
 		downBets:      0,
+		lunDownBets:   0,
 		totalDownBet:  0,
 		cardData:      msg.CardSuitData{},
 		resultMoney:   0,
