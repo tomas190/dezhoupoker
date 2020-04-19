@@ -10,6 +10,8 @@ var (
 	ChanRPC  = skeleton.ChanRPCServer
 
 	hall = NewHall()
+
+	c4c = &Conn4Center{}
 )
 
 type Module struct {
@@ -22,6 +24,9 @@ func (m *Module) OnInit() {
 	// 初始连接数据库
 	InitMongoDB()
 	HallInit()
+
+	c4c.Init()
+	c4c.CreatConnect()
 }
 
 func (m *Module) OnDestroy() {

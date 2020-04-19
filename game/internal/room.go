@@ -33,6 +33,8 @@ type Room struct {
 
 	counter int32
 	clock   *time.Ticker
+
+	UserLeave []string // 用户是否在房间
 }
 
 const (
@@ -159,6 +161,27 @@ func (r *Room) FindAbleChair() int32 {
 
 //KickPlayer 剔除房间玩家
 func (r *Room) KickPlayer() {
+	// 清理断线玩家
+	for _, uid := range r.UserLeave {
+		for _, v := range r.PlayerList {
+			if v != nil && v.Id == uid {
+				//玩家断线的话，退出房间信息，也要断开链接
+				if v.IsOnline == true {
+					v.PlayerExitRoom()
+				} else {
+					c4c.UserLogoutCenter(v.Id, v.Password, v.Token, func(data *Player) {
+						v.PlayerExitRoom()
+						hall.UserRecord.Delete(v.Id)
+						leaveHall := &msg.Logout_S2C{}
+						v.ConnAgent.WriteMsg(leaveHall)
+						v.IsOnline = false
+						log.Debug("踢出房间断线玩家 : %v", v.Id)
+					})
+				}
+			}
+		}
+	}
+
 	// 遍历桌面玩家，踢掉玩家筹码和房间小于房间最小带入金额
 	for _, v := range r.PlayerList { // 玩家筹码为0怎么办
 		if v != nil {
@@ -186,7 +209,6 @@ func (r *Room) KickPlayer() {
 			r.PlayerList[v.chair] = nil
 		}
 	}
-	// 清理断线玩家
 }
 
 // 玩家补充筹码
@@ -250,6 +272,8 @@ func (r *Room) ClearRoomData() {
 			v.totalDownBet = 0
 			v.cardData = msg.CardSuitData{}
 			v.resultMoney = 0
+			v.WinResultMoney = 0
+			v.LoseResultMoney = 0
 			v.blindType = msg.BlindType_No_Blind
 			v.IsAllIn = false
 			v.IsWinner = false
@@ -386,7 +410,7 @@ func (r *Room) betting(p *Player, blind float64) {
 	p.totalDownBet = p.totalDownBet + blind
 	//总筹码变动
 	r.potMoney += blind
-	r.preChips = blind
+	r.preChips = p.lunDownBets
 
 	action := &msg.PlayerAction_S2C{}
 	action.Id = p.Id
@@ -396,6 +420,7 @@ func (r *Room) betting(p *Player, blind float64) {
 	action.PotMoney = r.potMoney
 	action.ActionType = p.actStatus
 	r.Broadcast(action)
+	log.Debug("玩家下注行动:%+v", action)
 }
 
 //readyPlay 准备阶段
@@ -461,7 +486,7 @@ func (r *Room) Action(pos int) {
 				action.PotMoney = r.potMoney
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
-				log.Debug("玩家行动:%v", action)
+				log.Debug("玩家下注行动:%+v", action)
 
 				if r.remain <= 1 {
 					return
@@ -506,7 +531,6 @@ func (r *Room) action(pos int) {
 
 		//3、行动玩家是根据庄家的下一位玩家
 		r.activeSeat = p.chair
-		log.Debug("行动玩家 ~ :%v", r.activeSeat)
 
 		changed := &msg.PlayerActionChange_S2C{}
 		room := r.RespRoomData()
@@ -523,7 +547,6 @@ func (r *Room) action(pos int) {
 		action.PotMoney = r.potMoney
 		action.ActionType = p.actStatus
 		r.Broadcast(action)
-		log.Debug("玩家行动:%v", action)
 
 		if r.remain <= 1 {
 			return false
@@ -566,6 +589,7 @@ func (r *Room) ShowDown() {
 		for _, pos := range pot.Pos {
 			player := r.PlayerList[pos]
 			if player != nil && player.gameStep == emInGaming && player.HandValue == maxPlayer.HandValue {
+				log.Debug("比牌手值:%v,%v", player.HandValue, maxPlayer.HandValue)
 				winners = append(winners, pos)
 			}
 		}
@@ -588,6 +612,7 @@ func (r *Room) ShowDown() {
 		if v > 0 {
 			player := r.PlayerList[i]
 			player.chips += v
+			player.WinResultMoney = v
 			if v-player.totalDownBet > 0 {
 				player.IsWinner = true
 				player.resultMoney = v - player.totalDownBet
@@ -597,8 +622,51 @@ func (r *Room) ShowDown() {
 	}
 }
 
+func (r *Room) ResultMoney() {
+	sur := &SurplusPoolDB{}
+	sur.UpdateTime = time.Now()
+	sur.TimeNow = time.Now().Format("2006-01-02 15:04:05")
+	sur.Rid = r.roomId
+	sur.PlayerNum = LoadPlayerCount()
+
+	surPool := FindSurplusPool()
+	if surPool != nil {
+		sur.HistoryWin = surPool.HistoryWin
+		sur.HistoryLose = surPool.HistoryLose
+	}
+
+	for i := 0; i < len(r.PlayerList); i++ {
+		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
+			p := r.PlayerList[i]
+			p.LoseResultMoney = p.totalDownBet
+			nowTime := time.Now().Unix()
+			p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
+			if p.LoseResultMoney > 0 {
+				sur.HistoryLose += p.LoseResultMoney
+				sur.TotalLoseMoney += p.LoseResultMoney
+				loseReason := "ResultLoseScore"
+				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
+			}
+			if p.WinResultMoney > 0 {
+				sur.HistoryWin += p.WinResultMoney
+				sur.TotalWinMoney += p.WinResultMoney
+				winReason := "ResultWinScore"
+				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
+			}
+			// 插入盈余池数据
+			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
+				InsertSurplusPool(sur)
+			}
+			// 跑马灯
+			if p.resultMoney > PaoMaDeng {
+				c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
+			}
+		}
+	}
+}
+
 //TimerTask 游戏准备阶段定时器任务
-func (r *Room) ReadyTimerTask() {
+func (r *Room) ReadyTimer() {
 	// 广播游戏准备时间
 	ready := &msg.ReadyTime_S2C{}
 	ready.ReadyTime = ReadyTime
@@ -610,7 +678,7 @@ func (r *Room) ReadyTimerTask() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			log.Debug("readyTime clock : %v ", r.counter)
+			//log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
@@ -626,7 +694,7 @@ func (r *Room) ReadyTimerTask() {
 }
 
 //TimerTask 游戏开始定时器任务
-func (r *Room) GameRunTimerTask() {
+func (r *Room) GameRunTask() {
 	go func() {
 		select {
 		case t := <-ReadyTimeChan:
@@ -644,7 +712,7 @@ func (r *Room) RestartGame() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			log.Debug("settleTime clock : %v ", r.counter)
+			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == SettleTime {
 				r.counter = 0
 				// 剔除房间玩家

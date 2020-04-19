@@ -13,6 +13,7 @@ var Server struct {
 	CertFile    string
 	KeyFile     string
 	TCPAddr     string
+	HTTPPort    string
 	MaxConnNum  int
 	ConsolePort int
 	ProfilePath string
@@ -21,6 +22,15 @@ var Server struct {
 	MongoDBAuth string
 	MongoDBUser string
 	MongoDBPwd  string
+
+	TokenServer      string
+	CenterServer     string
+	CenterServerPort string
+	DevName          string
+	GameID           string
+	CenterUrl        string
+
+	LogAddr string
 }
 
 func init() {

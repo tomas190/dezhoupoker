@@ -59,58 +59,103 @@ func handleLogin(args []interface{}) {
 				log.Error("用户链接替换错误", err)
 			}
 
-			login := &msg.Login_S2C{}
-			login.PlayerInfo = new(msg.PlayerInfo)
-			login.PlayerInfo.Id = p.Id
-			login.PlayerInfo.NickName = p.NickName
-			login.PlayerInfo.HeadImg = p.HeadImg
-			login.PlayerInfo.Account = p.Account
-			a.WriteMsg(login)
+			rId := hall.UserRoom[p.Id]
+			v, _ := hall.RoomRecord.Load(rId)
+			if v != nil {
+				// 玩家如果已在游戏中，则返回房间数据
+				room := v.(*Room)
+				for i, userId := range room.UserLeave {
+					log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+					// 把玩家从掉线列表中移除
+					if userId == p.Id {
+						room.UserLeave = append(room.UserLeave[:i], room.UserLeave[i+1:]...)
+						log.Debug("AllocateUser 清除玩家记录~:%v", userId)
+						break
+					}
+					log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+				}
+			}
 
-			// todo 玩家login不用直接返回房间
-			//rId := hall.UserRoom[p.Id]
-			//v, _ := hall.RoomRecord.Load(rId)
-			//if v != nil {
-			//	// 玩家如果已在游戏中，则返回房间数据
-			//	r := v.(*Room)
-			//	roomData := r.RespRoomData()
-			//
-			//	enter := &msg.EnterRoom_S2C{}
-			//	enter.RoomData = roomData
-			//	a.WriteMsg(enter)
-			//}
+			user, _ := hall.UserRecord.Load(p.Id)
+			if user != nil {
+				u := user.(*Player)
+				login := &msg.Login_S2C{}
+				login.PlayerInfo = new(msg.PlayerInfo)
+				login.PlayerInfo.Id = u.Id
+				login.PlayerInfo.NickName = u.NickName
+				login.PlayerInfo.HeadImg = u.HeadImg
+				login.PlayerInfo.Account = u.Account
+				a.WriteMsg(login)
+
+				//p.ConnAgent.Destroy()
+				p.ConnAgent = a
+				p.ConnAgent.SetUserData(user) //p
+				p.IsOnline = true
+			}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
-		//p := v.(*Player)
-		// 中心服登入
-		//c4c.UserLogin()
-		pl.Id = m.Id // todo
-		pl.Account = 4000
-		pl.NickName = m.Id
-		pl.HeadImg = "0"
 
-		// 重新绑定信息
-		pl.ConnAgent = a
-		a.SetUserData(pl)
+		c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {
+			login := &msg.Login_S2C{}
+			login.PlayerInfo = new(msg.PlayerInfo)
+			login.PlayerInfo.Id = u.Id
+			login.PlayerInfo.NickName = u.NickName
+			login.PlayerInfo.HeadImg = u.HeadImg
+			login.PlayerInfo.Account = u.Account
+			a.WriteMsg(login)
 
-		// 查找用户是否存在，如果存在就插入数据库
-		pl.FindPlayerInfo()
+			u.Init()
+			// 重新绑定信息
+			a.SetUserData(u)
+			u.ConnAgent = a
 
-		hall.UserRecord.Store(pl.Id, pl)
+			u.Password = m.GetPassWord()
+			u.Token = m.GetToken()
 
-		login := &msg.Login_S2C{}
-		login.PlayerInfo = new(msg.PlayerInfo)
-		login.PlayerInfo.Id = pl.Id
-		login.PlayerInfo.NickName = pl.NickName
-		login.PlayerInfo.HeadImg = pl.HeadImg
-		login.PlayerInfo.Account = pl.Account
-		a.WriteMsg(login)
+			hall.UserRecord.Store(u.Id, u)
+
+			// 查找用户是否存在，如果存在就插入数据库
+			pl.FindPlayerInfo()
+
+		})
 	}
-
 }
 
 func handleLogout(args []interface{}) {
+	a := args[1].(gate.Agent)
 
+	p, ok := a.UserData().(*Player)
+	log.Debug("handleLeaveHall 玩家退出大厅~ : %v", p.Id)
+
+	if ok {
+		if p.totalDownBet > 0 {
+			var exist bool
+			rid := hall.UserRoom[p.Id]
+			v, _ := hall.RoomRecord.Load(rid)
+			if v != nil {
+				room := v.(*Room)
+				for _, v := range room.UserLeave {
+					if v == p.Id {
+						exist = true
+					}
+				}
+				if exist == false {
+					room.UserLeave = append(room.UserLeave, p.Id)
+				}
+				p.IsOnline = false
+				leaveHall := &msg.Logout_S2C{}
+				a.WriteMsg(leaveHall)
+			}
+		} else {
+			c4c.UserLogoutCenter(p.Id, p.Password, p.Token, func(u *Player) {
+				p.IsOnline = false
+				hall.UserRecord.Delete(p.Id)
+				leaveHall := &msg.Logout_S2C{}
+				a.WriteMsg(leaveHall)
+				p.ConnAgent.Close()
+			})
+		}
+	}
 }
 
 func handleQuickStart(args []interface{}) {

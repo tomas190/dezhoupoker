@@ -94,7 +94,7 @@ func LoadPlayerCount() int32 {
 	return int32(n)
 }
 
-func (r *Room) InsertRoomData() error{
+func (r *Room) InsertRoomData() error {
 	s, c := connect(dbName, roomSettle)
 	defer s.Close()
 
@@ -143,10 +143,25 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	log.Debug("<----- 数据库插入SurplusPool数据成功 ~ ----->")
 }
 
+func FindSurplusPool() *SurplusPoolDB {
+	s, c := connect(dbName, surPlusDB)
+	defer s.Close()
+
+	sur := &SurplusPoolDB{}
+	err := c.Find(nil).Sort("-updatetime").One(sur)
+	if err != nil {
+		log.Error("<----- 查找SurplusPool数据失败 ~ ----->:%v", err)
+		return nil
+	}
+
+	return sur
+}
+
 // 玩家的记录
 type PlayerDownBetRecode struct {
 	Id          string           `json:"id" bson:"id"`                       // 玩家Id
-	RandId      string           `json:"rand_id" bson:"rand_id"`             // 随机Id
+	GameId      string           `json:"game_id" bson:"game_id"`             // gameId
+	RoundId     string           `json:"round_id" bson:"round_id"`           // 随机Id
 	RoomId      string           `json:"room_id" bson:"room_id"`             // 所在房间
 	DownBetInfo float64          `json:"down_bet_info" bson:"down_bet_info"` // 玩家各注池下注的金额
 	DownBetTime int64            `json:"down_bet_time" bson:"down_bet_time"` // 下注时间

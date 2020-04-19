@@ -3,7 +3,7 @@
 ##### 1、克隆代码到本地
 git clone http://git.0717996.com/Tomas/dezhoupoker.git
 
-##### 2、进入RedBlack-War文件夹
+##### 2、进入dezhoupoker文件夹
 cd dezhoupoker
 
 ##### 3、编译
@@ -17,6 +17,7 @@ cat load.log
 
 ###### 如果看到日志文件输出以下数据代表成功启动~
 2020/04/18 14:36:36 [release] Leaf 1.1.3 starting up
+
 2020/04/18 14:36:36 [debug  ] Connect DataBase 数据库连接SUCCESS~
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 
@@ -47,7 +48,6 @@ cat load.log
   "TokenServer": "http://172.16.100.2:9502/Token/getToken",     中心服Token
   "CenterServer": "172.16.100.2",                               中心服地址 
   "CenterServerPort": "9502",                                   中心服端口 
-  "DevKey": ""                                                  devKey
   "DevName": "",                                                devName
   "GameID": ""                                                  gameID
   "CenterUrl": "ws://172.16.1.41:9502/"                         连接中心服URL地址

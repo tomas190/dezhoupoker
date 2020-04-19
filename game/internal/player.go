@@ -25,55 +25,59 @@ type Player struct {
 	Account  float64
 	Password string
 	Token    string
+	RoundId  string
 
-	cards         algorithm.Cards  // 牌型数据
-	chips         float64          // 玩家筹码
-	roomChips     float64          // 玩家房间筹码
-	chair         int32            // 座位号(站起为-1)
-	standUPNum    int32            // 站起玩家局数(站起5局直接踢出)
-	actStatus     msg.ActionStatus // 玩家行动状态
-	gameStep      GameStatus       // 玩家游戏状态
-	downBets      float64          // 下注金额
-	lunDownBets   float64          // 每轮总下注
-	totalDownBet  float64          // 下注总金额
-	cardData      msg.CardSuitData // 卡牌数据和类型
-	resultMoney   float64          // 结算金额
-	blindType     msg.BlindType    // 盲注类型
-	IsAllIn       bool             // 是否全压
-	IsButton      bool             // 是否庄家
-	IsWinner      bool             // 是否赢家
-	IsOnline      bool             // 是否在线
-	actTime       int32            // 当前行动时间
-	IsTimeOutFold bool             // 是否超时弃牌
-	timerCount    int32            // 玩家行动计时
+	cards           algorithm.Cards  // 牌型数据
+	chips           float64          // 玩家筹码
+	roomChips       float64          // 玩家房间筹码
+	chair           int32            // 座位号(站起为-1)
+	standUPNum      int32            // 站起玩家局数(站起5局直接踢出)
+	actStatus       msg.ActionStatus // 玩家行动状态
+	gameStep        GameStatus       // 玩家游戏状态
+	downBets        float64          // 下注金额
+	lunDownBets     float64          // 每轮总下注
+	totalDownBet    float64          // 下注总金额
+	cardData        msg.CardSuitData // 卡牌数据和类型
+	resultMoney     float64          // 结算金额
+	WinResultMoney  float64          // 本局赢钱金额
+	LoseResultMoney float64          // 本局输钱金额
+	blindType       msg.BlindType    // 盲注类型
+	IsAllIn         bool             // 是否全压
+	IsButton        bool             // 是否庄家
+	IsWinner        bool             // 是否赢家
+	IsOnline        bool             // 是否在线
+	actTime         int32            // 当前行动时间
+	IsTimeOutFold   bool             // 是否超时弃牌
+	timerCount      int32            // 玩家行动计时
 
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
 }
 
-func NewPlayer() *Player {
-	return &Player{
-		chips:         0,
-		roomChips:     0,
-		chair:         0,
-		standUPNum:    0,
-		actStatus:     msg.ActionStatus_WAITING,
-		gameStep:      emNotGaming,
-		downBets:      0,
-		lunDownBets:   0,
-		totalDownBet:  0,
-		cardData:      msg.CardSuitData{},
-		resultMoney:   0,
-		blindType:     msg.BlindType_No_Blind,
-		IsAllIn:       false,
-		IsButton:      false,
-		IsWinner:      false,
-		HandValue:     0,
-		IsOnline:      true,
-		IsTimeOutFold: false,
-		timerCount:    0,
-		action:        make(chan msg.ActionStatus),
-	}
+func (p *Player) Init() {
+	p.RoundId = ""
+	p.chips = 0
+	p.roomChips = 0
+	p.chair = 0
+	p.standUPNum = 0
+	p.actStatus = msg.ActionStatus_WAITING
+	p.gameStep = emNotGaming
+	p.downBets = 0
+	p.lunDownBets = 0
+	p.totalDownBet = 0
+	p.cardData = msg.CardSuitData{}
+	p.resultMoney = 0
+	p.WinResultMoney = 0
+	p.LoseResultMoney = 0
+	p.blindType = msg.BlindType_No_Blind
+	p.IsAllIn = false
+	p.IsButton = false
+	p.IsWinner = false
+	p.HandValue = 0
+	p.IsOnline = true
+	p.IsTimeOutFold = false
+	p.timerCount = 0
+	p.action = make(chan msg.ActionStatus)
 }
 
 //SendMsg 玩家向客户端发送消息
@@ -131,7 +135,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				// 本局玩家下注总金额
 				p.totalDownBet += p.downBets
 				// 房间上个玩家下注金额
-				r.preChips = p.downBets
+				r.preChips = p.lunDownBets
 				// 总筹码
 				r.potMoney += p.downBets
 				IsRaised = true

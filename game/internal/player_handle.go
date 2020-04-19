@@ -10,14 +10,24 @@ func (p *Player) PlayerExitRoom() {
 	rId := hall.UserRoom[p.Id]
 	v, _ := hall.RoomRecord.Load(rId)
 	if v != nil {
-		r := v.(*Room)
-		if p.gameStep == emInGaming {
+		room := v.(*Room)
+		if p.totalDownBet > 0 {
+			var exist bool
+			for _, v := range room.UserLeave {
+				if v == p.Id {
+					exist = true
+				}
+			}
+			if exist == false {
+				room.UserLeave = append(room.UserLeave, p.Id)
+			}
+
 			leave := &msg.LeaveRoom_S2C{}
 			leave.PlayerData = p.RespPlayerData()
 			p.SendMsg(leave)
 
 		} else {
-			r.ExitFromRoom(p)
+			room.ExitFromRoom(p)
 		}
 	} else {
 		log.Debug("Player Exit Room, But Not Found Player Room~")
@@ -37,6 +47,8 @@ func (p *Player) ClearPlayerData() {
 	p.totalDownBet = 0
 	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0
+	p.WinResultMoney = 0
+	p.LoseResultMoney = 0
 	p.blindType = msg.BlindType_No_Blind
 	p.IsAllIn = false
 	p.IsButton = false

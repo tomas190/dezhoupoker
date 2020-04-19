@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"dezhoupoker/msg"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 )
@@ -14,7 +15,8 @@ func rpcNewAgent(args []interface{}) {
 	a := args[0].(gate.Agent)
 	log.Debug("<-------------新链接请求连接--------------->")
 
-	p := NewPlayer()
+	p := &Player{}
+	p.Init()
 	p.ConnAgent = a
 	a.SetUserData(p)
 }
@@ -24,16 +26,31 @@ func rpcCloseAgent(args []interface{}) {
 	p, ok := a.UserData().(*Player)
 	if ok && p.ConnAgent == a {
 		log.Debug("<-------------%v主动断开链接--------------->", p.Id)
-		rid := hall.UserRoom[p.Id]
-		v, _ := hall.RoomRecord.Load(rid)
-		if v != nil {
-			if p.gameStep == emInGaming {
-				p.IsOnline = false
-			} else {
-				p.PlayerExitRoom()
+
+		p.IsOnline = false
+		if p.totalDownBet > 0 {
+			rid := hall.UserRoom[p.Id]
+			v, _ := hall.RoomRecord.Load(rid)
+			if v != nil {
+				room := v.(*Room)
+				var exist bool
+				for _, v := range room.UserLeave {
+					if v == p.Id {
+						exist = true
+					}
+				}
+				if exist == false {
+					room.UserLeave = append(room.UserLeave, p.Id)
+				}
 			}
+		} else {
+			hall.UserRecord.Delete(p.Id)
+			p.PlayerExitRoom()
 		}
-		a.Close()
-		// c4c.Logout()
+		c4c.UserLogoutCenter(p.Id, p.Password, p.Token, func(data *Player) {
+			leaveHall := &msg.Logout_S2C{}
+			a.WriteMsg(leaveHall)
+			a.Close()
+		})
 	}
 }

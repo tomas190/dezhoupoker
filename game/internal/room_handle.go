@@ -4,6 +4,7 @@ import (
 	"dezhoupoker/game/internal/algorithm"
 	"dezhoupoker/msg"
 	"github.com/name5566/leaf/log"
+	"time"
 )
 
 //PlayerJoinRoom 玩家加入房间
@@ -48,7 +49,6 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		enter := &msg.JoinRoom_S2C{}
 		enter.RoomData = roomData
 		p.SendMsg(enter)
-		log.Debug("发送加入房间")
 
 		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
@@ -110,10 +110,10 @@ func (r *Room) StartGameRun() {
 	})
 
 	// 准备阶段定时任务
-	r.ReadyTimerTask()
+	r.ReadyTimer()
 
 	// 游戏开始定时器任务
-	r.GameRunTimerTask()
+	r.GameRunTask()
 }
 
 func (r *Room) GameRunning() {
@@ -169,6 +169,8 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
+	time.Sleep(1 * time.Second)
+
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
@@ -204,6 +206,8 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
+	time.Sleep(1 * time.Second)
+
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
@@ -238,8 +242,8 @@ func (r *Room) GameRunning() {
 		}
 	}
 	//1、准备阶段
-	r.readyPlay()
-
+	//r.readyPlay()
+	time.Sleep(1 * time.Second)
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
@@ -247,6 +251,8 @@ func (r *Room) GameRunning() {
 showdown:
 	log.Debug("开始摊牌，开牌比大小 ~")
 	r.ShowDown()
+
+	r.ResultMoney()
 
 	r.Status = msg.GameStep_ShowDown
 
@@ -282,7 +288,6 @@ showdown:
 
 //ExitFromRoom 退出房间处理
 func (r *Room) ExitFromRoom(p *Player) {
-
 	if p.chair != -1 {
 		r.PlayerList[p.chair] = nil
 	}
@@ -292,8 +297,6 @@ func (r *Room) ExitFromRoom(p *Player) {
 			r.AllPlayer = append(r.AllPlayer[:k], r.AllPlayer[k+1:]...)
 		}
 	}
-
-	//hall.UserRecord.Delete(p.Id)  todo 玩家登出执行
 
 	p.Account += p.chips
 	p.Account += p.roomChips
