@@ -94,8 +94,8 @@ func handleLogin(args []interface{}) {
 			}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
-
 		c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {
+			log.Debug("玩家首次登陆:%v", u.Id)
 			login := &msg.Login_S2C{}
 			login.PlayerInfo = new(msg.PlayerInfo)
 			login.PlayerInfo.Id = u.Id

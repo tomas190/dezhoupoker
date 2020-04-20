@@ -28,6 +28,7 @@ var Server struct {
 	CenterServerPort string
 	DevName          string
 	GameID           string
+	DevKey           string
 	CenterUrl        string
 
 	LogAddr string
