@@ -53,7 +53,7 @@ var loseChan chan bool
 //Init 初始化
 func (c4c *Conn4Center) Init() {
 	c4c.GameId = conf.Server.GameID
-	c4c.DevKey = conf.Server.DevKey
+	//c4c.DevKey = conf.Server.DevKey
 	c4c.LoginStat = false
 
 
@@ -516,7 +516,7 @@ func (c4c *Conn4Center) ServerLoginCenter() {
 //UserLoginCenter 用户登录
 func (c4c *Conn4Center) UserLoginCenter(userId string, password string, token string, callback func(data *Player)) {
 	if !c4c.LoginStat {
-		log.Debug("<-------- RedBlack-War not ready~!!! -------->")
+		log.Debug("<-------- dezhoupoker not ready~!!! -------->")
 		return
 	}
 	baseData := &BaseMessage{}
