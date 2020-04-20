@@ -53,11 +53,11 @@ var loseChan chan bool
 //Init 初始化
 func (c4c *Conn4Center) Init() {
 	c4c.GameId = conf.Server.GameID
-	//c4c.DevKey = conf.Server.DevKey
+	c4c.DevKey = conf.Server.DevKey
 	c4c.LoginStat = false
 
-
 	c4c.waitUser = make(map[string]*UserCallback)
+	//go changeToken()
 }
 
 //onDestroy 销毁用户
@@ -263,7 +263,6 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 	}
 
 	if code != 200 {
-		cc.error("同步中心服用户登录失败", data)
 		return
 	}
 
@@ -352,7 +351,6 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 					userData.Data.NickName = nick.(string)
 				}
 			}
-
 			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
 
 			if okA {
@@ -385,7 +383,6 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 	}
 
 	if code != 200 {
-		cc.error("同步中心服赢钱失败", data)
 		return
 	}
 
@@ -403,7 +400,7 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 			jsonScore := userInfo["final_pay"]
 			score, err := jsonScore.(json.Number).Float64()
 
-			cc.log("同步中心服赢钱成功", score)
+			log.Debug("同步中心服赢钱成功:%v", score)
 
 			if err != nil {
 				log.Error(err.Error())
@@ -424,7 +421,7 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 		log.Error(err.Error())
 	}
 	if code != 200 {
-		cc.error("同步中心服输钱失败", data)
+		log.Error("同步中心服输钱失败:%v", data)
 		return
 	}
 
@@ -440,7 +437,7 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 			jsonScore := userInfo["final_pay"]
 			score, err := jsonScore.(json.Number).Float64()
 
-			cc.log("同步中心服输钱成功", score)
+			log.Debug("同步中心服输钱成功:%v", score)
 
 			if err != nil {
 				log.Error(err.Error())
@@ -648,7 +645,7 @@ func (c4c *Conn4Center) LockSettlement(p *Player) {
 	lockMoney.Info.Order = loseOrder
 	lockMoney.Info.PayReason = "lockMoney"
 	lockMoney.Info.PreMoney = 0
-	lockMoney.Info.RoundId = p.Id // todo
+	lockMoney.Info.RoundId = p.RoundId
 	baseData.Data = lockMoney
 	c4c.SendMsg2Center(baseData)
 }
@@ -671,7 +668,7 @@ func (c4c *Conn4Center) UnlockSettlement(p *Player) {
 	lockMoney.Info.Order = loseOrder
 	lockMoney.Info.PayReason = "UnlockMoney"
 	lockMoney.Info.PreMoney = 0
-	lockMoney.Info.RoundId = p.Id // todo
+	lockMoney.Info.RoundId = p.RoundId
 	baseData.Data = lockMoney
 	c4c.SendMsg2Center(baseData)
 }
@@ -688,12 +685,13 @@ func (c4c *Conn4Center) UserSyncScoreChange(p *Player, reason string) {
 
 func (c4c *Conn4Center) NoticeWinMoreThan(playerId, playerName string, winGold float64) {
 	log.Debug("<-------- NoticeWinMoreThan  -------->")
-	msg := fmt.Sprintf("<size=20><color=yellow>恭喜!</color><color=orange>%v</color><color=yellow>在</color></><color=orange><size=25>德州扑克</color></><color=yellow><size=20>中一把赢了</color></><color=yellow><size=30>%.2f</color></><color=yellow><size=25>金币！</color></>", playerName, winGold)
+	msg := fmt.Sprintf("<size=20><color=yellow>恭喜!</color><color=orange>%v</color><color=yellow>在</color></><color=orange><size=25>红黑大战</color></><color=yellow><size=20>中一把赢了</color></><color=yellow><size=30>%.2f</color></><color=yellow><size=25>金币！</color></>", playerName, winGold)
 
 	base := &BaseMessage{}
 	base.Event = msgWinMoreThanNotice
 	base.Data = &Notice{
 		DevName: conf.Server.DevName,
+		DevKey:  conf.Server.DevKey,
 		ID:      playerId,
 		GameId:  c4c.GameId,
 		Type:    2000,
@@ -710,8 +708,8 @@ func (cc *mylog) Init() {
 func (cc *mylog) log(v ...interface{}) {
 	senddata := logmsg{
 		Type:     "LOG",
-		From:     "dezhoupoker",
-		GameName: "德州扑克",
+		From:     "RedBlack-War",
+		GameName: "红黑大战",
 		Id:       conf.Server.GameID,
 		Host:     "",
 		Time:     time.Now().Unix(),
@@ -730,8 +728,8 @@ func (cc *mylog) log(v ...interface{}) {
 func (cc *mylog) debug(v ...interface{}) {
 	senddata := logmsg{
 		Type:     "DEG",
-		From:     "dezhoupoker",
-		GameName: "德州扑克",
+		From:     "RedBlack-War",
+		GameName: "红黑大战",
 		Id:       conf.Server.GameID,
 		Host:     "",
 		Time:     time.Now().Unix(),
@@ -750,8 +748,8 @@ func (cc *mylog) debug(v ...interface{}) {
 func (cc *mylog) error(v ...interface{}) {
 	senddata := logmsg{
 		Type:     "ERR",
-		From:     "dezhoupoker",
-		GameName: "dezhoupoker",
+		From:     "RedBlack-War",
+		GameName: "RedBlack-War",
 		Id:       conf.Server.GameID,
 		Host:     "",
 		Time:     time.Now().Unix(),
@@ -784,5 +782,3 @@ func (cc *mylog) sendMsg(senddata logmsg) {
 		}
 	}
 }
-
-var cc mylog
