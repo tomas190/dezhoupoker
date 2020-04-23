@@ -234,19 +234,22 @@ func (c4c *Conn4Center) onReceive(messType int, messBody []byte) {
 func (c4c *Conn4Center) onServerLogin(msgBody interface{}) {
 	log.Debug("<-------- onServerLogin -------->: %v", msgBody)
 	data, ok := msgBody.(map[string]interface{})
-	if ok {
-		code, err := data["code"].(json.Number).Int64()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-
-		fmt.Println(code, reflect.TypeOf(code))
-		if data["status"] == "SUCCESS" && code == 200 {
-			log.Debug("<-------- serverLogin SUCCESS~!!! -------->")
-
-			c4c.LoginStat = true
-		}
+	if !ok {
+		log.Debug("onServerLogin Error")
 	}
+
+	code, err := data["code"].(json.Number).Int64()
+	if err != nil {
+		log.Error(err.Error())
+		return
+	}
+
+	if data["status"] == "SUCCESS" && code == 200 {
+		log.Debug("<-------- serverLogin SUCCESS~!!! -------->")
+		c4c.LoginStat = true
+		fmt.Println(code, reflect.TypeOf(code))
+	}
+
 }
 
 //onUserLogin 收到中心服的用户登录回应

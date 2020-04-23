@@ -14,7 +14,7 @@
   "CenterServer": "172.16.100.2",
   "CenterServerPort": "9502",
   "DevName": "新游戏开发",
-  "GameID": "5b1f3a3cb76a591e7f251723",
+  "GameID": "5b1f3a3cb76a591e7f25176",
   "DevKey": "new_game_30",
   "CenterUrl": "ws://172.16.100.2:9502/",
 
