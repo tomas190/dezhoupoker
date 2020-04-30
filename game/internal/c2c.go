@@ -53,7 +53,7 @@ var loseChan chan bool
 //Init 初始化
 func (c4c *Conn4Center) Init() {
 	c4c.GameId = conf.Server.GameID
-	c4c.DevKey = conf.Server.Dev_dezhoupoker
+	c4c.DevKey = conf.Server.DevKey
 	c4c.LoginStat = false
 
 	c4c.waitUser = make(map[string]*UserCallback)
@@ -701,7 +701,7 @@ func (c4c *Conn4Center) NoticeWinMoreThan(playerId, playerName string, winGold f
 	id, _ := strconv.Atoi(playerId)
 	base.Data = &Notice{
 		DevName: conf.Server.DevName,
-		DevKey:  conf.Server.Dev_dezhoupoker,
+		DevKey:  conf.Server.DevKey,
 		ID:      id,
 		GameId:  c4c.GameId,
 		Type:    2000,
