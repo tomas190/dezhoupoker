@@ -53,7 +53,7 @@ var loseChan chan bool
 //Init 初始化
 func (c4c *Conn4Center) Init() {
 	c4c.GameId = conf.Server.GameID
-	c4c.DevKey = conf.Server.DevKey
+	c4c.DevKey = conf.Server.Dev_dezhoupoker
 	c4c.LoginStat = false
 
 	c4c.waitUser = make(map[string]*UserCallback)
@@ -521,16 +521,17 @@ func (c4c *Conn4Center) UserLoginCenter(userId string, password string, token st
 	}
 	baseData := &BaseMessage{}
 	baseData.Event = msgUserLogin
+	id, _ := strconv.Atoi(userId)
 	if password != "" {
 		baseData.Data = &UserReq{
-			ID:       userId,
+			ID:       id,
 			PassWord: password,
 			GameId:   c4c.GameId,
 			DevName:  conf.Server.DevName,
 			DevKey:   c4c.DevKey}
 	} else {
 		baseData.Data = &UserReq{
-			ID:      userId,
+			ID:      id,
 			Token:   token,
 			GameId:  c4c.GameId,
 			DevName: conf.Server.DevName,
@@ -549,16 +550,17 @@ func (c4c *Conn4Center) UserLoginCenter(userId string, password string, token st
 func (c4c *Conn4Center) UserLogoutCenter(userId string, password string, token string, callback func(data *Player)) {
 	base := &BaseMessage{}
 	base.Event = msgUserLogout
+	id, _ := strconv.Atoi(userId)
 	if password != "" {
 		base.Data = &UserReq{
-			ID:       userId,
+			ID:       id,
 			PassWord: password,
 			GameId:   c4c.GameId,
 			DevName:  conf.Server.DevName,
 			DevKey:   c4c.DevKey}
 	} else {
 		base.Data = &UserReq{
-			ID:      userId,
+			ID:      id,
 			Token:   token,
 			GameId:  c4c.GameId,
 			DevName: conf.Server.DevName,
@@ -593,12 +595,13 @@ func (c4c *Conn4Center) SendMsg2Center(data interface{}) {
 func (c4c *Conn4Center) UserSyncWinScore(p *Player, timeUnix int64, roundId, reason string) {
 	baseData := &BaseMessage{}
 	baseData.Event = msgUserWinScore
+	id, _ := strconv.Atoi(p.Id)
 	userWin := &UserChangeScore{}
 	userWin.Auth.DevName = conf.Server.DevName
 	userWin.Auth.DevKey = c4c.DevKey
 	userWin.Info.CreateTime = timeUnix
 	userWin.Info.GameId = c4c.GameId
-	userWin.Info.ID = p.Id
+	userWin.Info.ID = id
 	userWin.Info.LockMoney = 0
 	userWin.Info.Money = p.WinResultMoney
 	userWin.Info.Order = bson.NewObjectId().Hex()
@@ -614,12 +617,13 @@ func (c4c *Conn4Center) UserSyncWinScore(p *Player, timeUnix int64, roundId, rea
 func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, reason string) {
 	baseData := &BaseMessage{}
 	baseData.Event = msgUserLoseScore
+	id, _ := strconv.Atoi(p.Id)
 	userLose := &UserChangeScore{}
 	userLose.Auth.DevName = conf.Server.DevName
 	userLose.Auth.DevKey = c4c.DevKey
 	userLose.Info.CreateTime = timeUnix
 	userLose.Info.GameId = c4c.GameId
-	userLose.Info.ID = p.Id
+	userLose.Info.ID = id
 	userLose.Info.LockMoney = 0
 	userLose.Info.Money = p.LoseResultMoney
 	userLose.Info.Order = bson.NewObjectId().Hex()
@@ -637,12 +641,13 @@ func (c4c *Conn4Center) LockSettlement(p *Player) {
 
 	baseData := &BaseMessage{}
 	baseData.Event = msgLockSettlement
+	id, _ := strconv.Atoi(p.Id)
 	lockMoney := &UserChangeScore{}
 	lockMoney.Auth.DevName = conf.Server.DevName
 	lockMoney.Auth.DevKey = c4c.DevKey
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
-	lockMoney.Info.ID = p.Id
+	lockMoney.Info.ID = id
 	lockMoney.Info.LockMoney = p.Account
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = loseOrder
@@ -660,12 +665,13 @@ func (c4c *Conn4Center) UnlockSettlement(p *Player) {
 
 	baseData := &BaseMessage{}
 	baseData.Event = msgUnlockSettlement
+	id, _ := strconv.Atoi(p.Id)
 	lockMoney := &UserChangeScore{}
 	lockMoney.Auth.DevName = conf.Server.DevName
 	lockMoney.Auth.DevKey = c4c.DevKey
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
-	lockMoney.Info.ID = p.Id
+	lockMoney.Info.ID = id
 	lockMoney.Info.LockMoney = p.Account
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = loseOrder
@@ -692,10 +698,11 @@ func (c4c *Conn4Center) NoticeWinMoreThan(playerId, playerName string, winGold f
 
 	base := &BaseMessage{}
 	base.Event = msgWinMoreThanNotice
+	id, _ := strconv.Atoi(playerId)
 	base.Data = &Notice{
 		DevName: conf.Server.DevName,
-		DevKey:  conf.Server.DevKey,
-		ID:      playerId,
+		DevKey:  conf.Server.Dev_dezhoupoker,
+		ID:      id,
 		GameId:  c4c.GameId,
 		Type:    2000,
 		Message: msg,

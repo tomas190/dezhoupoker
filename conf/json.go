@@ -25,10 +25,10 @@ var Server struct {
 
 	TokenServer      string
 	CenterServer     string
-	CenterServerPort string
+	CenterServerPort int
 	DevName          string
 	GameID           string
-	DevKey           string
+	Dev_dezhoupoker  string
 	CenterUrl        string
 
 	LogAddr string

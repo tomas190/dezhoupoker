@@ -6,9 +6,9 @@ const (
 	msgUserLogout        string = "/GameServer/GameUser/loginout"
 	msgUserWinScore      string = "/GameServer/GameUser/winSettlement"
 	msgUserLoseScore     string = "/GameServer/GameUser/loseSettlement"
-	msgWinMoreThanNotice string = "/GameServer/Notice/notice"    // 赢钱超过发送通知
-	msgLockSettlement    string = "/GameServer/GameUser/lockSettlement"    //锁钱
-	msgUnlockSettlement  string = "/GameServer/GameUser/unlockSettlement"  //解锁
+	msgWinMoreThanNotice string = "/GameServer/Notice/notice"             // 赢钱超过发送通知
+	msgLockSettlement    string = "/GameServer/GameUser/lockSettlement"   //锁钱
+	msgUnlockSettlement  string = "/GameServer/GameUser/unlockSettlement" //解锁
 )
 
 //跑马灯设置金额
@@ -23,7 +23,7 @@ type BaseMessage struct {
 //ServerLogin 服务器登录
 type ServerLogin struct {
 	Host    string `json:"host"`    // 主机
-	Port    string `json:"port"`    // 端口
+	Port    int    `json:"port"`    // 端口
 	GameId  string `json:"game_id"` // 游戏Id
 	DevName string `json:"dev_name"`
 	DevKey  string `json:"dev_key"`
@@ -31,7 +31,7 @@ type ServerLogin struct {
 
 //UserReq 用户请求，用登录登出
 type UserReq struct {
-	ID       string `json:"id"`
+	ID       int    `json:"id"`
 	GameId   string `json:"game_id"`
 	Token    string `json:"token"`
 	PassWord string `json:"password"`
@@ -54,7 +54,7 @@ type UserAuth struct {
 
 //UserScoreSync 同步分值数据
 type UserScoreSync struct {
-	ID         string  `json:"id"`
+	ID         int     `json:"id"`
 	CreateTime int64   `json:"create_time"`
 	PayReason  string  `json:"pay_reason"`
 	Money      float64 `json:"money"`
@@ -104,7 +104,7 @@ type logmsg struct {
 type Notice struct {
 	DevName string `json:"dev_name"`
 	DevKey  string `json:"dev_key"`
-	ID      string `json:"id"`
+	ID      int    `json:"id"`
 	GameId  string `json:"game_id"`
 	Type    int32  `json:"type"`
 	Message string `json:"message"`

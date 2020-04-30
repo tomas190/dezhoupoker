@@ -12,10 +12,10 @@
 
   "TokenServer": "http://172.16.100.2:9502/Token/getToken",
   "CenterServer": "172.16.100.2",
-  "CenterServerPort": "9502",
+  "CenterServerPort": 9502,
   "DevName": "新游戏开发",
   "GameID": "5b1f3a3cb76a591e7f25176",
-  "DevKey": "new_game_30",
+  "dev_dezhoupoker": "dev_7ujie$5",
   "CenterUrl": "ws://172.16.100.2:9502/",
 
   "LogAddr": "http://172.16.100.7:4151/pub?topic=game-server"
