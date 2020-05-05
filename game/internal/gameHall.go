@@ -109,14 +109,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)
 		if r != nil {
+			log.Debug("进来了1")
 			if r.cfgId == cfgId && r.IsCanJoin() {
 				r.PlayerJoinRoom(p)
 				return false
 			} else {
+				log.Debug("进来了2")
 				hall.PlayerCreateRoom(cfgId, p)
 				return false
 			}
 		} else {
+			log.Debug("进来了3")
 			hall.PlayerCreateRoom(cfgId, p)
 			return false
 		}

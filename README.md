@@ -35,8 +35,7 @@ cat load.log
 {
   "LogLevel": "debug",
   "LogPath": "",
-  "WSAddr": "0.0.0.0",
-  "Port": "1344",                                               服务器端口
+  "WSAddr": "0.0.0.0:1344",                                     服务器地址和端口
   "HTTPPort": "3344",                                           运营后台数据对接端口
   "MaxConnNum": 20000,
     
@@ -50,7 +49,9 @@ cat load.log
   "CenterServerPort": "9502",                                   中心服端口 
   "DevName": "",                                                devName
   "GameID": ""                                                  gameID
+  "DevKey": "",                                                 devKey
   "CenterUrl": "ws://172.16.1.41:9502/"                         连接中心服URL地址
+  "LogAddr": "http://172.16.100.7:4151/pub?topic=game-server"   连接中心服日志URL
 }
 ```
 

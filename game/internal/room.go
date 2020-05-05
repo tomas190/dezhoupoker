@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"dezhoupoker/conf"
 	"dezhoupoker/game/internal/algorithm"
 	"dezhoupoker/msg"
 	"fmt"
@@ -613,9 +614,9 @@ func (r *Room) ShowDown() {
 			player := r.PlayerList[i]
 			player.chips += v
 			player.WinResultMoney = v
+			player.resultMoney += v
 			if v-player.totalDownBet > 0 {
 				player.IsWinner = true
-				player.resultMoney = v - player.totalDownBet
 			}
 		}
 		fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
@@ -639,6 +640,7 @@ func (r *Room) ResultMoney() {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
 			p.LoseResultMoney = p.totalDownBet
+			p.resultMoney -= p.totalDownBet
 			nowTime := time.Now().Unix()
 			p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
 			if p.LoseResultMoney > 0 {
@@ -660,6 +662,23 @@ func (r *Room) ResultMoney() {
 			// 跑马灯
 			if p.resultMoney > PaoMaDeng {
 				c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
+			}
+			// 插入运营数据
+			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
+				data := &PlayerDownBetRecode{}
+				data.Id = p.Id
+				data.GameId = conf.Server.GameID
+				data.RoundId = p.RoundId
+				data.RoomId = r.roomId
+				data.DownBetInfo = p.totalDownBet
+				data.DownBetTime = nowTime
+				data.CardResult = msg.CardSuitData{}
+				data.CardResult.SuitPattern = p.cardData.SuitPattern
+				data.CardResult.HandCardKeys = p.cardData.HandCardKeys
+				data.CardResult.PublicCardKeys = p.cardData.PublicCardKeys
+				data.ResultMoney = p.resultMoney
+				data.TaxRate = taxRate
+				InsertAccessData(data)
 			}
 		}
 	}
