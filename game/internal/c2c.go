@@ -247,7 +247,6 @@ func (c4c *Conn4Center) onServerLogin(msgBody interface{}) {
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- serverLogin SUCCESS~!!! -------->")
 		c4c.LoginStat = true
-		fmt.Println(code, reflect.TypeOf(code))
 	}
 
 }

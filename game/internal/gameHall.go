@@ -24,7 +24,10 @@ func NewHall() *GameHall {
 
 func HallInit() { // 大厅初始化增加一个房间
 	r := &Room{}
-	hall.RoomRecord.Store("0", r)
+	r.Init("0")
+	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
+
+	hall.RoomRecord.Store(r.roomId, r)
 }
 
 //ReplacePlayerAgent 替换用户链接
