@@ -271,7 +271,6 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- UserLogin SUCCESS~ -------->")
-		log.Debug("data:%v,ok:%v", data, ok)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		var strId string
@@ -321,7 +320,6 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 	if !ok {
 		log.Debug("onUserLogout Error")
 	}
-	log.Debug("data:%v , ok:%v", data, ok)
 
 	code, err := data["code"].(json.Number).Int64()
 	if err != nil {
@@ -330,7 +328,6 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- UserLogout SUCCESS~ -------->")
-		log.Debug("data:%v,ok:%v", data, ok)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		var strId string
@@ -391,7 +388,6 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- UserWinScore SUCCESS~ -------->")
-		log.Debug("data:%v,ok:%v", data, ok)
 
 		//将Win数据插入数据
 		InsertWinMoney(msgBody)
@@ -430,7 +426,6 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- UserLoseScore SUCCESS~ -------->")
-		log.Debug("data:%v,ok:%v", data, ok)
 
 		//将Lose数据插入数据
 		InsertLoseMoney(msgBody)

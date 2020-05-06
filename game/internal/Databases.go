@@ -15,7 +15,7 @@ var (
 )
 
 const (
-	dbName          = "dezhoupoker"
+	dbName          = "dezhoupoker-Game"
 	playerInfo      = "playerInfo"
 	roomSettle      = "roomSettle"
 	settleWinMoney  = "settleWinMoney"
