@@ -234,7 +234,8 @@ func (r *Room) GameRunning() {
 
 			log.Debug("玩家公牌手牌合成:%v", cs.HexInt())
 			kind, _ := algorithm.De(cs.GetType())
-			log.Debug("玩家手牌最后牌型：%v , %v", p.Id, kind)
+
+			log.Debug("玩家手牌最后牌型: %v , 类型: %v ", p.Id, kind)
 
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}

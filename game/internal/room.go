@@ -337,6 +337,7 @@ func (r *Room) SetPlayerStatus() {
 	for _, v := range r.PlayerList {
 		if v != nil {
 			v.gameStep = emInGaming
+			log.Debug("设置玩家状态:%v,%v", v.Id, v.gameStep)
 		}
 	}
 }
@@ -398,7 +399,6 @@ func (r *Room) Blind(pos int32) *Player {
 
 //betting 小大盲下注
 func (r *Room) betting(p *Player, blind float64) {
-	log.Debug("玩家下注金额:%v", blind)
 	//当前行动玩家
 	r.activeSeat = p.chair
 	//玩家筹码变动
