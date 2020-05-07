@@ -6,11 +6,12 @@ import (
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"sync"
+	"time"
 )
 
 type GameHall struct {
-	UserRecord sync.Map         // 用户记录
-	RoomRecord sync.Map         // 房间记录
+	UserRecord sync.Map          // 用户记录
+	RoomRecord sync.Map          // 房间记录
 	UserRoom   map[string]string // 用户房间
 }
 
@@ -24,7 +25,7 @@ func NewHall() *GameHall {
 
 func HallInit() { // 大厅初始化增加一个房间
 	r := &Room{}
-	r.Init("9")
+	r.Init("0")
 	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
 	hall.RoomRecord.Store(r.roomId, r)
@@ -69,20 +70,23 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	// 玩家退出当前房间
 	p.PlayerExitRoom()
 
-	hall.RoomRecord.Range(func(key, value interface{}) bool {
-		room := value.(*Room)
-		if room != nil {
-			if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
-				room.PlayerJoinRoom(p)
-				return false
+	// 延时5秒，重新开始游戏
+	time.AfterFunc(time.Millisecond*500, func() {
+		hall.RoomRecord.Range(func(key, value interface{}) bool {
+			room := value.(*Room)
+			if room != nil {
+				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+					room.PlayerJoinRoom(p)
+					return false
+				} else {
+					hall.PlayerCreateRoom(r.cfgId, p)
+					return false
+				}
 			} else {
 				hall.PlayerCreateRoom(r.cfgId, p)
 				return false
 			}
-		} else {
-			hall.PlayerCreateRoom(r.cfgId, p)
-			return false
-		}
+		})
 	})
 }
 
@@ -134,7 +138,6 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	r := &Room{}
 	r.Init(cfgId)
 	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
-
 
 	hall.RoomRecord.Store(r.roomId, r)
 
