@@ -9,7 +9,7 @@ import (
 var Processor = protobuf.NewProcessor()
 
 func init() {
-	log.Debug("处理成功隐藏牌型~")
+	log.Debug("进入房间测试~")
 	Processor.Register(&Ping{})                   //--0
 	Processor.Register(&Pong{})                   //--1
 	Processor.Register(&Error_S2C{})              //--2

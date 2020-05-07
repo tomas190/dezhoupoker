@@ -21,6 +21,7 @@ func SetRoomConfig(cfgId string) RoomData {
 		{Id: "1", SB: 1, BB: 2, MinTakeIn: 50, MaxTakeIn: 1000},
 		{Id: "2", SB: 5, BB: 10, MinTakeIn: 300, MaxTakeIn: 5000},
 		{Id: "3", SB: 25, BB: 50, MinTakeIn: 1000, MaxTakeIn: 1000000},
+		{Id: "9", SB: 0, BB: 0, MinTakeIn: 0, MaxTakeIn: 0},
 	}
 	for _, v := range roomData {
 		if v.Id == cfgId {
