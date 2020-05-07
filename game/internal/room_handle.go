@@ -232,6 +232,7 @@ func (r *Room) GameRunning() {
 			cs := pubCards.Append(p.cards...)
 			p.HandValue = cs.GetType()
 
+			log.Debug("玩家公牌手牌合成:%v", cs.HexInt())
 			kind, _ := algorithm.De(cs.GetType())
 			log.Debug("玩家手牌最后牌型：%v , %v", p.Id, kind)
 

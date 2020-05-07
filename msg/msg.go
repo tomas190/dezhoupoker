@@ -1,11 +1,15 @@
 package msg
 
-import "github.com/name5566/leaf/network/protobuf"
+import (
+	"github.com/name5566/leaf/log"
+	"github.com/name5566/leaf/network/protobuf"
+)
 
 // 使用默认的 Json 消息处理器 (默认还提供了 ProtoBuf 消息处理器)
 var Processor = protobuf.NewProcessor()
 
 func init() {
+	log.Debug("玩家公牌手牌合成~")
 	Processor.Register(&Ping{})                   //--0
 	Processor.Register(&Pong{})                   //--1
 	Processor.Register(&Error_S2C{})              //--2
