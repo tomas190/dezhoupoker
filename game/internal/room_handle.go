@@ -232,9 +232,10 @@ func (r *Room) GameRunning() {
 			cs := pubCards.Append(p.cards...)
 			p.HandValue = cs.GetType()
 
-			log.Debug("玩家公牌手牌合成:%v", cs.HexInt())
-			kind, _ := algorithm.De(cs.GetType())
+			cardSlice := cs.GetCardHexInt()
+			p.cardData.PublicCardKeys = cardSlice[2:]
 
+			kind, _ := algorithm.De(cs.GetType())
 			log.Debug("玩家手牌最后牌型: %v , 类型: %v ", p.Id, kind)
 
 			// 游戏阶段变更
