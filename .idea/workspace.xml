@@ -2354,9 +2354,9 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/gameHall.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/gameHall.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/player.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/room_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room_handle.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/module.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/module.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/robot.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/robot.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/msg/msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/msg/msg.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />

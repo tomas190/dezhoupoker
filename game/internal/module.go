@@ -25,6 +25,9 @@ func (m *Module) OnInit() {
 	InitMongoDB()
 	HallInit()
 
+	//机器人初始化并开始
+	gRobotCenter.Init()
+
 	c4c.Init()
 	c4c.CreatConnect()
 }
