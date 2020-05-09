@@ -26,9 +26,13 @@ func NewHall() *GameHall {
 func HallInit() { // 大厅初始化增加一个房间
 	r := &Room{}
 	r.Init("0")
+	hall.RoomRecord.Store(r.roomId, r)
 	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
-	hall.RoomRecord.Store(r.roomId, r)
+	robot := gRobotCenter.CreateRobot()
+
+	r.PlayerJoinRoom(robot)
+	robot.StandUpTable()
 }
 
 //ReplacePlayerAgent 替换用户链接

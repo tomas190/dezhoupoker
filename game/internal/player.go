@@ -52,6 +52,8 @@ type Player struct {
 
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
+
+	IsRobot bool  // 是否机器人
 }
 
 func (p *Player) Init() {
@@ -78,6 +80,7 @@ func (p *Player) Init() {
 	p.IsTimeOutFold = false
 	p.timerCount = 0
 	p.action = make(chan msg.ActionStatus)
+	p.IsRobot = false
 }
 
 //SendMsg 玩家向客户端发送消息

@@ -169,7 +169,7 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(time.Millisecond * 1500)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -206,7 +206,7 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	time.Sleep(1 * time.Second)
+	time.Sleep(time.Millisecond * 1500)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -246,7 +246,7 @@ func (r *Room) GameRunning() {
 	}
 	//1、准备阶段
 	//r.readyPlay()
-	time.Sleep(1 * time.Second)
+	time.Sleep(time.Millisecond * 1500)
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
