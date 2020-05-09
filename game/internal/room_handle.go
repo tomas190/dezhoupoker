@@ -236,6 +236,7 @@ func (r *Room) GameRunning() {
 			p.cardData.PublicCardKeys = cardSlice[2:]
 
 			kind, _ := algorithm.De(cs.GetType())
+			p.cardData.SuitPattern = msg.CardSuit(kind)
 			log.Debug("玩家手牌最后牌型: %v , 类型: %v ", p.Id, kind)
 
 			// 游戏阶段变更
