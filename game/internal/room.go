@@ -46,9 +46,13 @@ const (
 	ReadyTime  = 6  // 开始准备时间
 	SettleTime = 5  // 游戏结算时间
 	ActionTime = 15 // 玩家行动时间
+	ActionWaitTime = 2 // 行动等待时间
 )
 
 var ReadyTimeChan chan bool
+
+// 行动时间间隔
+var ActionTimeChan chan bool
 
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
@@ -80,6 +84,7 @@ func (r *Room) Init(cfgId string) {
 	r.clock = time.NewTicker(time.Second)
 
 	ReadyTimeChan = make(chan bool)
+	ActionTimeChan = make(chan bool)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
@@ -707,6 +712,20 @@ func (r *Room) ReadyTimer() {
 			if r.counter == ReadyTime {
 				r.counter = 0
 				ReadyTimeChan <- true
+				return
+			}
+		}
+	}()
+}
+
+//TimerTask 游戏准备阶段定时器任务
+func (r *Room) ActionWaitTimer() {
+	go func() {
+		for range r.clock.C {
+			r.counter++
+			if r.counter == ActionWaitTime {
+				r.counter = 0
+				ActionTimeChan <- true
 				return
 			}
 		}

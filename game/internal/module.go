@@ -23,10 +23,11 @@ func (m *Module) OnInit() {
 
 	// 初始连接数据库
 	InitMongoDB()
-	HallInit()
 
 	//机器人初始化并开始
 	gRobotCenter.Init()
+	// 大厅初始化
+	HallInit()
 
 	c4c.Init()
 	c4c.CreatConnect()

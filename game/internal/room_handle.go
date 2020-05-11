@@ -237,7 +237,7 @@ func (r *Room) GameRunning() {
 
 			kind, _ := algorithm.De(cs.GetType())
 			p.cardData.SuitPattern = msg.CardSuit(kind)
-			log.Debug("玩家手牌最后牌型: %v , 类型: %v ", p.Id, kind)
+			log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
 
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}
