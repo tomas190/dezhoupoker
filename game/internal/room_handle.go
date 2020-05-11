@@ -145,6 +145,8 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
+	time.Sleep(time.Millisecond * 500)
+
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	r.Status = msg.GameStep_Flop
 
@@ -169,7 +171,7 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	time.Sleep(time.Millisecond * 1500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -181,8 +183,9 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
+	time.Sleep(time.Millisecond * 500)
 
+	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	r.Status = msg.GameStep_Turn
 
 	//2、生成桌面第四张公牌
@@ -206,7 +209,7 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	time.Sleep(time.Millisecond * 1500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -217,6 +220,8 @@ func (r *Room) GameRunning() {
 		// 直接摊牌
 		goto showdown
 	}
+
+	time.Sleep(time.Millisecond * 500)
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	r.Status = msg.GameStep_River
@@ -247,17 +252,19 @@ func (r *Room) GameRunning() {
 	}
 	//1、准备阶段
 	//r.readyPlay()
-	time.Sleep(time.Millisecond * 1500)
+	time.Sleep(time.Millisecond * 1000)
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
-	// showdown 摊开底牌,开牌比大小
 showdown:
 	log.Debug("开始摊牌，开牌比大小 ~")
 	r.ShowDown()
 
 	r.ResultMoney()
 
+	time.Sleep(time.Millisecond * 500)
+
+	//Round 5: ShowDown 摊开底牌,开牌比大小
 	r.Status = msg.GameStep_ShowDown
 
 	result := &msg.ResultGameData_S2C{}
