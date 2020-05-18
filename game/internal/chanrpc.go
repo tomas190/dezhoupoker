@@ -25,7 +25,7 @@ func rpcCloseAgent(args []interface{}) {
 	a := args[0].(gate.Agent)
 	p, ok := a.UserData().(*Player)
 	if ok && p.ConnAgent == a {
-		log.Debug("<-------------%v主动断开链接--------------->", p.Id)
+		log.Debug("<-------------%v 主动断开链接--------------->", p.Id)
 
 		p.IsOnline = false
 		if p.totalDownBet > 0 {
