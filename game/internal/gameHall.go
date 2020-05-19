@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
-	"strconv"
 	"sync"
 	"time"
 )
@@ -25,17 +24,15 @@ func NewHall() *GameHall {
 }
 
 func HallInit() { // 大厅初始化增加一个房间
-	for i := 0; i < 4; i++ {
-		r := &Room{}
-		cfg := strconv.Itoa(i)
-		r.Init(cfg)
-		hall.RoomRecord.Store(r.roomId, r)
-		log.Debug("CreateRoom 创建新的房间:%v,%v", r.cfgId, r.roomId)
+	r := &Room{}
+	r.Init("0")
+	hall.RoomRecord.Store(r.roomId, r)
+	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
-		robot := gRobotCenter.CreateRobot()
-		r.PlayerJoinRoom(robot)
-		robot.StandUpTable()
-	}
+	robot := gRobotCenter.CreateRobot()
+
+	r.PlayerJoinRoom(robot)
+	robot.StandUpTable()
 }
 
 //ReplacePlayerAgent 替换用户链接
