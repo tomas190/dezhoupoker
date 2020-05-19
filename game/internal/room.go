@@ -267,6 +267,7 @@ func (r *Room) ClearRoomData() {
 	r.preChips = 0
 	r.remain = 0
 	r.allin = 0
+	r.IsShowDown = 0
 	r.Chips = make([]float64, MaxPlayer)
 
 	for _, v := range r.AllPlayer {
