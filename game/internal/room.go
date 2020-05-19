@@ -320,6 +320,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.ActionStatus = v.actStatus
 			pd.GameStep = int32(v.gameStep)
 			pd.DownBets = v.downBets
+			pd.LunDownBets = v.lunDownBets
 			pd.TotalDownBet = v.totalDownBet
 			pd.CardSuitData = new(msg.CardSuitData)
 			pd.CardSuitData.HandCardKeys = v.cardData.HandCardKeys

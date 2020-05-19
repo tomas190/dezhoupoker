@@ -105,6 +105,7 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	data.ActionStatus = p.actStatus
 	data.GameStep = int32(p.gameStep)
 	data.DownBets = p.downBets
+	data.LunDownBets = p.lunDownBets
 	data.TotalDownBet = p.totalDownBet
 	data.CardSuitData = new(msg.CardSuitData)
 	data.CardSuitData.HandCardKeys = p.cardData.HandCardKeys

@@ -142,15 +142,16 @@ message PlayerData {
     ActionStatus actionStatus = 6; // 玩家行动状态
     int32 gameStep = 7; // 玩家当前游戏状态, 0 为未游戏状态,1为游戏中
     double downBets = 8; // 玩家跟牌、加注最终下的的金额
-    double totalDownBet = 9; // 玩家下注总金额
-    repeated int32 handCards = 10; // 玩家手牌
-    CardSuitData cardSuitData = 11; // 玩家手牌和公牌能组成的牌型数据
-    double resultMoney = 12; // 本局结束结算的金额
-    BlindType blindType = 13; // 盲注类型
-    bool IsButton = 14; // 是否庄家
-    bool IsAllIn = 15; // 是否AllIn
-    bool IsWinner = 16; // 是否赢家
-    int32 timerCount = 17; // 玩家行动计时
+    double lunDownBets = 9; // 玩家每轮下注金额
+    double totalDownBet = 10; // 玩家下注总金额
+    repeated int32 handCards = 11; // 玩家手牌
+    CardSuitData cardSuitData = 12; // 玩家手牌和公牌能组成的牌型数据
+    double resultMoney = 13; // 本局结束结算的金额
+    BlindType blindType = 14; // 盲注类型
+    bool IsButton = 15; // 是否庄家
+    bool IsAllIn = 16; // 是否AllIn
+    bool IsWinner = 17; // 是否赢家
+    int32 timerCount = 18; // 玩家行动计时
 }
 
 message RoomData {
