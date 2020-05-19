@@ -2,7 +2,6 @@ package internal
 
 import (
 	"fmt"
-	"github.com/name5566/leaf/log"
 	"math/rand"
 	"time"
 )
@@ -18,7 +17,7 @@ var RobotIndex uint32
 
 //Init 初始机器人控制中心
 func (rc *RobotsCenter) Init() {
-	log.Debug("-------------- RobotsCenter Init~! ---------------")
+	//log.Debug("-------------- RobotsCenter Init~! ---------------")
 	rc.mapRobotList = make(map[uint32]*Player)
 }
 

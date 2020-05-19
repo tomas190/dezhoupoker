@@ -759,6 +759,12 @@ func (r *Room) RestartGame() {
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
 				r.TimeOutStandUp()
 
+				r.Status = msg.GameStep_Waiting
+				// 游戏阶段变更
+				game := &msg.GameStepChange_S2C{}
+				game.RoomData = r.RespRoomData()
+				r.Broadcast(game)
+
 				//开始新一轮游戏,重复调用StartGameRun函数
 				r.StartGameRun()
 				return

@@ -9,7 +9,7 @@ import (
 var Processor = protobuf.NewProcessor()
 
 func init() {
-	log.Debug("处理筹码回收注池问题~")
+	log.Debug("处理用户登录问题~")
 	Processor.Register(&Ping{})                   //--0
 	Processor.Register(&Pong{})                   //--1
 	Processor.Register(&Error_S2C{})              //--2
