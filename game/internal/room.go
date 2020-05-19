@@ -43,8 +43,8 @@ const (
 )
 
 const (
-	ReadyTime  = 6  // 开始准备时间
-	SettleTime = 5  // 游戏结算时间
+	ReadyTime  = 5  // 开始准备时间
+	SettleTime = 6  // 游戏结算时间
 	ActionTime = 15 // 玩家行动时间
 	ActionWaitTime = 2 // 行动等待时间
 )
@@ -192,7 +192,7 @@ func (r *Room) KickPlayer() {
 	for _, v := range r.PlayerList { // 玩家筹码为0怎么办
 		if v != nil {
 			if v.chips+v.roomChips < 3 {
-				ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
+				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
 				v.PlayerExitRoom()
 			}
 		}
@@ -200,11 +200,11 @@ func (r *Room) KickPlayer() {
 
 	// 遍历站起玩家，是否在该房间站起超时
 	for _, v := range r.AllPlayer {
-		if v != nil && v.chair == -1 {
+		if v != nil && v.IsRobot == false && v.chair == -1 {
 			v.standUPNum++
 			log.Debug("玩家站起次数:%v", v.standUPNum)
 			if v.standUPNum >= 6 {
-				ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
+				//ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
 				v.PlayerExitRoom()
 			}
 		}

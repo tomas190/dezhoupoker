@@ -169,7 +169,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 		case <-after.C:
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
 
-			ErrorResp(p.ConnAgent, msg.ErrorMsg_UserTimeOutFoldCard, "玩家超时弃牌")
+			//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserTimeOutFoldCard, "玩家超时弃牌")
 
 			p.gameStep = emNotGaming
 			p.actStatus = msg.ActionStatus_FOLD

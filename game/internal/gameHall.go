@@ -40,7 +40,7 @@ func (hall *GameHall) ReplacePlayerAgent(Id string, agent gate.Agent) error {
 	log.Debug("用户重连或顶替，正在替换agent %+v", Id)
 	// tip 这里会拷贝一份数据，需要替换的是记录中的，而非拷贝数据中的，还要注意替换连接之后要把数据绑定到新连接上
 	if v, ok := hall.UserRecord.Load(Id); ok {
-		ErrorResp(agent, msg.ErrorMsg_UserRemoteLogin, "异地登录")
+		//ErrorResp(agent, msg.ErrorMsg_UserRemoteLogin, "异地登录")
 		user := v.(*Player)
 		user.ConnAgent = agent
 		user.ConnAgent.SetUserData(v)
@@ -67,7 +67,7 @@ func (hall *GameHall) agentExist(a gate.Agent) bool {
 func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	data := SetRoomConfig(r.cfgId)
 	if p.Account < data.MinTakeIn {
-		ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
+		//ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
 		return
 	}
 
@@ -98,7 +98,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	data := SetRoomConfig(cfgId)
 	if p.Account < data.MinTakeIn {
-		ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
+		//ErrorResp(p.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家金币不足")
 		return
 	}
 

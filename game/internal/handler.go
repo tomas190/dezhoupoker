@@ -51,7 +51,7 @@ func handleLogin(args []interface{}) {
 		p := v.(*Player)
 		if p.ConnAgent == a { // 用户和链接都相同
 			log.Debug("同一用户相同连接重复登录~")
-			ErrorResp(a, msg.ErrorMsg_UserRepeatLogin, "重复登录")
+			//ErrorResp(a, msg.ErrorMsg_UserRepeatLogin, "重复登录")
 			return
 		} else { // 用户相同，链接不相同
 			err := hall.ReplacePlayerAgent(p.Id, a)
@@ -179,7 +179,7 @@ func handleChangeTable(args []interface{}) {
 	if ok {
 		// 判断玩家当前状态是否正在游戏
 		if p.gameStep == emInGaming {
-			ErrorResp(a, msg.ErrorMsg_UserNotChangeTable, "玩家正在游戏,不能换桌")
+			//ErrorResp(a, msg.ErrorMsg_UserNotChangeTable, "玩家正在游戏,不能换桌")
 			return
 		}
 		rId := hall.UserRoom[p.Id]

@@ -67,7 +67,7 @@ func (p *Player) SitDownTable() {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
 		if r.PlayerLength() >= MaxPlayer {
-			ErrorResp(p.ConnAgent, msg.ErrorMsg_ChairAlreadyFull, "桌面位置已满")
+			//ErrorResp(p.ConnAgent, msg.ErrorMsg_ChairAlreadyFull, "桌面位置已满")
 			return
 		}
 		// 玩家坐下筹码重置为房间最少带入金额
@@ -104,7 +104,7 @@ func (p *Player) StandUpTable() {
 		r := v.(*Room)
 
 		if r.Status != msg.GameStep_Waiting {
-			ErrorResp(p.ConnAgent, msg.ErrorMsg_UserInGameNotStandUp, "玩家正在游戏中,不能站起")
+			//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserInGameNotStandUp, "玩家正在游戏中,不能站起")
 			return
 		}
 
