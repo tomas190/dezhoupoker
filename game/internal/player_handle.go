@@ -103,10 +103,10 @@ func (p *Player) StandUpTable() {
 		// 玩家如果已在游戏中，则返回房间数据
 		r := v.(*Room)
 
-		if r.Status != msg.GameStep_Waiting {
-			//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserInGameNotStandUp, "玩家正在游戏中,不能站起")
-			return
-		}
+		//if r.Status != msg.GameStep_Waiting {
+		//	//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserInGameNotStandUp, "玩家正在游戏中,不能站起")
+		//	return
+		//}
 
 		if p.chair == -1 { // 防止客戶端重复点击多次
 			return
