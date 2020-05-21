@@ -23,6 +23,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
 
+	log.Debug("玩家加入房间: %v,房间状态: %v", p.Id, r.Status)
 	if r.Status == msg.GameStep_Waiting {
 		// 返回房间数据
 		roomData := r.RespRoomData()
@@ -94,6 +95,7 @@ func (r *Room) StartGameRun() {
 	//Round 1：preFlop 开始发手牌,下注
 	r.readyPlay()
 	r.Status = msg.GameStep_PreFlop
+	log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 	r.Each(0, func(p *Player) bool {
 		// 生成玩家手牌,获取的是对应牌型生成二进制的数
 		p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
@@ -149,7 +151,7 @@ func (r *Room) GameRunning() {
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	r.Status = msg.GameStep_Flop
-
+	log.Debug("GameStep_Flop 阶段: %v", r.Status)
 	//2、生成桌面工牌赋值
 	pubCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
 	log.Debug("Flop桌面工牌数字 ~ :%v", pubCards.HexInt())
@@ -187,6 +189,7 @@ func (r *Room) GameRunning() {
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	r.Status = msg.GameStep_Turn
+	log.Debug("GameStep_Turn 阶段: %v", r.Status)
 
 	//2、生成桌面第四张公牌
 	pubCards = pubCards.Append(r.Cards.Take())
@@ -225,6 +228,7 @@ func (r *Room) GameRunning() {
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	r.Status = msg.GameStep_River
+	log.Debug("GameStep_River 阶段: %v", r.Status)
 
 	//2、生成桌面第五张公牌
 	pubCards = pubCards.Append(r.Cards.Take())
@@ -266,6 +270,7 @@ showdown:
 
 	//Round 5: ShowDown 摊开底牌,开牌比大小
 	r.Status = msg.GameStep_ShowDown
+	log.Debug("GameStep_ShowDown 阶段: %v", r.Status)
 
 	result := &msg.ResultGameData_S2C{}
 	result.RoomData = r.RespRoomData()

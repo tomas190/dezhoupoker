@@ -14,7 +14,7 @@ type Room struct {
 	roomId     string
 	cfgId      string    // 房间配置ID
 	PlayerList []*Player // 座位玩家列表，最高9人
-	AllPlayer  []*Player // 房间所有玩家，包括站起玩家座位号为-1
+	AllPlayer  []*Player // 房间，包括站起玩家座位号为-1
 
 	activeSeat  int32        // 当前正在行动玩家座位号
 	minRaise    float64      // 加注最小值
@@ -90,7 +90,6 @@ func (r *Room) Init(cfgId string) {
 //BroadCastExcept 向指定玩家之外的玩家广播
 func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 	for _, p := range r.AllPlayer {
-		log.Debug("所有玩家:%v", p)
 		if p != nil && except.Id != p.Id {
 			p.SendMsg(msg)
 		}
