@@ -496,6 +496,9 @@ func (r *Room) Action(pos int) {
 				r.Broadcast(action)
 				log.Debug("玩家下注行动:%+v", action)
 
+				if r.allin+1 >= r.remain {
+					return
+				}
 				if r.remain <= 1 {
 					return
 				}

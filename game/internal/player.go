@@ -159,6 +159,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 
 			if p.chips == 0 {
 				p.IsAllIn = true
+				p.actStatus = msg.ActionStatus_ALLIN
 				r.allin++
 			}
 			//玩家本局下注的总筹码数

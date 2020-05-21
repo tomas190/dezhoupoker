@@ -116,7 +116,7 @@ enum ActionStatus {
     CALL = 2; // 跟牌
     CHECK = 3; // 让牌
     FOLD = 4; // 弃牌
-    SHOWDOWN = 5; // 摊牌
+    ALLIN = 5; // 全压
 }
 
 // 盲注类型
