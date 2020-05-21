@@ -35,7 +35,8 @@ type Room struct {
 	counter int32
 	clock   *time.Ticker
 
-	UserLeave []string // 用户是否在房间
+	IsHaveAllin bool     // 是否有玩家allin
+	UserLeave   []string // 用户是否在房间
 }
 
 const (
@@ -43,10 +44,10 @@ const (
 )
 
 const (
-	ReadyTime  = 6  // 开始准备时间
-	SettleTime = 5  // 游戏结算时间
-	ActionTime = 15 // 玩家行动时间
-	ActionWaitTime = 2 // 行动等待时间
+	ReadyTime      = 6  // 开始准备时间
+	SettleTime     = 5  // 游戏结算时间
+	ActionTime     = 15 // 玩家行动时间
+	ActionWaitTime = 2  // 行动等待时间
 )
 
 var ReadyTimeChan chan bool
@@ -82,6 +83,8 @@ func (r *Room) Init(cfgId string) {
 
 	r.counter = 0
 	r.clock = time.NewTicker(time.Second)
+
+	r.IsHaveAllin = false
 
 	ReadyTimeChan = make(chan bool)
 	ActionTimeChan = make(chan bool)
@@ -267,6 +270,7 @@ func (r *Room) ClearRoomData() {
 	r.remain = 0
 	r.allin = 0
 	r.IsShowDown = 0
+	r.IsHaveAllin = false
 	r.Chips = make([]float64, MaxPlayer)
 
 	for _, v := range r.AllPlayer {
@@ -299,6 +303,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 	rd.MinRaise = r.minRaise
 	rd.PreChips = r.preChips
 	rd.IsShowDown = r.IsShowDown
+	rd.IsHaveAllin = r.IsHaveAllin
 	rd.ActionSeat = r.activeSeat
 	rd.BigBlind = r.BB
 	rd.Banker = r.Banker
@@ -435,6 +440,7 @@ func (r *Room) betting(p *Player, blind float64) {
 func (r *Room) readyPlay() {
 	r.preChips = 0
 	r.remain = 0
+	r.IsHaveAllin = false
 	r.Each(0, func(p *Player) bool {
 		p.downBets = 0
 		p.lunDownBets = 0

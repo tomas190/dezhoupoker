@@ -156,6 +156,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				r.preChips = p.lunDownBets
 				r.potMoney += p.downBets
 				r.allin++
+				r.IsHaveAllin = true
 			}
 
 			r.Chips[p.chair] += p.chips
@@ -164,6 +165,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				p.IsAllIn = true
 				p.actStatus = msg.ActionStatus_ALLIN
 				r.allin++
+				r.IsHaveAllin = true
 			}
 			//玩家本局下注的总筹码数
 			//r.Chips[p.chair] += uint32(r.preChips)

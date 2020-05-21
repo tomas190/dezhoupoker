@@ -165,8 +165,9 @@ message RoomData {
     double bigBlind = 8; // 大盲注金额
     double potMoney = 9; // 赌注池当前总共有多少钱
     int32 isShowDown = 10; // 是否摊牌   // 0 摊牌,1 不摊牌
-    repeated int32 publicCards = 11; // 桌面公牌
-    repeated PlayerData playerData = 12; // 房间玩家数据
+    bool isHaveAllin = 11; // 是否有玩家ALLIN
+    repeated int32 publicCards = 12; // 桌面公牌
+    repeated PlayerData playerData = 13; // 房间玩家数据
 }
 
 message QuickStart_C2S {
