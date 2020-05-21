@@ -232,9 +232,10 @@ func handleAction(args []interface{}) {
 	log.Debug("handleAction 玩家开始行动~ :%v", p.Id)
 
 	if ok {
+		p.action <- m.Action
 		p.downBets = m.BetAmount
 		p.lunDownBets += m.BetAmount
-		p.action <- m.Action
+		p.totalDownBet += p.downBets
 	}
 }
 

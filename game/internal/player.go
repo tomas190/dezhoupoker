@@ -134,19 +134,14 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			switch x {
 			case msg.ActionStatus_RAISE:
 				p.actStatus = msg.ActionStatus_RAISE
-				// 玩家筹码
 				p.chips -= p.downBets
-				// 本局玩家下注总金额
-				p.totalDownBet += p.downBets
-				// 房间上个玩家下注金额
 				r.preChips = p.lunDownBets
-				// 总筹码
 				r.potMoney += p.downBets
 				IsRaised = true
 			case msg.ActionStatus_CALL:
 				p.actStatus = msg.ActionStatus_CALL
 				p.chips -= p.downBets
-				p.totalDownBet += p.downBets
+				r.preChips = p.lunDownBets
 				r.potMoney += p.downBets
 			case msg.ActionStatus_CHECK:
 				p.actStatus = msg.ActionStatus_CHECK
@@ -154,7 +149,15 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				p.actStatus = msg.ActionStatus_FOLD
 				p.gameStep = emNotGaming
 				r.remain--
+			case msg.ActionStatus_ALLIN:
+				p.actStatus = msg.ActionStatus_ALLIN
+				p.IsAllIn = true
+				p.chips -= p.downBets
+				r.preChips = p.lunDownBets
+				r.potMoney += p.downBets
+				r.allin++
 			}
+
 			r.Chips[p.chair] += p.chips
 
 			if p.chips == 0 {
