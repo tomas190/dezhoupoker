@@ -713,7 +713,7 @@ func (r *Room) ReadyTimer() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			//log.Debug("readyTime clock : %v ", r.counter)
+			log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()

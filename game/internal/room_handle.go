@@ -111,6 +111,7 @@ func (r *Room) StartGameRun() {
 		return true
 	})
 
+	log.Debug("进来了1")
 	// 准备阶段定时任务
 	r.ReadyTimer()
 
