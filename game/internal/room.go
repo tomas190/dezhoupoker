@@ -125,6 +125,18 @@ func (r *Room) PlayerLength() int32 {
 	return num
 }
 
+//PlayerLength 房间玩家人数
+func (r *Room) AllPlayerLength() int32 {
+	var num int32
+	for _, v := range r.AllPlayer {
+		if v != nil {
+			num++
+		}
+	}
+	log.Debug("当前房间所有玩家人数: %v", num)
+	return num
+}
+
 // 房间庄家座位号
 func (r *Room) RoomBanker(banker int) *Player {
 	i := banker + 1

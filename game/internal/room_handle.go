@@ -33,7 +33,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		p.SendMsg(enter)
 		log.Debug("发送加入房间")
 
-		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
+		if r.AllPlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
 			notice.PlayerData = roomData.PlayerData[p.chair]
 			r.BroadCastExcept(notice, p)
@@ -52,7 +52,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		enter.RoomData = roomData
 		p.SendMsg(enter)
 
-		if r.PlayerLength() > 1 { // 广播其他玩家进入游戏
+		if r.AllPlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
 			notice.PlayerData = roomData.PlayerData[p.chair]
 			r.BroadCastExcept(notice, p)

@@ -1,7 +1,6 @@
 package msg
 
 import (
-	"github.com/name5566/leaf/log"
 	"github.com/name5566/leaf/network/protobuf"
 )
 
@@ -9,7 +8,6 @@ import (
 var Processor = protobuf.NewProcessor()
 
 func init() {
-	log.Debug("处理用户登录问题~")
 	Processor.Register(&Ping{})                   //--0
 	Processor.Register(&Pong{})                   //--1
 	Processor.Register(&Error_S2C{})              //--2
