@@ -265,7 +265,6 @@ func (r *Room) ClearRoomData() {
 	r.activeSeat = -1
 	r.potMoney = 0
 	r.publicCards = nil
-	r.Status = msg.GameStep_Waiting
 	r.preChips = 0
 	r.remain = 0
 	r.allin = 0
