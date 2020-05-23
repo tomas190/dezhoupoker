@@ -128,7 +128,7 @@ func handleLogout(args []interface{}) {
 	log.Debug("handleLeaveHall 玩家退出大厅~ : %v", p.Id)
 
 	if ok {
-		if p.totalDownBet > 0 {
+		if p.gameStep == emInGaming {
 			var exist bool
 			rid := hall.UserRoom[p.Id]
 			v, _ := hall.RoomRecord.Load(rid)
@@ -147,13 +147,12 @@ func handleLogout(args []interface{}) {
 				a.WriteMsg(leaveHall)
 			}
 		} else {
-			c4c.UserLogoutCenter(p.Id, p.Password, p.Token, func(u *Player) {
-				p.IsOnline = false
-				hall.UserRecord.Delete(p.Id)
-				leaveHall := &msg.Logout_S2C{}
-				a.WriteMsg(leaveHall)
-				p.ConnAgent.Close()
-			})
+			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
+			p.IsOnline = false
+			hall.UserRecord.Delete(p.Id)
+			leaveHall := &msg.Logout_S2C{}
+			a.WriteMsg(leaveHall)
+			p.ConnAgent.Close()
 		}
 	}
 }

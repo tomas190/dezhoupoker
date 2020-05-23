@@ -347,22 +347,6 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 					userData.Data.NickName = nick.(string)
 				}
 			}
-			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
-
-			if okA {
-				balance := gameAccount["balance"]
-				floatBalance, err := balance.(json.Number).Float64()
-				if err != nil {
-					log.Error(err.Error())
-				}
-
-				userData.Data.Account = floatBalance
-
-				//调用玩家绑定回调函数
-				if userData.Callback != nil {
-					userData.Callback(&userData.Data)
-				}
-			}
 		}
 	}
 }
@@ -536,7 +520,7 @@ func (c4c *Conn4Center) UserLoginCenter(userId string, password string, token st
 }
 
 //UserLogoutCenter 用户登出
-func (c4c *Conn4Center) UserLogoutCenter(userId string, password string, token string, callback func(data *Player)) {
+func (c4c *Conn4Center) UserLogoutCenter(userId string, password string, token string) {
 	base := &BaseMessage{}
 	base.Event = msgUserLogout
 	id, _ := strconv.Atoi(userId)
@@ -558,11 +542,6 @@ func (c4c *Conn4Center) UserLogoutCenter(userId string, password string, token s
 
 	// 发送消息到中心服
 	c4c.SendMsg2Center(base)
-
-	//加入待处理map，等待处理
-	c4c.waitUser[userId] = &UserCallback{}
-	c4c.waitUser[userId].Data.Id = userId
-	c4c.waitUser[userId].Callback = callback
 }
 
 //SendMsg2Center 发送消息到中心服

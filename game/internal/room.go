@@ -189,14 +189,13 @@ func (r *Room) KickPlayer() {
 				if v.IsOnline == true {
 					v.PlayerExitRoom()
 				} else {
-					c4c.UserLogoutCenter(v.Id, v.Password, v.Token, func(data *Player) {
-						v.PlayerExitRoom()
-						hall.UserRecord.Delete(v.Id)
-						leaveHall := &msg.Logout_S2C{}
-						v.ConnAgent.WriteMsg(leaveHall)
-						v.IsOnline = false
-						log.Debug("踢出房间断线玩家 : %v", v.Id)
-					})
+					v.PlayerExitRoom()
+					hall.UserRecord.Delete(v.Id)
+					c4c.UserLogoutCenter(v.Id, v.Password, v.Token)
+					leaveHall := &msg.Logout_S2C{}
+					v.ConnAgent.WriteMsg(leaveHall)
+					v.IsOnline = false
+					log.Debug("踢出房间断线玩家 : %v", v.Id)
 				}
 			}
 		}
