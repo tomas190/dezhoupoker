@@ -82,6 +82,7 @@ func (p *Player) SitDownTable() {
 		p.IsTimeOutFold = false
 
 		if r.Status == msg.GameStep_Waiting {
+			log.Debug("SitDownTable 开始运行游戏~")
 			r.StartGameRun()
 		} else {
 			// 如果玩家中途加入游戏，则玩家视为弃牌状态
