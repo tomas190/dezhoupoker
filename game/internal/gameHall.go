@@ -102,6 +102,23 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		return
 	}
 
+	roomId := hall.UserRoom[p.Id]
+	rm, _ := hall.RoomRecord.Load(roomId)
+	if rm != nil {
+		// 玩家如果已在游戏中，则返回房间数据
+		room := rm.(*Room)
+		for i, userId := range room.UserLeave {
+			// 把玩家从掉线列表中移除
+			if userId == p.Id {
+				log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+				room.UserLeave = append(room.UserLeave[:i], room.UserLeave[i+1:]...)
+				log.Debug("AllocateUser 清除玩家记录~:%v", userId)
+				log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+				break
+			}
+		}
+	}
+
 	rId := hall.UserRoom[p.Id]
 	v, _ := hall.RoomRecord.Load(rId)
 	if v != nil {
