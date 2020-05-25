@@ -672,13 +672,13 @@ func (r *Room) ResultMoney() {
 			if p.LoseResultMoney > 0 {
 				sur.HistoryLose += p.LoseResultMoney
 				sur.TotalLoseMoney += p.LoseResultMoney
-				loseReason := "ResultLoseScore"
+				loseReason := "德州扑克输钱"
 				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 			}
 			if p.WinResultMoney > 0 {
 				sur.HistoryWin += p.WinResultMoney
 				sur.TotalWinMoney += p.WinResultMoney
-				winReason := "ResultWinScore"
+				winReason := "德州扑克赢钱"
 				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 			}
 			// 插入盈余池数据
