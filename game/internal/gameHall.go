@@ -88,7 +88,6 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 						// 装载房间机器人
 						room.LoadRoomRobots()
 					}
-					time.Sleep(time.Millisecond * 500)
 					room.PlayerJoinRoom(p)
 					return false
 				} else {
@@ -151,7 +150,6 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 					// 装载房间机器人
 					r.LoadRoomRobots()
 				}
-				time.Sleep(time.Millisecond * 500)
 				r.PlayerJoinRoom(p)
 				return false
 			} else {
