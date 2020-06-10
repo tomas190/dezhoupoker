@@ -298,6 +298,11 @@ showdown:
 	settle.SettleTime = SettleTime
 	r.Broadcast(settle)
 
+	// 判断房间真实玩家是否为0,为0清空机器人
+	if r.RealPlayerLength() == 0 {
+		r.ClearRoomRobots()
+	}
+
 	// 重新开始游戏
 	r.RestartGame()
 

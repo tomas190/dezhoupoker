@@ -774,10 +774,6 @@ func (r *Room) RestartGame() {
 			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == SettleTime {
 				r.counter = 0
-				// 判断房间真实玩家是否为0,为0清空机器人
-				if r.RealPlayerLength() == 0 {
-					r.ClearRoomRobots()
-				}
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
