@@ -25,7 +25,7 @@ func NewHall() *GameHall {
 }
 
 func HallInit() { // 大厅初始化增加一个房间
-	for i := 0; i < 4; i ++ {
+	for i := 0; i < 4; i++ {
 		r := &Room{}
 		roomCfg := strconv.Itoa(i)
 		r.Init(roomCfg)
@@ -84,7 +84,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 			room := value.(*Room)
 			if room != nil {
 				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
-					if room.RealPlayerLength() <= 1 {
+					if room.RealPlayerLength() <= 1 && r.RobotsLength() < 2 {
 						// 装载房间机器人
 						room.LoadRoomRobots()
 					}
@@ -147,7 +147,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
-				if r.RealPlayerLength() <= 1 {
+				if r.RealPlayerLength() <= 1 && r.RobotsLength() < 2 {
 					// 装载房间机器人
 					r.LoadRoomRobots()
 				}

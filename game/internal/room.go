@@ -774,6 +774,10 @@ func (r *Room) RestartGame() {
 			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == SettleTime {
 				r.counter = 0
+				// 判断房间真实玩家是否为0,为0清空机器人
+				if r.RealPlayerLength() == 0 {
+					r.ClearRoomRobots()
+				}
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
@@ -806,12 +810,24 @@ func (r *Room) RealPlayerLength() int32 {
 	return num
 }
 
+//RealPlayerLength 真实房间玩家人数
+func (r *Room) RobotsLength() int32 {
+	var num int32
+	for _, v := range r.PlayerList {
+		if v != nil && v.IsRobot == true {
+			num++
+		}
+	}
+	log.Debug("当前房间机器人数: %v", num)
+	return num
+}
+
 // 房间装载2-4机器人
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
-	//rand.Seed(time.Now().UnixNano())
-	//num := rand.Intn(2) + 2
-	for i := 0; i < 2; i++ {
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(2) + 2
+	for i := 0; i < num; i++ {
 		time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)

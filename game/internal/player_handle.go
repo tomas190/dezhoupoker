@@ -28,10 +28,6 @@ func (p *Player) PlayerExitRoom() {
 
 		} else {
 			room.ExitFromRoom(p)
-			// 判断房间真实玩家是否为0,为0清空机器人
-			if room.RealPlayerLength() == 0 {
-				room.ClearRoomRobots()
-			}
 		}
 	} else {
 		log.Debug("Player Exit Room, But Not Found Player Room~")
