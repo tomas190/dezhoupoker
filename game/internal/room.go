@@ -411,7 +411,7 @@ func (r *Room) Blind(pos int32) *Player {
 
 	i := int(pos) + 1
 	for ; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
-		if r.PlayerList[i] != nil {
+		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
 			return r.PlayerList[i]
 		}
 	}

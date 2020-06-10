@@ -84,7 +84,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 			room := value.(*Room)
 			if room != nil {
 				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
-					if room.RealPlayerLength() <= 1 && r.RobotsLength() < 2 {
+					if room.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
 						// 装载房间机器人
 						room.LoadRoomRobots()
 					}
@@ -146,7 +146,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
-				if r.RealPlayerLength() <= 1 && r.RobotsLength() < 2 {
+				if r.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
 					// 装载房间机器人
 					r.LoadRoomRobots()
 				}
