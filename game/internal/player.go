@@ -54,7 +54,7 @@ type Player struct {
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
 
-	IsRobot bool  // 是否机器人
+	IsRobot bool // 是否机器人
 }
 
 func (p *Player) Init() {
@@ -194,8 +194,8 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				rand.Seed(time.Now().UnixNano())
 				num := rand.Intn(len(timerSlice))
 				time.Sleep(time.Second * time.Duration(timerSlice[num]))
-			}else {
-				timerSlice := []int32{2, 2, 3, 1, 6, 2, 3, 6, 3, 15, 3, 2, 3, 2}
+			} else {
+				timerSlice := []int32{2, 2, 3, 1, 7, 2, 4, 6, 3, 12, 3, 1, 3, 2}
 				rand.Seed(time.Now().UnixNano())
 				num := rand.Intn(len(timerSlice))
 				time.Sleep(time.Second * time.Duration(timerSlice[num]))
@@ -261,7 +261,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 						p.totalDownBet += p.downBets
 						r.preChips = p.lunDownBets
 						r.potMoney += p.downBets
-					}else {
+					} else {
 						p.actStatus = msg.ActionStatus_FOLD
 						p.gameStep = emNotGaming
 						r.remain--

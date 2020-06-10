@@ -66,6 +66,8 @@ func (r *Room) StartGameRun() {
 	// 当前房间人数存在两人及两人以上才开始游戏
 	n := r.PlayerLength()
 	if n < 2 {
+		// 创建机器人
+		r.LoadRoomRobots()
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}
