@@ -725,47 +725,6 @@ func (r *Room) ReadyTimer() {
 			r.counter++
 			log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 4 {
-				// 设置玩家状态
-				r.SetPlayerStatus()
-				// 洗牌
-				r.Cards.Shuffle()
-
-				// 产生庄家
-				var dealer *Player
-				banker := r.Banker
-				r.Each(int(banker+1)%MaxPlayer, func(p *Player) bool {
-					dealer = p
-					r.Banker = dealer.chair
-					dealer.IsButton = true
-					return false
-				})
-				if dealer == nil {
-					return
-				}
-				log.Debug("庄家的座位号为 :%v", dealer.chair)
-
-				r.remain = 0
-				r.allin = 0
-
-				//Round 1：preFlop 开始发手牌,下注
-				r.readyPlay()
-				r.Status = msg.GameStep_PreFlop
-				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
-				r.Each(0, func(p *Player) bool {
-					// 生成玩家手牌,获取的是对应牌型生成二进制的数
-					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-					p.cardData.HandCardKeys = p.cards.HexInt()
-
-					kind, _ := algorithm.De(p.cards.GetType())
-					p.cardData.SuitPattern = msg.CardSuit(kind)
-					log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
-
-					game := &msg.GameStepChange_S2C{}
-					game.RoomData = r.RespRoomData()
-					p.SendMsg(game)
-					return true
-				})
-
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)
@@ -850,9 +809,9 @@ func (r *Room) RealPlayerLength() int32 {
 // 房间装载2-4机器人
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
-	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(2) + 2
-	for i := 0; i < num; i++ {
+	//rand.Seed(time.Now().UnixNano())
+	//num := rand.Intn(2) + 2
+	for i := 0; i < 2; i++ {
 		time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)

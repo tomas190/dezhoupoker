@@ -33,6 +33,8 @@ func HallInit() { // 大厅初始化增加一个房间
 
 	r.PlayerJoinRoom(robot)
 	robot.StandUpTable()
+
+	r.LoadRoomRobots()
 }
 
 //ReplacePlayerAgent 替换用户链接
@@ -80,10 +82,10 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 			room := value.(*Room)
 			if room != nil {
 				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
-					if room.RealPlayerLength() <= 1 {
-						// 装载房间机器人
-						room.LoadRoomRobots()
-					}
+					//if room.RealPlayerLength() <= 1 {
+					//	// 装载房间机器人
+					//	room.LoadRoomRobots()
+					//}
 					room.PlayerJoinRoom(p)
 					return false
 				} else {
@@ -142,10 +144,10 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		r := value.(*Room)
 		if r != nil {
 			if r.cfgId == cfgId && r.IsCanJoin() {
-				if r.RealPlayerLength() <= 1 {
-					// 装载房间机器人
-					r.LoadRoomRobots()
-				}
+				//if r.RealPlayerLength() <= 1 {
+				//	// 装载房间机器人
+				//	r.LoadRoomRobots()
+				//}
 				r.PlayerJoinRoom(p)
 				return false
 			} else {
