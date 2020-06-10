@@ -183,28 +183,34 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				return IsRaised
 			}
 		}
-	}else {
+	} else {
 		// 先随机睡眠时间,然后在执行操作
 		// 判断到随机为15的话，就直接视为超时弃牌
 		// 操作根据上一位玩家下注金额和自己本金额来随机自己的下注操作
-		timerSlice := []int32{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
-		rand.Seed(time.Now().UnixNano())
-		num := rand.Intn(len(timerSlice))
-		time.Sleep(time.Second * time.Duration(timerSlice[num]))
-
-		// 机器人的超时操作
-		if timerSlice[num] == 15 {
-			p.gameStep = emNotGaming
-			p.actStatus = msg.ActionStatus_FOLD
-			p.IsTimeOutFold = true
-			r.remain--
-			return IsRaised
-		}
-
 		callMoney := r.preChips - p.lunDownBets
 		if callMoney > 0 {
+			if r.Status == msg.GameStep_PreFlop {
+				timerSlice := []int32{2, 2, 3, 1, 4, 2, 4, 6, 3}
+				rand.Seed(time.Now().UnixNano())
+				num := rand.Intn(len(timerSlice))
+				time.Sleep(time.Second * time.Duration(timerSlice[num]))
+			}else {
+				timerSlice := []int32{2, 2, 3, 1, 6, 2, 3, 6, 3, 15, 3, 2, 3, 2}
+				rand.Seed(time.Now().UnixNano())
+				num := rand.Intn(len(timerSlice))
+				time.Sleep(time.Second * time.Duration(timerSlice[num]))
+				// 机器人的超时操作
+				if timerSlice[num] == 15 {
+					p.gameStep = emNotGaming
+					p.actStatus = msg.ActionStatus_FOLD
+					p.IsTimeOutFold = true
+					r.remain--
+					return IsRaised
+				}
+			}
+			log.Debug("测试机器人下注:%v,%v", callMoney, p.chips)
 			if callMoney > p.chips {
-				callBets := []int32{1,2,1,1,1} // 1为弃牌,2 全压
+				callBets := []int32{1, 2, 1, 1, 1} // 1为弃牌,2 全压
 				rand.Seed(time.Now().UnixNano())
 				callNum := rand.Intn(len(callBets))
 				if callBets[callNum] == 1 {
@@ -224,12 +230,13 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 					r.allin++
 					r.IsHaveAllin = true
 				}
-			}else {
-				callBets := []int32{1,2,3,1,3,1,3,2,3} // 1跟注,2加注,3弃牌,4全压
+			} else {
+				callBets := []int32{1, 1, 3, 1, 1,} // 1跟注,2加注,3弃牌,4全压
 				rand.Seed(time.Now().UnixNano())
 				callNum := rand.Intn(len(callBets))
 				if callBets[callNum] == 1 {
 					p.actStatus = msg.ActionStatus_CALL
+					p.downBets = callMoney
 					p.chips -= p.downBets
 					p.lunDownBets += p.downBets
 					p.totalDownBet += p.downBets
@@ -246,15 +253,28 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 					IsRaised = true
 				}
 				if callBets[callNum] == 3 {
-					p.actStatus = msg.ActionStatus_FOLD
-					p.gameStep = emNotGaming
-					r.remain--
+					if r.Status == msg.GameStep_PreFlop {
+						p.actStatus = msg.ActionStatus_CALL
+						p.downBets = callMoney
+						p.chips -= p.downBets
+						p.lunDownBets += p.downBets
+						p.totalDownBet += p.downBets
+						r.preChips = p.lunDownBets
+						r.potMoney += p.downBets
+					}else {
+						p.actStatus = msg.ActionStatus_FOLD
+						p.gameStep = emNotGaming
+						r.remain--
+					}
 				}
 			}
-		}else {
+		} else {
+			timerSlice := []int32{2, 2, 3, 1, 4, 2, 4, 6, 3}
+			rand.Seed(time.Now().UnixNano())
+			num := rand.Intn(len(timerSlice))
+			time.Sleep(time.Second * time.Duration(timerSlice[num]))
 			p.actStatus = msg.ActionStatus_CHECK
 		}
 		return IsRaised
 	}
-	return IsRaised
 }

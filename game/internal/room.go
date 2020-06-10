@@ -793,3 +793,36 @@ func (r *Room) RestartGame() {
 		}
 	}()
 }
+
+//RealPlayerLength 真实房间玩家人数
+func (r *Room) RealPlayerLength() int32 {
+	var num int32
+	for _, v := range r.AllPlayer {
+		if v != nil && v.IsRobot == false {
+			num++
+		}
+	}
+	log.Debug("当前房间所有玩家人数: %v", num)
+	return num
+}
+
+// 房间装载2-4机器人
+func (r *Room) LoadRoomRobots() {
+	// 当玩家创建新房间时,则安排随机2-4机器人
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(2) + 2
+	for i := 0; i < num; i++ {
+		time.Sleep(time.Millisecond)
+		robot := gRobotCenter.CreateRobot()
+		r.PlayerJoinRoom(robot)
+	}
+}
+
+// 清除房间所有机器人
+func (r *Room) ClearRoomRobots() {
+	for _, v := range r.PlayerList {
+		if v != nil && v.IsRobot == true {
+			r.ExitFromRoom(v)
+		}
+	}
+}

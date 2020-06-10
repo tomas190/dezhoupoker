@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
-	"math/rand"
 	"sync"
 	"time"
 )
@@ -81,6 +80,10 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 			room := value.(*Room)
 			if room != nil {
 				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+					if room.RealPlayerLength() <= 1 {
+						// 装载房间机器人
+						room.LoadRoomRobots()
+					}
 					room.PlayerJoinRoom(p)
 					return false
 				} else {
@@ -138,17 +141,18 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	hall.RoomRecord.Range(func(key, value interface{}) bool {
 		r := value.(*Room)
 		if r != nil {
-			log.Debug("进来了1")
 			if r.cfgId == cfgId && r.IsCanJoin() {
+				if r.RealPlayerLength() <= 1 {
+					// 装载房间机器人
+					r.LoadRoomRobots()
+				}
 				r.PlayerJoinRoom(p)
 				return false
 			} else {
-				log.Debug("进来了2")
 				hall.PlayerCreateRoom(cfgId, p)
 				return false
 			}
 		} else {
-			log.Debug("进来了3")
 			hall.PlayerCreateRoom(cfgId, p)
 			return false
 		}
@@ -164,13 +168,4 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	hall.RoomRecord.Store(r.roomId, r)
 
 	r.PlayerJoinRoom(p)
-
-	// 当玩家创建新房间时,则安排随机2-4机器人
-	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(2) + 2
-	for i := 0; i < num; i++ {
-		time.Sleep(time.Millisecond)
-		robot := gRobotCenter.CreateRobot()
-		r.PlayerJoinRoom(robot)
-	}
 }
