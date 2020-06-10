@@ -5,6 +5,7 @@ import (
 	"dezhoupoker/msg"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
+	"math/rand"
 	"time"
 )
 
@@ -128,60 +129,132 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 
 	after := time.NewTicker(timeout)
 	var IsRaised bool
-	for {
-		select {
-		case x := <-p.action:
-			switch x {
-			case msg.ActionStatus_RAISE:
-				p.actStatus = msg.ActionStatus_RAISE
-				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
-				r.potMoney += p.downBets
-				IsRaised = true
-			case msg.ActionStatus_CALL:
-				p.actStatus = msg.ActionStatus_CALL
-				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
-				r.potMoney += p.downBets
-			case msg.ActionStatus_CHECK:
-				p.actStatus = msg.ActionStatus_CHECK
-			case msg.ActionStatus_FOLD:
-				p.actStatus = msg.ActionStatus_FOLD
+	if p.IsRobot == false {
+		for {
+			select {
+			case x := <-p.action:
+				switch x {
+				case msg.ActionStatus_RAISE:
+					p.actStatus = msg.ActionStatus_RAISE
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+					IsRaised = true
+				case msg.ActionStatus_CALL:
+					p.actStatus = msg.ActionStatus_CALL
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+				case msg.ActionStatus_CHECK:
+					p.actStatus = msg.ActionStatus_CHECK
+				case msg.ActionStatus_FOLD:
+					p.actStatus = msg.ActionStatus_FOLD
+					p.gameStep = emNotGaming
+					r.remain--
+				case msg.ActionStatus_ALLIN:
+					p.actStatus = msg.ActionStatus_ALLIN
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+				}
+
+				r.Chips[p.chair] += p.chips
+
+				if p.chips == 0 {
+					p.actStatus = msg.ActionStatus_ALLIN
+					p.IsAllIn = true
+					r.allin++
+					r.IsHaveAllin = true
+				}
+				//玩家本局下注的总筹码数
+				//r.Chips[p.chair] += uint32(r.preChips)
+				return IsRaised
+
+
+			case <-after.C:
+				log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
+
+				//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserTimeOutFoldCard, "玩家超时弃牌")
+
 				p.gameStep = emNotGaming
+				p.actStatus = msg.ActionStatus_FOLD
+				p.IsTimeOutFold = true
 				r.remain--
-			case msg.ActionStatus_ALLIN:
-				p.actStatus = msg.ActionStatus_ALLIN
-				p.IsAllIn = true
-				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
-				r.potMoney += p.downBets
-				r.allin++
-				r.IsHaveAllin = true
+				return IsRaised
 			}
+		}
+	}else {
+		// 先随机睡眠时间,然后在执行操作
+		// 判断到随机为15的话，就直接视为超时弃牌
+		// 操作根据上一位玩家下注金额和自己本金额来随机自己的下注操作
+		timerSlice := []int32{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15}
+		rand.Seed(time.Now().UnixNano())
+		num := rand.Intn(len(timerSlice))
+		time.Sleep(time.Second * time.Duration(timerSlice[num]))
 
-			r.Chips[p.chair] += p.chips
-
-			if p.chips == 0 {
-				p.IsAllIn = true
-				p.actStatus = msg.ActionStatus_ALLIN
-				r.allin++
-				r.IsHaveAllin = true
-			}
-			//玩家本局下注的总筹码数
-			//r.Chips[p.chair] += uint32(r.preChips)
-			return IsRaised
-
-
-		case <-after.C:
-			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
-
-			//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserTimeOutFoldCard, "玩家超时弃牌")
-
+		// 机器人的超时操作
+		if timerSlice[num] == 15 {
 			p.gameStep = emNotGaming
 			p.actStatus = msg.ActionStatus_FOLD
 			p.IsTimeOutFold = true
 			r.remain--
 			return IsRaised
 		}
+
+		callMoney := r.preChips - p.lunDownBets
+		if callMoney > 0 {
+			if callMoney > p.chips {
+				callBets := []int32{1,2,1,1,1} // 1为弃牌,2 全压
+				rand.Seed(time.Now().UnixNano())
+				callNum := rand.Intn(len(callBets))
+				if callBets[callNum] == 1 {
+					p.actStatus = msg.ActionStatus_FOLD
+					p.gameStep = emNotGaming
+					r.remain--
+				}
+				if callBets[callNum] == 2 {
+					p.actStatus = msg.ActionStatus_ALLIN
+					p.IsAllIn = true
+					p.downBets = p.chips
+					p.lunDownBets += p.chips
+					p.totalDownBet += p.chips
+					p.chips -= p.chips
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+					r.allin++
+					r.IsHaveAllin = true
+				}
+			}else {
+				callBets := []int32{1,2,3,1,3,1,3,2,3} // 1跟注,2加注,3弃牌,4全压
+				rand.Seed(time.Now().UnixNano())
+				callNum := rand.Intn(len(callBets))
+				if callBets[callNum] == 1 {
+					p.actStatus = msg.ActionStatus_CALL
+					p.chips -= p.downBets
+					p.lunDownBets += p.downBets
+					p.totalDownBet += p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+				}
+				if callBets[callNum] == 2 {
+					p.actStatus = msg.ActionStatus_RAISE
+					p.chips -= p.downBets
+					p.lunDownBets += p.downBets
+					p.totalDownBet += p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+					IsRaised = true
+				}
+				if callBets[callNum] == 3 {
+					p.actStatus = msg.ActionStatus_FOLD
+					p.gameStep = emNotGaming
+					r.remain--
+				}
+			}
+		}else {
+			p.actStatus = msg.ActionStatus_CHECK
+		}
+		return IsRaised
 	}
+	return IsRaised
 }

@@ -234,7 +234,7 @@ func handleAction(args []interface{}) {
 		p.action <- m.Action
 		p.downBets = m.BetAmount
 		p.lunDownBets += m.BetAmount
-		p.totalDownBet += p.downBets
+		p.totalDownBet += m.BetAmount
 	}
 }
 

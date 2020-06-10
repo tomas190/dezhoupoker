@@ -93,7 +93,7 @@ func (r *Room) Init(cfgId string) {
 //BroadCastExcept 向指定玩家之外的玩家广播
 func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 	for _, p := range r.AllPlayer {
-		if p != nil && except.Id != p.Id {
+		if p != nil && except.Id != p.Id && p.IsRobot == false {
 			p.SendMsg(msg)
 		}
 	}
@@ -102,7 +102,7 @@ func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 //Broadcast 广播消息
 func (r *Room) Broadcast(msg interface{}) {
 	for _, v := range r.AllPlayer {
-		if v != nil {
+		if v != nil && v.IsRobot == false {
 			v.SendMsg(msg)
 		}
 	}

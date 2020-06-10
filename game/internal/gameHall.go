@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
+	"math/rand"
 	"sync"
 	"time"
 )
@@ -163,4 +164,13 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	hall.RoomRecord.Store(r.roomId, r)
 
 	r.PlayerJoinRoom(p)
+
+	// 当玩家创建新房间时,则安排随机2-4机器人
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(2) + 2
+	for i := 0; i < num; i++ {
+		time.Sleep(time.Millisecond)
+		robot := gRobotCenter.CreateRobot()
+		r.PlayerJoinRoom(robot)
+	}
 }
