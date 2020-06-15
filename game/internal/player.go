@@ -206,6 +206,9 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				callBets := []int32{1, 1, 3, 1, 1,} // 1跟注,2加注,3弃牌,4全压
 				rand.Seed(time.Now().UnixNano())
 				callNum := rand.Intn(len(callBets))
+				if r.Status == msg.GameStep_PreFlop {
+					callBets[callNum] = 1
+				}
 				if callBets[callNum] == 1 {
 					actionType = msg.ActionStatus_CALL
 					p.downBets = callMoney
@@ -243,9 +246,6 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 		}
 		if actionType == 2 {
 			timerSlice = []int32{3, 6, 4, 6, 15, 5, 8, 4}
-			if r.Status != msg.GameStep_PreFlop {
-				timerSlice = []int32{3, 6, 4, 6, 5, 8, 4}
-			}
 		}
 		if actionType == 3 {
 			timerSlice = []int32{3, 5, 4, 3, 2, 4, 6, 3}
@@ -266,7 +266,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
 		}
 
-		log.Debug("开始行动~")
+		log.Debug("状态:%v", actionType)
 		p.action <- actionType
 
 		for {
