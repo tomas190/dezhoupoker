@@ -184,6 +184,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			}
 		}
 	} else {
+		log.Debug("机器人开始下注~")
 		var actionType msg.ActionStatus
 		callMoney := r.preChips - p.lunDownBets
 		if callMoney > 0 {
@@ -265,7 +266,9 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
 		}
 
+		log.Debug("开始行动~")
 		p.action <- actionType
+
 		for {
 			select {
 			case x := <-p.action:
