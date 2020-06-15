@@ -268,10 +268,12 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 
 		log.Debug("状态:%v", actionType)
 		p.action <- actionType
-
+		log.Debug("状态1:%v", p.action)
 		for {
+			log.Debug("状态2:%v", p.action)
 			select {
 			case x := <-p.action:
+				log.Debug("状态3:%v", x)
 				switch x {
 				case msg.ActionStatus_RAISE:
 					p.actStatus = msg.ActionStatus_RAISE
