@@ -244,6 +244,14 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 					r.potMoney += p.downBets
 				}
 				if callBets[callNum] == 2 {
+					downBet := []float64{0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1}
+					rand.Seed(time.Now().UnixNano())
+					num := rand.Intn(len(downBet))
+					if p.chips > downBet[num] {
+						p.downBets = downBet[num]
+					}else {
+						p.downBets = p.chips
+					}
 					p.actStatus = msg.ActionStatus_RAISE
 					p.chips -= p.downBets
 					p.lunDownBets += p.downBets
@@ -273,7 +281,30 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			rand.Seed(time.Now().UnixNano())
 			num := rand.Intn(len(timerSlice))
 			time.Sleep(time.Second * time.Duration(timerSlice[num]))
-			p.actStatus = msg.ActionStatus_CHECK
+
+			callBets := []int32{1, 2, 1, 1, 1} // 1为让牌,2为加注
+			rand.Seed(time.Now().UnixNano())
+			callNum := rand.Intn(len(callBets))
+			if callBets[callNum] == 1 {
+				p.actStatus = msg.ActionStatus_CHECK
+			}
+			if callBets[callNum] == 2 {
+				downBet := []float64{0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1}
+				rand.Seed(time.Now().UnixNano())
+				num := rand.Intn(len(downBet))
+				if p.chips > downBet[num] {  // todo （上面）加注的金额怎么处理
+					p.actStatus = msg.ActionStatus_RAISE
+					p.downBets = downBet[num]
+					p.chips -= p.downBets
+					p.lunDownBets += p.downBets
+					p.totalDownBet += p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+					IsRaised = true
+				}else {
+					p.actStatus = msg.ActionStatus_CHECK
+				}
+			}
 		}
 		return IsRaised
 	}

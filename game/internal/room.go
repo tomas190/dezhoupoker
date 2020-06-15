@@ -665,22 +665,28 @@ func (r *Room) ResultMoney() {
 	for i := 0; i < len(r.PlayerList); i++ {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
-			p.LoseResultMoney = p.totalDownBet
 			p.resultMoney -= p.totalDownBet
 			nowTime := time.Now().Unix()
 			p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
-			if p.LoseResultMoney > 0 {
-				sur.HistoryLose += p.LoseResultMoney
-				sur.TotalLoseMoney += p.LoseResultMoney
-				loseReason := "德州扑克输钱"
-				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
-			}
-			if p.WinResultMoney > 0 {
-				sur.HistoryWin += p.WinResultMoney
-				sur.TotalWinMoney += p.WinResultMoney
+			var taxMoney float64
+			if p.resultMoney > 0 {
+				taxMoney = p.resultMoney * taxRate
+				p.WinResultMoney = p.resultMoney
 				winReason := "德州扑克赢钱"
 				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 			}
+			if p.resultMoney < 0 {
+				p.LoseResultMoney = p.resultMoney
+				loseReason := "德州扑克输钱"
+				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
+			}
+			sur.HistoryWin += p.WinResultMoney
+			sur.TotalWinMoney += p.WinResultMoney
+			sur.HistoryLose += p.LoseResultMoney
+			sur.TotalLoseMoney += p.LoseResultMoney
+
+			// 这里是玩家金额扣税
+			p.resultMoney -= taxMoney
 			// 插入盈余池数据
 			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
 				InsertSurplusPool(sur)
