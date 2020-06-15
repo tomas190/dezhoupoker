@@ -267,6 +267,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 		}
 
 		log.Debug("状态:%v", actionType)
+		p.action = make(chan msg.ActionStatus)
 		p.action <- actionType
 		log.Debug("状态1:%v", p.action)
 		for {
