@@ -259,51 +259,65 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 		if actionType == 5 {
 			timerSlice = []int32{6, 8, 7, 5, 6, 9}
 		}
+
 		rand.Seed(time.Now().UnixNano())
 		num := rand.Intn(len(timerSlice))
-		time.Sleep(time.Second * time.Duration(timerSlice[num]))
-
 		if timerSlice[num] == 15 {
 			actionType = msg.ActionStatus_FOLD
 			p.IsTimeOutFold = true
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
 		}
 
-		if actionType == msg.ActionStatus_RAISE {
-			p.actStatus = msg.ActionStatus_RAISE
-			p.chips -= p.downBets
-			r.preChips = p.lunDownBets
-			r.potMoney += p.downBets
-			IsRaised = true
-		}
-		if actionType == msg.ActionStatus_CALL {
-			p.actStatus = msg.ActionStatus_CALL
-			p.chips -= p.downBets
-			r.preChips = p.lunDownBets
-			r.potMoney += p.downBets
-		}
-		if actionType == msg.ActionStatus_CHECK {
-			p.actStatus = msg.ActionStatus_CHECK
-		}
-		if actionType == msg.ActionStatus_FOLD {
-			p.actStatus = msg.ActionStatus_FOLD
-			p.gameStep = emNotGaming
-			r.remain--
-		}
-		if actionType == msg.ActionStatus_ALLIN {
-			p.actStatus = msg.ActionStatus_ALLIN
-			p.chips -= p.downBets
-			r.preChips = p.lunDownBets
-			r.potMoney += p.downBets
-		}
-		r.Chips[p.chair] += p.chips
+		actChan := make(chan msg.ActionStatus)
+		go func() {
+			for range r.clock.C {
+				r.counter++
+				if r.counter == timerSlice[num] {
+					r.counter = 0
+					actChan <- actionType
+					return
+				}
+			}
+		}()
 
-		if p.chips == 0 {
-			p.actStatus = msg.ActionStatus_ALLIN
-			p.IsAllIn = true
-			r.allin++
-			r.IsHaveAllin = true
+		for {
+			select {
+			case x := <-actChan:
+				switch x {
+				case msg.ActionStatus_RAISE:
+					p.actStatus = msg.ActionStatus_RAISE
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+					IsRaised = true
+				case msg.ActionStatus_CALL:
+					p.actStatus = msg.ActionStatus_CALL
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+				case msg.ActionStatus_CHECK:
+					p.actStatus = msg.ActionStatus_CHECK
+				case msg.ActionStatus_FOLD:
+					p.actStatus = msg.ActionStatus_FOLD
+					p.gameStep = emNotGaming
+					r.remain--
+				case msg.ActionStatus_ALLIN:
+					p.actStatus = msg.ActionStatus_ALLIN
+					p.chips -= p.downBets
+					r.preChips = p.lunDownBets
+					r.potMoney += p.downBets
+				}
+
+				r.Chips[p.chair] += p.chips
+
+				if p.chips == 0 {
+					p.actStatus = msg.ActionStatus_ALLIN
+					p.IsAllIn = true
+					r.allin++
+					r.IsHaveAllin = true
+				}
+				return IsRaised
+			}
 		}
-		return IsRaised
 	}
 }
