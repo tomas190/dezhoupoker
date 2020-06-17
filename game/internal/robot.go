@@ -1,7 +1,9 @@
 package internal
 
 import (
+	"dezhoupoker/msg"
 	"fmt"
+	"github.com/name5566/leaf/log"
 	"math/rand"
 	"time"
 )
@@ -69,4 +71,105 @@ func RandomName() string {
 	randNum := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000000))
 	RobotName := randNum
 	return RobotName
+}
+
+func (p *Player) RobotDownBet(r *Room) {
+	log.Debug("机器人开始下注~")
+	var actionType msg.ActionStatus
+	callMoney := r.preChips - p.lunDownBets
+	if callMoney > 0 {
+		// 当跟注金额 大于筹码时
+		if callMoney > p.chips {
+			callBets := []int32{1, 2, 1, 1, 1} // 1为弃牌,2 全压
+			rand.Seed(time.Now().UnixNano())
+			callNum := rand.Intn(len(callBets))
+			if callBets[callNum] == 1 {
+				actionType = msg.ActionStatus_FOLD
+			}
+			if callBets[callNum] == 2 {
+				actionType = msg.ActionStatus_ALLIN
+				p.downBets = p.chips
+				p.lunDownBets += p.chips
+				p.totalDownBet += p.chips
+			}
+		} else {
+			callBets := []int32{1, 1, 3, 1, 1,} // 1跟注,2加注,3弃牌,4全压
+			rand.Seed(time.Now().UnixNano())
+			callNum := rand.Intn(len(callBets))
+			if r.Status == msg.GameStep_PreFlop {
+				callBets[callNum] = 1
+			}
+			if callBets[callNum] == 1 {
+				actionType = msg.ActionStatus_CALL
+				p.downBets = callMoney
+				p.lunDownBets += callMoney
+				p.totalDownBet += callMoney
+			}
+			if callBets[callNum] == 3 {
+				actionType = msg.ActionStatus_FOLD
+			}
+		}
+	} else {
+		callBets := []int32{1, 2, 1, 1, 1} // 1为让牌,2为加注
+		rand.Seed(time.Now().UnixNano())
+		callNum := rand.Intn(len(callBets))
+		if callBets[callNum] == 1 {
+			actionType = msg.ActionStatus_CHECK
+		}
+		if callBets[callNum] == 2 {
+			var downBet []float64
+			if r.cfgId == "0" {
+				downBet = []float64{0.4, 0.5, 0.6}
+			}
+			if r.cfgId == "1" {
+				downBet = []float64{4, 5, 6}
+			}
+			if r.cfgId == "2" {
+				downBet = []float64{20, 25, 30}
+			}
+			if r.cfgId == "3" {
+				downBet = []float64{100, 125, 150}
+			}
+			rand.Seed(time.Now().UnixNano())
+			num := rand.Intn(len(downBet))
+			if p.chips > downBet[num] && r.Status != msg.GameStep_PreFlop {
+				actionType = msg.ActionStatus_RAISE
+				p.downBets = downBet[num]
+				p.lunDownBets += downBet[num]
+				p.totalDownBet += downBet[num]
+			} else {
+				actionType = msg.ActionStatus_CHECK
+			}
+		}
+	}
+	var timerSlice []int32
+	if actionType == 1 {
+		timerSlice = []int32{4, 6, 8, 5, 6}
+	}
+	if actionType == 2 {
+		timerSlice = []int32{3, 6, 4, 3, 5, 8, 4}
+	}
+	if actionType == 3 {
+		timerSlice = []int32{3, 5, 4, 3, 2, 4, 6, 3}
+	}
+	if actionType == 4 {
+		timerSlice = []int32{4, 6, 8, 5, 6, 4}
+	}
+	if actionType == 5 {
+		timerSlice = []int32{6, 8, 7, 5, 6, 9}
+	}
+
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(len(timerSlice))
+
+	go func() {
+		for range r.clock.C {
+			r.counter++
+			if r.counter == timerSlice[num] {
+				r.counter = 0
+				p.action <- actionType
+				return
+			}
+		}
+	}()
 }
