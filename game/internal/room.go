@@ -687,6 +687,12 @@ func (r *Room) ResultMoney() {
 
 			// 这里是玩家金额扣税
 			p.resultMoney -= taxMoney
+
+			if p.IsRobot == false {
+				log.Debug("玩家扣税:%v", taxMoney)
+				log.Debug("玩家金额:%v", p.resultMoney)
+			}
+			
 			// 插入盈余池数据
 			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
 				InsertSurplusPool(sur)
