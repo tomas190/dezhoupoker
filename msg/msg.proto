@@ -152,6 +152,7 @@ message PlayerData {
     bool IsAllIn = 16; // 是否AllIn
     bool IsWinner = 17; // 是否赢家
     int32 timerCount = 18; // 玩家行动计时
+    double account = 19; // 玩家的总金额(每局更新)
 }
 
 message RoomData {
@@ -222,7 +223,7 @@ message PlayerAction_S2C {
     string Id = 1;
     int32 chair = 2;
     double chips = 3;
-    double downBet = 4;   // 每轮总下注金额,用于客户端显示筹码底
+    double downBet = 4; // 每轮总下注金额,用于客户端显示筹码底
     double potMoney = 5; // 底池
     ActionStatus actionType = 6; // 下注状态
 }
