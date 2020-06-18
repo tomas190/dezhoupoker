@@ -347,7 +347,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
 			pd.TimerCount = v.timerCount
-			pd.Account = v.Account + v.chips + v.roomChips
+			//pd.Account = v.Account + v.chips + v.roomChips
 			rd.PlayerData = append(rd.PlayerData, pd)
 		}
 	}
