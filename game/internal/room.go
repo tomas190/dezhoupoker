@@ -638,7 +638,6 @@ func (r *Room) ShowDown() {
 		}
 		if v > 0 {
 			player := r.PlayerList[i]
-			player.chips += v
 			player.WinResultMoney = v
 			player.resultMoney += v
 			if v-player.totalDownBet > 0 {
@@ -688,11 +687,10 @@ func (r *Room) ResultMoney() {
 			// 这里是玩家金额扣税
 			p.resultMoney -= taxMoney
 
-			if p.IsRobot == false {
-				log.Debug("玩家扣税:%v", taxMoney)
-				log.Debug("玩家金额:%v", p.resultMoney)
+			if p.resultMoney > 0 {
+				p.chips += p.resultMoney
 			}
-			
+
 			// 插入盈余池数据
 			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
 				InsertSurplusPool(sur)
