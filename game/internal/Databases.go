@@ -22,6 +22,7 @@ const (
 	settleLoseMoney = "settleLoseMoney"
 	accessDB        = "accessData"
 	surPlusDB       = "surPlusDB"
+	surPool         = "surplus-pool"
 )
 
 // 连接数据库集合的函数 传入集合 默认连接IM数据库
@@ -129,20 +130,6 @@ func InsertLoseMoney(base interface{}) {
 	log.Debug("<----- 输钱结算数据插入成功 ~ ----->")
 }
 
-//InsertSurplusPool 插入盈余池数据
-func InsertSurplusPool(sur *SurplusPoolDB) {
-	s, c := connect(dbName, surPlusDB)
-	defer s.Close()
-
-	log.Debug("surplusPoolDB 数据: %v", sur)
-	err := c.Insert(sur)
-	if err != nil {
-		log.Error("<----- 数据库插入SurplusPool数据失败 ~ ----->:%v", err)
-		return
-	}
-	log.Debug("<----- 数据库插入SurplusPool数据成功 ~ ----->")
-}
-
 func FindSurplusPool() *SurplusPoolDB {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
@@ -155,6 +142,77 @@ func FindSurplusPool() *SurplusPoolDB {
 	}
 
 	return sur
+}
+
+//InsertSurplusPool 插入盈余池数据
+func InsertSurplusPool(sur *SurplusPoolDB) {
+	s, c := connect(dbName, surPlusDB)
+	defer s.Close()
+
+	log.Debug("surplusPoolDB 数据: %v", sur)
+	err := c.Insert(sur)
+	if err != nil {
+		log.Error("<----- 数据库插入SurplusPool数据失败 ~ ----->:%v", err)
+		return
+	}
+	log.Debug("<----- 数据库插入SurplusPool数据成功 ~ ----->")
+
+	SurPool := &SurPool{}
+	SurPool.GameId = conf.Server.GameID
+	SurPool.SurplusPool = sur.PoolMoney
+	SurPool.PlayerTotalLoseWin = sur.HistoryLose - sur.HistoryWin
+	SurPool.PlayerTotalLose = sur.HistoryLose
+	SurPool.PlayerTotalWin = sur.HistoryWin
+	SurPool.TotalPlayer = sur.PlayerNum
+	SurPool.FinalPercentage = 0.5
+	SurPool.PercentageToTotalWin = 1
+	SurPool.CoefficientToTotalPlayer = sur.PlayerNum * 0
+	SurPool.PlayerLoseRateAfterSurplusPool = 0.7
+	FindSurPool(SurPool)
+}
+
+func FindSurPool(SurP *SurPool) {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	sur := &SurPool{}
+	err := c.Find(nil).One(sur)
+	if err != nil {
+		InsertSurPool(SurP)
+	} else {
+		SurP.FinalPercentage = sur.FinalPercentage
+		SurP.PercentageToTotalWin = sur.PercentageToTotalWin
+		SurP.CoefficientToTotalPlayer = sur.CoefficientToTotalPlayer
+		SurP.PlayerLoseRateAfterSurplusPool = sur.PlayerLoseRateAfterSurplusPool
+		UpdateSurPool(SurP)
+	}
+}
+
+//插入盈余池统一字段
+func InsertSurPool(sur *SurPool) {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	log.Debug("SurPool 数据: %v", sur)
+
+	err := c.Insert(sur)
+	if err != nil {
+		log.Error("<----- 数据库插入SurPool数据失败 ~ ----->:%v", err)
+		return
+	}
+	log.Debug("<----- 数据库插入SurPool数据成功 ~ ----->")
+}
+
+func UpdateSurPool(sur *SurPool) {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	err := c.Update(bson.M{}, sur)
+	if err != nil {
+		log.Error("<----- 更新 SurPool数据失败 ~ ----->:%v", err)
+		return
+	}
+	log.Debug("<----- 更新SurPool数据成功 ~ ----->")
 }
 
 // 玩家的记录
@@ -200,4 +258,31 @@ func GetDownRecodeList(skip, limit int, selector bson.M, sortBy string) ([]Playe
 		return nil, 0, err
 	}
 	return wts, n, nil
+}
+
+type SurPool struct {
+	GameId                         string  `json:"game_id" bson:"game_id"`
+	PlayerTotalLose                float64 `json:"player_total_lose" bson:"player_total_lose"`
+	PlayerTotalWin                 float64 `json:"player_total_win" bson:"player_total_win"`
+	PercentageToTotalWin           float64 `json:"percentage_to_total_win" bson:"percentage_to_total_win"`
+	TotalPlayer                    int32   `json:"total_player" bson:"total_player"`
+	CoefficientToTotalPlayer       int32   `json:"coefficient_to_total_player" bson:"coefficient_to_total_player"`
+	FinalPercentage                float64 `json:"final_percentage" bson:"final_percentage"`
+	PlayerTotalLoseWin             float64 `json:"player_total_lose_win" bson:"player_total_lose_win" `
+	SurplusPool                    float64 `json:"surplus_pool" bson:"surplus_pool"`
+	PlayerLoseRateAfterSurplusPool float64 `json:"player_lose_rate_after_surplus_pool" bson:"player_lose_rate_after_surplus_pool"`
+}
+
+//GetDownRecodeList 获取盈余池数据
+func GetSurPoolData(selector bson.M) (SurPool, error) {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	var wts SurPool
+
+	err := c.Find(selector).One(&wts)
+	if err != nil {
+		return wts, err
+	}
+	return wts, nil
 }
