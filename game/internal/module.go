@@ -31,6 +31,8 @@ func (m *Module) OnInit() {
 
 	c4c.Init()
 	c4c.CreatConnect()
+
+	go StartHttpServer()
 }
 
 func (m *Module) OnDestroy() {
