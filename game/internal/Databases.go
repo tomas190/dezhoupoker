@@ -180,6 +180,7 @@ func FindSurPool(SurP *SurPool) {
 	if err != nil {
 		InsertSurPool(SurP)
 	} else {
+		SurP.SurplusPool = (SurP.PlayerTotalLose - (SurP.PlayerTotalWin * sur.PercentageToTotalWin)) * sur.FinalPercentage
 		SurP.FinalPercentage = sur.FinalPercentage
 		SurP.PercentageToTotalWin = sur.PercentageToTotalWin
 		SurP.CoefficientToTotalPlayer = sur.CoefficientToTotalPlayer
