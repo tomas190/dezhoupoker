@@ -511,7 +511,7 @@ func (r *Room) Action(pos int) {
 				action.PotMoney = r.potMoney
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
-				log.Debug("玩家下注行动:%+v", action)
+				//log.Debug("玩家下注行动:%+v", action)
 
 				if r.allin >= r.remain {
 					return
