@@ -227,13 +227,17 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 	final := r.PostFormValue("final_percentage")
 	log.Debug("uptSurplusOne~ :%v", final)
 
-	s, c := connect(dbName, surPool)
-	defer s.Close()
+	var req GameDataReq
+	req.GameId = r.FormValue("game_id")
+	log.Debug("game_id :%v", req.GameId)
 
-	sur := &SurPool{}
-	err := c.Find(nil).One(sur)
+	selector := bson.M{}
+	if req.GameId != "" {
+		selector["game_id"] = req.GameId
+	}
+	sur, err := GetSurPoolData(selector)
 	if err != nil {
-		log.Debug("uptSurplusOne 盈余池赋值失败~")
+		return
 	}
 
 	var upt UpSurPool
@@ -260,9 +264,9 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 		sur.FinalPercentage = upt.FinalPercentage
 	}
 
-	sur.SurplusPool = (sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin)) * sur.FinalPercentage
+	sur.SurplusPool = (sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin) - float64(sur.TotalPlayer * sur.CoefficientToTotalPlayer)) * sur.FinalPercentage
 	// 更新盈余池数据
-	UpdateSurPool(sur)
+	UpdateSurPool(&sur)
 
 	js, err := json.Marshal(NewResp(SuccCode, "", upt))
 	if err != nil {
