@@ -674,16 +674,20 @@ func (r *Room) ResultMoney() {
 				p.WinResultMoney = p.resultMoney
 				winReason := "德州扑克赢钱"
 				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
+				sur.HistoryWin += p.WinResultMoney
+				sur.TotalWinMoney += p.WinResultMoney
+				sur.HistoryLose += -p.WinResultMoney
+				sur.TotalLoseMoney += -p.WinResultMoney
 			}
 			if p.resultMoney < 0 {
 				p.LoseResultMoney = p.resultMoney
 				loseReason := "德州扑克输钱"
 				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
+				sur.HistoryWin -= p.LoseResultMoney
+				sur.TotalWinMoney -= p.LoseResultMoney
+				sur.HistoryLose += p.LoseResultMoney
+				sur.TotalLoseMoney += p.LoseResultMoney
 			}
-			sur.HistoryWin += p.WinResultMoney
-			sur.TotalWinMoney += p.WinResultMoney
-			sur.HistoryLose += p.LoseResultMoney
-			sur.TotalLoseMoney += p.LoseResultMoney
 
 			// 这里是玩家金额扣税
 			p.resultMoney -= taxMoney
