@@ -43,7 +43,7 @@ func handleLogin(args []interface{}) {
 	m := args[0].(*msg.Login_C2S)
 	a := args[1].(gate.Agent)
 
-	pl := a.UserData().(*Player)
+	//pl := a.UserData().(*Player)
 
 	log.Debug("handleLogin 用户登入游戏~ :%v", m.Id)
 	v, ok := hall.UserRecord.Load(m.Id)
