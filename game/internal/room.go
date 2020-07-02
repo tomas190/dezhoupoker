@@ -663,7 +663,7 @@ func (r *Room) ResultMoney() {
 	}
 
 	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
+		if r.PlayerList[i] != nil && r.PlayerList[i].IsRobot == false && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
 			p.resultMoney -= p.totalDownBet
 			nowTime := time.Now().Unix()

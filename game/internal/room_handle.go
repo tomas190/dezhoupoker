@@ -9,6 +9,10 @@ import (
 
 //PlayerJoinRoom 玩家加入房间
 func (r *Room) PlayerJoinRoom(p *Player) {
+	// 查找用户是否存在，如果存在就插入数据库
+	if p.IsRobot == false {
+		p.FindPlayerInfo()
+	}
 
 	log.Debug("Player Join Game Room ~")
 

@@ -113,10 +113,6 @@ func handleLogin(args []interface{}) {
 			u.Token = m.GetToken()
 
 			hall.UserRecord.Store(u.Id, u)
-
-			// 查找用户是否存在，如果存在就插入数据库
-			pl.FindPlayerInfo()
-
 		})
 	}
 }

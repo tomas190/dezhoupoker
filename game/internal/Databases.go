@@ -149,6 +149,7 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
 
+	sur.PoolMoney = (sur.HistoryLose - (sur.HistoryWin * 1)) * 0.5
 	log.Debug("surplusPoolDB 数据: %v", sur)
 	err := c.Insert(sur)
 	if err != nil {
@@ -160,7 +161,7 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	SurPool := &SurPool{}
 	SurPool.GameId = conf.Server.GameID
 	SurPool.SurplusPool = sur.PoolMoney
-	SurPool.PlayerTotalLoseWin = sur.HistoryLose - sur.HistoryWin
+	SurPool.PlayerTotalLoseWin = sur.HistoryLose + sur.HistoryWin
 	SurPool.PlayerTotalLose = sur.HistoryLose
 	SurPool.PlayerTotalWin = sur.HistoryWin
 	SurPool.TotalPlayer = sur.PlayerNum
@@ -174,6 +175,8 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 func FindSurPool(SurP *SurPool) {
 	s, c := connect(dbName, surPool)
 	defer s.Close()
+
+	c.RemoveAll(nil)  // todo
 
 	sur := &SurPool{}
 	err := c.Find(nil).One(sur)
