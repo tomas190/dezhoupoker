@@ -176,7 +176,7 @@ func FindSurPool(SurP *SurPool) {
 	s, c := connect(dbName, surPool)
 	defer s.Close()
 
-	//c.RemoveAll(nil)  // todo
+	c.RemoveAll(nil)  // todo
 
 	sur := &SurPool{}
 	err := c.Find(nil).One(sur)
