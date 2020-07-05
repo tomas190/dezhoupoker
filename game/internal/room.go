@@ -837,7 +837,7 @@ func (r *Room) RobotsLength() int32 {
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
 	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(2) + 1
+	num := rand.Intn(1)
 	for i := 0; i < num; i++ {
 		time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
