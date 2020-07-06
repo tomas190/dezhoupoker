@@ -676,15 +676,11 @@ func (r *Room) ResultMoney() {
 				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 				sur.HistoryWin += p.WinResultMoney
 				sur.TotalWinMoney += p.WinResultMoney
-				sur.HistoryLose += -p.WinResultMoney
-				sur.TotalLoseMoney += -p.WinResultMoney
 			}
 			if p.resultMoney < 0 {
 				p.LoseResultMoney = p.resultMoney
 				loseReason := "德州扑克输钱"
 				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
-				sur.HistoryWin -= p.LoseResultMoney
-				sur.TotalWinMoney -= p.LoseResultMoney
 				sur.HistoryLose += p.LoseResultMoney
 				sur.TotalLoseMoney += p.LoseResultMoney
 			}
