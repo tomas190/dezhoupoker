@@ -663,7 +663,7 @@ func (r *Room) ResultMoney() {
 	}
 
 	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].IsRobot == false && r.PlayerList[i].totalDownBet > 0 {
+		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
 			p.resultMoney -= p.totalDownBet
 			nowTime := time.Now().Unix()
@@ -672,19 +672,23 @@ func (r *Room) ResultMoney() {
 			if p.resultMoney > 0 {
 				taxMoney = p.resultMoney * taxRate
 				p.WinResultMoney = p.resultMoney
-				winReason := "德州扑克赢钱"
-				c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
-				sur.HistoryWin += p.WinResultMoney
-				sur.TotalWinMoney += p.WinResultMoney
+				if r.PlayerList[i].IsRobot == false {
+					winReason := "德州扑克赢钱"
+					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
+					sur.HistoryWin += p.WinResultMoney
+					sur.TotalWinMoney += p.WinResultMoney
+				}
 			}
 			if p.resultMoney < 0 {
 				p.LoseResultMoney = p.resultMoney
 				loseReason := "德州扑克输钱"
-				c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
-				sur.HistoryLose += p.LoseResultMoney
-				sur.TotalLoseMoney += p.LoseResultMoney
+				if r.PlayerList[i].IsRobot == false {
+					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
+					sur.HistoryLose += p.LoseResultMoney
+					sur.TotalLoseMoney += p.LoseResultMoney
+				}
 			}
-
+			
 			// 这里是玩家金额扣税
 			p.resultMoney -= taxMoney
 
