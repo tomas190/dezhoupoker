@@ -693,6 +693,7 @@ func (r *Room) ResultMoney() {
 			p.resultMoney -= taxMoney
 
 			if p.resultMoney > 0 {
+				p.chips += p.totalDownBet
 				p.chips += p.resultMoney
 			}
 
