@@ -232,11 +232,27 @@ func (r *Room) KickPlayer() {
 
 // 玩家补充筹码
 func (r *Room) PlayerAddChips() {
+	var limit float64
+	var limitMoney float64
+	if r.cfgId == "0" {
+		limit = 1
+		limitMoney = 10
+	} else if r.cfgId == "1" {
+		limit = 5
+		limitMoney = 50
+	} else if r.cfgId == "2" {
+		limit = 30
+		limitMoney = 300
+	} else if r.cfgId == "3" {
+		limit = 100
+		limitMoney = 1000
+	}
+
 	for _, v := range r.PlayerList {
-		if v != nil && v.chips < 1 {
-			if v.roomChips > 10 {
-				v.roomChips -= 10
-				v.chips += 10
+		if v != nil && v.chips < limit {
+			if v.roomChips > limitMoney {
+				v.roomChips -= limitMoney
+				v.chips += limitMoney
 				addChips := &msg.AddChips_S2C{}
 				addChips.Chair = v.chair
 				addChips.AddChips = 10
