@@ -662,7 +662,7 @@ func (c4c *Conn4Center) UserSyncScoreChange(p *Player, reason string) {
 
 func (c4c *Conn4Center) NoticeWinMoreThan(playerId, playerName string, winGold float64) {
 	log.Debug("<-------- NoticeWinMoreThan  -------->")
-	msg := fmt.Sprintf("<size=20><color=yellow>恭喜!</color><color=orange>%v</color><color=yellow>在</color></><color=orange><size=25>红黑大战</color></><color=yellow><size=20>中一把赢了</color></><color=yellow><size=30>%.2f</color></><color=yellow><size=25>金币！</color></>", playerName, winGold)
+	msg := fmt.Sprintf("<size=20><color=yellow>恭喜!</color><color=orange>%v</color><color=yellow>在</color></><color=orange><size=25>德州扑克</color></><color=yellow><size=20>中一把赢了</color></><color=yellow><size=30>%.2f</color></><color=yellow><size=25>金币！</color></>", playerName, winGold)
 
 	base := &BaseMessage{}
 	base.Event = msgWinMoreThanNotice
