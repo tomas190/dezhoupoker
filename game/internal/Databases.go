@@ -240,7 +240,7 @@ func InsertAccessData(data *PlayerDownBetRecode) {
 	log.Debug("AccessData 数据: %v", data)
 	err := c.Insert(data)
 	if err != nil {
-		log.Error("<----- 运营接入数据插入失败 ~ ----->:%v", err)
+		log.Error("<----- 运营接入数据插入失败 ~ ----->: %v", err)
 		return
 	}
 	log.Debug("<----- 运营接入数据插入成功 ~ ----->")
