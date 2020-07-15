@@ -500,6 +500,7 @@ func (r *Room) Action(pos int) {
 			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
 				p := r.PlayerList[i]
 				if r.remain <= 1 {
+					log.Debug("111111111")
 					return
 				}
 				if p.chips == 0 {
@@ -530,9 +531,11 @@ func (r *Room) Action(pos int) {
 				//log.Debug("玩家下注行动:%+v", action)
 
 				if r.allin >= r.remain {
+					log.Debug("222222222")
 					return
 				}
 				if r.remain <= 1 {
+					log.Debug("333333333")
 					return
 				}
 			}
@@ -545,6 +548,7 @@ func (r *Room) Action(pos int) {
 				}
 			}
 		} else {
+			log.Debug("44444444444")
 			return
 		}
 	}
