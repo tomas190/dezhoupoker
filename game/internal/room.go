@@ -500,7 +500,7 @@ func (r *Room) Action(pos int) {
 			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
 				p := r.PlayerList[i]
 				if r.remain <= 1 {
-					log.Debug("111111111")
+					//log.Debug("111111111")
 					return
 				}
 				if p.chips == 0 {
