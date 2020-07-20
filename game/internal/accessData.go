@@ -78,6 +78,8 @@ func StartHttpServer() {
 	http.HandleFunc("/api/getSurplusOne", getSurplusOne)
 	// 修改盈余池数据
 	http.HandleFunc("/api/uptSurplusConf", uptSurplusOne)
+	// 请求玩家退出
+	http.HandleFunc("/api/reqPlayerLeave", reqPlayerLeave)
 
 	err := http.ListenAndServe(":"+conf.Server.HTTPPort, nil)
 	if err != nil {
@@ -275,4 +277,21 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
+}
+
+func reqPlayerLeave(w http.ResponseWriter, r *http.Request) {
+	Id := r.FormValue("id")
+	user, _ := hall.UserRecord.Load(Id)
+	if user != nil {
+		u := user.(*Player)
+		u.gameStep = emNotGaming
+		u.totalDownBet = 0
+		u.PlayerExitRoom()
+		js, err := json.Marshal(NewResp(SuccCode, "", "已成功T出房间!"))
+		if err != nil {
+			fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "", Data: nil})
+			return
+		}
+		w.Write(js)
+	}
 }
