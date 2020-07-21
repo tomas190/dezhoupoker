@@ -521,16 +521,6 @@ func (r *Room) Action(pos int) {
 				var preDownBet = r.preChips
 
 				IsRaised = p.GetAction(r, ticker)
-				if IsRaised == true && p.lunDownBets > preDownBet {
-					log.Debug("当前玩家加注了:%v,%v", p.lunDownBets, preDownBet)
-					log.Debug("当前玩家座位1:%v", actionPos)
-					actionPos = actionPos + 1
-					if actionPos >= MaxPlayer {
-						actionPos = actionPos % MaxPlayer
-					}
-					log.Debug("当前玩家座位2:%v", actionPos)
-					break
-				}
 
 				action := &msg.PlayerAction_S2C{}
 				action.Id = p.Id
@@ -541,6 +531,17 @@ func (r *Room) Action(pos int) {
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
 				//log.Debug("玩家下注行动:%+v", action)
+
+				if IsRaised == true && p.lunDownBets > preDownBet {
+					log.Debug("当前玩家加注了:%v,%v", p.lunDownBets, preDownBet)
+					log.Debug("当前玩家座位1:%v", actionPos)
+					//actionPos = actionPos + 1
+					//if actionPos >= MaxPlayer {
+					//	actionPos = actionPos % MaxPlayer
+					//}
+					log.Debug("当前玩家座位2:%v", actionPos)
+					break
+				}
 
 				if r.allin >= r.remain {
 					return
