@@ -45,6 +45,7 @@ type Player struct {
 	IsAllIn         bool             // 是否全压
 	IsButton        bool             // 是否庄家
 	IsWinner        bool             // 是否赢家
+	IsAction        bool             // 玩家是否行动过
 	IsOnline        bool             // 是否在线
 	actTime         int32            // 当前行动时间
 	IsTimeOutFold   bool             // 是否超时弃牌
@@ -75,6 +76,7 @@ func (p *Player) Init() {
 	p.IsAllIn = false
 	p.IsButton = false
 	p.IsWinner = false
+	p.IsAction = false
 	p.HandValue = 0
 	p.IsOnline = true
 	p.IsTimeOutFold = false

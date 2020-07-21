@@ -472,6 +472,7 @@ func (r *Room) readyPlay() {
 		p.downBets = 0
 		p.lunDownBets = 0
 		p.HandValue = 0
+		p.IsAction = false
 		r.remain++
 		return true
 	})
@@ -500,7 +501,6 @@ func (r *Room) Action(pos int) {
 			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
 				p := r.PlayerList[i]
 				if r.remain <= 1 {
-					log.Debug("111111111")
 					return
 				}
 				if p.chips == 0 {
@@ -518,7 +518,19 @@ func (r *Room) Action(pos int) {
 				changed.RoomData = room
 				r.Broadcast(changed)
 
+				var preDownBet = r.preChips
+
 				IsRaised = p.GetAction(r, ticker)
+				if IsRaised == true && p.lunDownBets > preDownBet {
+					log.Debug("当前玩家加注了:%v,%v", p.lunDownBets, preDownBet)
+					log.Debug("当前玩家座位1:%v", actionPos)
+					actionPos = actionPos + 1
+					if actionPos >= MaxPlayer {
+						actionPos = actionPos % MaxPlayer
+					}
+					log.Debug("当前玩家座位2:%v", actionPos)
+					break
+				}
 
 				action := &msg.PlayerAction_S2C{}
 				action.Id = p.Id
@@ -531,11 +543,9 @@ func (r *Room) Action(pos int) {
 				//log.Debug("玩家下注行动:%+v", action)
 
 				if r.allin >= r.remain {
-					log.Debug("222222222")
 					return
 				}
 				if r.remain <= 1 {
-					log.Debug("333333333")
 					return
 				}
 			}
@@ -544,11 +554,11 @@ func (r *Room) Action(pos int) {
 			for i := actionPos; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
 				if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
 					actionPos = int(r.PlayerList[i].chair)
+					log.Debug("行动玩家座位3:%v", actionPos)
 					break
 				}
 			}
 		} else {
-			log.Debug("44444444444")
 			return
 		}
 	}
