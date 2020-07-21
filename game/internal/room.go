@@ -518,8 +518,6 @@ func (r *Room) Action(pos int) {
 				changed.RoomData = room
 				r.Broadcast(changed)
 
-				var preDownBet = r.preChips
-
 				IsRaised = p.GetAction(r, ticker)
 
 				action := &msg.PlayerAction_S2C{}
@@ -532,13 +530,16 @@ func (r *Room) Action(pos int) {
 				r.Broadcast(action)
 				//log.Debug("玩家下注行动:%+v", action)
 
+				var preDownBet = r.preChips
+
 				if IsRaised == true && p.lunDownBets > preDownBet {
 					log.Debug("当前玩家加注了:%v,%v", p.lunDownBets, preDownBet)
 					log.Debug("当前玩家座位1:%v", actionPos)
-					//actionPos = actionPos + 1
-					//if actionPos >= MaxPlayer {
-					//	actionPos = actionPos % MaxPlayer
-					//}
+					r.activeSeat = r.activeSeat + 1
+					if r.activeSeat >= MaxPlayer {
+						r.activeSeat = r.activeSeat % MaxPlayer
+					}
+					actionPos = int(r.activeSeat)
 					log.Debug("当前玩家座位2:%v", actionPos)
 					break
 				}
