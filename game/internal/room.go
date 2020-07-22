@@ -228,6 +228,17 @@ func (r *Room) KickPlayer() {
 			r.PlayerList[v.chair] = nil
 		}
 	}
+
+	if r.PlayerLength() >= 9 {
+		if r.RealPlayerLength() <= 8 {
+			for _,v := range r.PlayerList {
+				if v != nil && v.IsRobot == true {
+					v.PlayerExitRoom()
+					break
+				}
+			}
+		}
+	}
 }
 
 // 玩家补充筹码
@@ -811,7 +822,7 @@ func (r *Room) RobotsLength() int32 {
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
 	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(2) + 2
+	num := rand.Intn(2) + 6
 	for i := 0; i < num; i++ {
 		time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
