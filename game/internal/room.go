@@ -491,8 +491,15 @@ func (r *Room) Action(pos int) {
 	for {
 		var IsRaised bool
 		i := actionPos
+		var num int
 		for ; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
-			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+			if i == actionPos {
+				num++
+			}
+			if num == 2 {
+				break
+			}
+			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && r.PlayerList[i].IsAction == false{
 				p := r.PlayerList[i]
 
 				if r.remain <= 1 {
