@@ -491,6 +491,7 @@ func (r *Room) Action(pos int) {
 	for {
 		var IsRaised bool
 		i := actionPos
+		log.Debug("当前行动玩家是:%v", actionPos)
 		for ; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
 			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && r.PlayerList[i].IsAction == false {
 				p := r.PlayerList[i]
@@ -514,6 +515,7 @@ func (r *Room) Action(pos int) {
 				r.Broadcast(changed)
 
 				IsRaised = p.GetAction(r, ticker)
+				log.Debug("2222222222")
 
 				action := &msg.PlayerAction_S2C{}
 				action.Id = p.Id
@@ -539,13 +541,17 @@ func (r *Room) Action(pos int) {
 				}
 			}
 		}
+		log.Debug("1111111111111")
 		if IsRaised == true {
-			for i := 0; i < len(r.PlayerList); i++ {
-				if r.PlayerList[i] != nil && r.PlayerList[i].chair != int32(actionPos) {
-					r.PlayerList[i].IsAction = false
+			log.Debug("2222222222222")
+			for _, v := range r.PlayerList {
+				if v != nil && v.chair != int32(actionPos) {
+					v.IsAction = false
 				}
 			}
+			log.Debug("3333333333333333")
 		} else {
+			log.Debug("4444444444444444")
 			return
 		}
 	}
