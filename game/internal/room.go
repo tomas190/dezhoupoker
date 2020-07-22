@@ -525,17 +525,9 @@ func (r *Room) Action(pos int) {
 				r.Broadcast(action)
 				//log.Debug("玩家下注行动:%+v", action)
 
-				var preDownBet = r.preChips
-
-				if IsRaised == true && p.lunDownBets > preDownBet {
-					log.Debug("当前玩家加注了:%v,%v", p.lunDownBets, preDownBet)
-					log.Debug("当前玩家座位1:%v", actionPos)
-					r.activeSeat = r.activeSeat + 1
-					if r.activeSeat >= MaxPlayer {
-						r.activeSeat = r.activeSeat % MaxPlayer
-					}
+				if IsRaised == true {
 					actionPos = int(r.activeSeat)
-					log.Debug("当前玩家座位2:%v", actionPos)
+					log.Debug("有玩家开始下注:%v", actionPos)
 					break
 				}
 
@@ -548,11 +540,9 @@ func (r *Room) Action(pos int) {
 			}
 		}
 		if IsRaised == true {
-			for i := actionPos; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
-				if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
-					actionPos = int(r.PlayerList[i].chair)
-					log.Debug("行动玩家座位3:%v", actionPos)
-					break
+			for i := 0; i < len(r.PlayerList); i++ {
+				if r.PlayerList[i] != nil && r.PlayerList[i].chair != int32(actionPos) {
+					r.PlayerList[i].IsAction = false
 				}
 			}
 		} else {
