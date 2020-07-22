@@ -487,19 +487,14 @@ func (r *Room) Action(pos int) {
 	if actionPos >= MaxPlayer {
 		actionPos = actionPos % MaxPlayer
 	}
+
 	for {
 		var IsRaised bool
-		var num int32
 		i := actionPos
 		for ; i < len(r.PlayerList); i = (i + 1) % MaxPlayer {
-			if i == actionPos {
-				num++
-			}
-			if num == 2 {
-				break
-			}
-			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && r.PlayerList[i].IsAction == false {
 				p := r.PlayerList[i]
+
 				if r.remain <= 1 {
 					return
 				}
@@ -564,56 +559,6 @@ func (r *Room) Action(pos int) {
 			return
 		}
 	}
-}
-
-//action 玩家行动
-func (r *Room) action(pos int) {
-
-	if r.allin+1 >= r.remain {
-		return
-	}
-
-	if pos == 0 {
-		pos = int((r.Banker)%MaxPlayer) + 1
-	}
-
-	r.Each(pos, func(p *Player) bool {
-		//玩家行动
-		waitTime := ActionTime
-		ticker := time.Second * time.Duration(waitTime)
-
-		if r.remain <= 1 {
-			return false
-		}
-		if p.chips == 0 {
-			return true
-		}
-
-		//3、行动玩家是根据庄家的下一位玩家
-		r.activeSeat = p.chair
-
-		changed := &msg.PlayerActionChange_S2C{}
-		room := r.RespRoomData()
-		changed.RoomData = room
-		r.Broadcast(changed)
-
-		p.GetAction(r, ticker)
-
-		action := &msg.PlayerAction_S2C{}
-		action.Id = p.Id
-		action.Chair = p.chair
-		action.Chips = p.chips // 这里传入房间筹码金额
-		action.DownBet = p.downBets
-		action.PotMoney = r.potMoney
-		action.ActionType = p.actStatus
-		r.Broadcast(action)
-
-		if r.remain <= 1 {
-			return false
-		}
-
-		return true
-	})
 }
 
 //showdown 玩家摊牌结算
