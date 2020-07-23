@@ -143,26 +143,22 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	}
 
-	rId := hall.UserRoom[p.Id]
-	r, _ := hall.RoomRecord.Load(rId)
-	if r != nil {
-		room := r.(*Room)
-		if room.cfgId == cfgId && room.IsCanJoin() {
-			if room.RealPlayerLength() < 1 && room.RobotsLength() < 1 {
+	for _, r := range hall.roomList {
+		if r.cfgId == cfgId && r.IsCanJoin() {
+			if r.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
 				// 装载房间机器人
-				room.LoadRoomRobots()
+				r.LoadRoomRobots()
 			}
 			time.Sleep(time.Millisecond * 1500)
-			room.PlayerJoinRoom(p)
-			return
-		} else {
-			hall.PlayerCreateRoom(cfgId, p)
+			r.PlayerJoinRoom(p)
+			log.Debug("1111111111111")
 			return
 		}
-	} else {
-		hall.PlayerCreateRoom(cfgId, p)
-		return
 	}
+	
+	hall.PlayerCreateRoom(cfgId, p)
+	log.Debug("22222222222")
+	return
 }
 
 //PlayerCreateRoom 创建游戏房间
