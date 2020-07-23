@@ -127,8 +127,11 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	log.Debug("玩家行动时间: %v", time.Now().Format("2006-01-02 15:04:05"))
 
 	p.IsAction = true
-
 	p.timerCount = 0 // todo
+
+	if p.chips == 0 {
+		p.action <- msg.ActionStatus_CHECK
+	}
 
 	after := time.NewTicker(timeout)
 

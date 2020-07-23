@@ -516,9 +516,7 @@ func (r *Room) Action(pos int) {
 				if r.remain <= 1 {
 					return
 				}
-				if p.chips == 0 {
-					continue
-				}
+
 				//玩家行动
 				waitTime := ActionTime
 				ticker := time.Second * time.Duration(waitTime)
@@ -530,6 +528,7 @@ func (r *Room) Action(pos int) {
 				room := r.RespRoomData()
 				changed.RoomData = room
 				r.Broadcast(changed)
+
 
 				IsRaised = p.GetAction(r, ticker)
 
