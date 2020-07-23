@@ -344,8 +344,13 @@ func (r *Room) ExitFromRoom(p *Player) {
 
 	// 如果房间总人数为0，删除房间缓存
 	if len(r.AllPlayer) == 0 {
-		hall.RoomRecord.Delete(r.roomId)
-		log.Debug("Room Player Number is 0，so Delete this Room~")
+		for k, v := range hall.roomList {
+			if v.roomId == r.roomId {
+				hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
+				hall.RoomRecord.Delete(r.roomId)
+				log.Debug("Room Player Number is 0，so Delete this Room~")
+			}
+		}
 	}
 
 	delete(hall.UserRoom, p.Id)

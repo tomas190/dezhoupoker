@@ -13,6 +13,7 @@ import (
 type GameHall struct {
 	UserRecord sync.Map          // 用户记录
 	RoomRecord sync.Map          // 房间记录
+	roomList   []*Room           // 房间列表
 	UserRoom   map[string]string // 用户房间
 }
 
@@ -20,6 +21,7 @@ func NewHall() *GameHall {
 	return &GameHall{
 		UserRecord: sync.Map{},
 		RoomRecord: sync.Map{},
+		roomList:   make([]*Room, 0),
 		UserRoom:   make(map[string]string),
 	}
 }
@@ -29,6 +31,7 @@ func HallInit() { // 大厅初始化增加一个房间
 		r := &Room{}
 		roomCfg := strconv.Itoa(i)
 		r.Init(roomCfg)
+		hall.roomList = append(hall.roomList, r)
 		hall.RoomRecord.Store(r.roomId, r)
 		log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
@@ -79,7 +82,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	p.PlayerExitRoom()
 
 	// 延时5秒，重新开始游戏
-	time.AfterFunc(time.Millisecond*500, func() {
+	time.AfterFunc(time.Millisecond*200, func() {
 		hall.RoomRecord.Range(func(key, value interface{}) bool {
 			room := value.(*Room)
 			if room != nil {
@@ -128,50 +131,49 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	}
 
-	rId := hall.UserRoom[p.Id]
-	v, _ := hall.RoomRecord.Load(rId)
-	if v != nil {
-		// 玩家如果已在游戏中，则返回房间数据
-		r := v.(*Room)
-		log.Debug("Room:%v", r)
-		roomData := r.RespRoomData()
-
-		enter := &msg.EnterRoom_S2C{}
-		enter.RoomData = roomData
-		p.SendMsg(enter)
-
-		return
+	// 处理重连
+	for _, r := range hall.roomList {
+		for _, v := range r.PlayerList {
+			if v != nil && v.Id == p.Id {
+				roomData := r.RespRoomData()
+				enter := &msg.EnterRoom_S2C{}
+				enter.RoomData = roomData
+				p.SendMsg(enter)
+			}
+		}
 	}
 
-	hall.RoomRecord.Range(func(key, value interface{}) bool {
-		r := value.(*Room)
-		if r != nil {
-			if r.cfgId == cfgId && r.IsCanJoin() {
-				if r.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
-					// 装载房间机器人
-					r.LoadRoomRobots()
-				}
-				time.Sleep(time.Millisecond * 1500)
-				r.PlayerJoinRoom(p)
-				return false
-			} else {
-				hall.PlayerCreateRoom(cfgId, p)
-				return false
+	rId := hall.UserRoom[p.Id]
+	r, _ := hall.RoomRecord.Load(rId)
+	if r != nil {
+		room := r.(*Room)
+		if room.cfgId == cfgId && room.IsCanJoin() {
+			if room.RealPlayerLength() < 1 && room.RobotsLength() < 1 {
+				// 装载房间机器人
+				room.LoadRoomRobots()
 			}
+			time.Sleep(time.Millisecond * 1500)
+			room.PlayerJoinRoom(p)
+			return
 		} else {
 			hall.PlayerCreateRoom(cfgId, p)
-			return false
+			return
 		}
-	})
+	} else {
+		hall.PlayerCreateRoom(cfgId, p)
+		return
+	}
 }
 
 //PlayerCreateRoom 创建游戏房间
 func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	r := &Room{}
 	r.Init(cfgId)
-	log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
+	hall.roomList = append(hall.roomList, r)
 	hall.RoomRecord.Store(r.roomId, r)
+
+	log.Debug("CreateRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
 
 	if r.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
 		// 装载房间机器人
