@@ -129,17 +129,18 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	p.IsAction = true
 	p.timerCount = 0 // todo
 
+	after := time.NewTicker(timeout)
+
+	// 机器人开始下注
+	if p.IsRobot == true && p.chips > 0{
+		p.RobotDownBet(r)
+	}
+
 	if p.chips == 0 {
 		p.action <- msg.ActionStatus_CHECK
 	}
 
-	after := time.NewTicker(timeout)
-
 	var IsRaised bool
-	// 机器人开始下注
-	if p.IsRobot == true {
-		p.RobotDownBet(r)
-	}
 
 	for {
 		select {
@@ -148,13 +149,11 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			case msg.ActionStatus_RAISE:
 				p.actStatus = msg.ActionStatus_RAISE
 				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
 				r.potMoney += p.downBets
 				IsRaised = true
 			case msg.ActionStatus_CALL:
 				p.actStatus = msg.ActionStatus_CALL
 				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
 				r.potMoney += p.downBets
 			case msg.ActionStatus_CHECK:
 				p.actStatus = msg.ActionStatus_CHECK
@@ -165,8 +164,11 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			case msg.ActionStatus_ALLIN:
 				p.actStatus = msg.ActionStatus_ALLIN
 				p.chips -= p.downBets
-				r.preChips = p.lunDownBets
 				r.potMoney += p.downBets
+			}
+
+			if p.lunDownBets >= r.preChips {
+				r.preChips = p.lunDownBets
 			}
 
 			r.Chips[p.chair] += p.chips

@@ -36,4 +36,6 @@ func init() {
 	Processor.Register(&ReadyTime_S2C{})          //--25
 	Processor.Register(&SettleTime_S2C{})         //--26
 	Processor.Register(&PushCardTime_S2C{})       //--27
+	Processor.Register(&RoomStatus_C2S{})         //--28
+	Processor.Register(&RoomStatus_S2C{})         //--29
 }

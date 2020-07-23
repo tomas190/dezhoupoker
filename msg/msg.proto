@@ -32,6 +32,8 @@ enum MessageID {
     MSG_ReadyTime_S2C = 25;
     MSG_SettleTime_S2C = 26;
     MSG_PushCardTime_S2C = 27;
+    MSG_RoomStatus_C2S = 28;
+    MSG_RoomStatus_S2C = 29;
 }
 
 message Ping {
@@ -270,4 +272,14 @@ message SettleTime_S2C {
 // 发牌时间
 message PushCardTime_S2C {
     RoomData roomData = 1;
+}
+
+// 房间状态
+message RoomStatus_C2S {
+    string cfgId = 1;
+}
+
+message RoomStatus_S2C {
+    string cfgId = 1;
+    string RoomIdNow = 2;
 }

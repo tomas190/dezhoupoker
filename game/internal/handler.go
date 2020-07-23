@@ -22,6 +22,8 @@ func init() {
 	handlerReg(&msg.StandUp_C2S{}, handleStandUp)
 	handlerReg(&msg.PlayerAction_C2S{}, handleAction)
 	handlerReg(&msg.AddChips_C2S{}, handleAddChips)
+
+	handlerReg(&msg.RoomStatus_C2S{}, handleRoomStatus)
 }
 
 // 注册消息处理函数
@@ -252,6 +254,27 @@ func handleAddChips(args []interface{}) {
 		data.RoomChips = p.roomChips
 		data.SysBuyChips = m.SysBuyChips
 
+		p.SendMsg(data)
+	}
+}
+
+func handleRoomStatus(args []interface{}) {
+	m := args[0].(*msg.RoomStatus_C2S)
+	a := args[1].(gate.Agent)
+
+	p, ok := a.UserData().(*Player)
+	if ok {
+		var roomCfg  = "-1"
+		for _, r := range hall.roomList {
+			for _, v := range r.PlayerList {
+				if v != nil && v.Id == p.Id {
+					roomCfg = r.cfgId
+				}
+			}
+		}
+		data := &msg.RoomStatus_S2C{}
+		data.CfgId = m.CfgId
+		data.RoomIdNow = roomCfg
 		p.SendMsg(data)
 	}
 }
