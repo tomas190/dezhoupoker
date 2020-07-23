@@ -132,12 +132,8 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	after := time.NewTicker(timeout)
 
 	// 机器人开始下注
-	if p.IsRobot == true && p.chips > 0{
+	if p.IsRobot == true{
 		p.RobotDownBet(r)
-	}
-
-	if p.chips == 0 {
-		p.action <- msg.ActionStatus_CHECK
 	}
 
 	var IsRaised bool

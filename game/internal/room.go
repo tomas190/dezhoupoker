@@ -517,6 +517,12 @@ func (r *Room) Action(pos int) {
 					return
 				}
 
+				if p.chips == 0 {
+					p.IsAction = true
+					log.Debug("当前行动玩家金额为:%v", p.chips)
+					continue
+				}
+
 				//玩家行动
 				waitTime := ActionTime
 				ticker := time.Second * time.Duration(waitTime)
