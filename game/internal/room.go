@@ -517,9 +517,9 @@ func (r *Room) Action(pos int) {
 					return
 				}
 
+				log.Debug("当前行动玩家金额为:%v", p.chips)
 				if p.chips == 0 {
 					p.IsAction = true
-					log.Debug("当前行动玩家金额为:%v", p.chips)
 					continue
 				}
 
