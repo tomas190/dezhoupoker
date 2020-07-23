@@ -82,28 +82,20 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	p.PlayerExitRoom()
 
 	// 延时5秒，重新开始游戏
-	time.AfterFunc(time.Millisecond*200, func() {
-		hall.RoomRecord.Range(func(key, value interface{}) bool {
-			room := value.(*Room)
-			if room != nil {
-				if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
-					if r.RealPlayerLength() < 1 && r.RobotsLength() < 1 {
-						// 装载房间机器人
-						room.LoadRoomRobots()
-					}
-					time.Sleep(time.Millisecond * 1500)
-					room.PlayerJoinRoom(p)
-					return false
-				} else {
-					hall.PlayerCreateRoom(r.cfgId, p)
-					return false
-				}
-			} else {
-				hall.PlayerCreateRoom(r.cfgId, p)
-				return false
+	for _, room := range hall.roomList {
+		if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+			if room.RealPlayerLength() < 1 && room.RobotsLength() < 1 {
+				// 装载房间机器人
+				room.LoadRoomRobots()
 			}
-		})
-	})
+			time.Sleep(time.Millisecond * 1500)
+			room.PlayerJoinRoom(p)
+			return
+		}
+	}
+
+	hall.PlayerCreateRoom(r.cfgId, p)
+	return
 }
 
 //PlayerQuickStart 快速匹配房间
@@ -151,13 +143,11 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			}
 			time.Sleep(time.Millisecond * 1500)
 			r.PlayerJoinRoom(p)
-			log.Debug("1111111111111")
 			return
 		}
 	}
-	
+
 	hall.PlayerCreateRoom(cfgId, p)
-	log.Debug("22222222222")
 	return
 }
 
