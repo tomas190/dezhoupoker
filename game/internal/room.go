@@ -266,7 +266,7 @@ func (r *Room) PlayerAddChips() {
 				v.chips += limitMoney
 				addChips := &msg.AddChips_S2C{}
 				addChips.Chair = v.chair
-				addChips.AddChips = 10
+				addChips.AddChips = limitMoney
 				addChips.Chips = v.chips
 				addChips.RoomChips = v.roomChips
 				addChips.SysBuyChips = 1
@@ -275,7 +275,7 @@ func (r *Room) PlayerAddChips() {
 				// 自动补充筹码
 				money := v.roomChips
 				v.roomChips = 0
-				v.chips = v.chips + money
+				v.chips += money
 				addChips := &msg.AddChips_S2C{}
 				addChips.Chair = v.chair
 				addChips.AddChips = money
