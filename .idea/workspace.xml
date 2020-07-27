@@ -3272,50 +3272,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="238" y="0" key="CommitChangelistDialog2/0.0.1280.680@0.0.1280.680" timestamp="1587195492674" />
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1586617084231">
+    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1595833729252">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1586617084231" />
-    <state width="1237" height="249" key="GridCell.Tab.0.bottom" timestamp="1586963738407">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1586963738407" />
-    <state width="1237" height="249" key="GridCell.Tab.0.center" timestamp="1586963738407">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1586963738407" />
-    <state width="1237" height="249" key="GridCell.Tab.0.left" timestamp="1586963738407">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1586963738407" />
-    <state width="1237" height="249" key="GridCell.Tab.0.right" timestamp="1586963738407">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1586963738407" />
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1586963738408">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1586963738408" />
-    <state width="1237" height="249" key="GridCell.Tab.1.center" timestamp="1586963738408">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.center/0.0.1280.680@0.0.1280.680" timestamp="1586963738408" />
-    <state width="1237" height="249" key="GridCell.Tab.1.left" timestamp="1586963738408">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.left/0.0.1280.680@0.0.1280.680" timestamp="1586963738408" />
-    <state width="1237" height="249" key="GridCell.Tab.1.right" timestamp="1586963738408">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1586963738408" />
-    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1594719131515">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1594719131515" />
-    <state x="703" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1586611138646">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="703" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1586611138646" />
+    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1595833729252" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1589015253795">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -188,6 +188,7 @@ func (r *Room) KickPlayer() {
 				//玩家断线的话，退出房间信息，也要断开链接
 				if v.IsOnline == true {
 					v.PlayerExitRoom()
+					log.Debug("踢出断线玩家~")
 				} else {
 					v.PlayerExitRoom()
 					hall.UserRecord.Delete(v.Id)
@@ -207,6 +208,7 @@ func (r *Room) KickPlayer() {
 			if v.chips+v.roomChips < 3 {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
 				v.PlayerExitRoom()
+				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v",v)
 			}
 		}
 	}
@@ -215,10 +217,10 @@ func (r *Room) KickPlayer() {
 	for _, v := range r.AllPlayer {
 		if v != nil && v.IsRobot == false && v.chair == -1 {
 			v.standUPNum++
-			log.Debug("玩家站起次数:%v", v.standUPNum)
 			if v.standUPNum >= 6 {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
 				v.PlayerExitRoom()
+				log.Debug("玩家站起次数6次:%v", v)
 			}
 		}
 	}
