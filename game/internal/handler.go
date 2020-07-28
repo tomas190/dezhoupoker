@@ -45,8 +45,6 @@ func handleLogin(args []interface{}) {
 	m := args[0].(*msg.Login_C2S)
 	a := args[1].(gate.Agent)
 
-	//pl := a.UserData().(*Player)
-
 	log.Debug("handleLogin 用户登入游戏~ :%v", m.Id)
 	v, ok := hall.UserRecord.Load(m.Id)
 	if ok { // 说明用户已存在
@@ -108,16 +106,8 @@ func handleLogin(args []interface{}) {
 
 			u.Init()
 			// 重新绑定信息
-			user, _ := hall.UserRecord.Load(u.Id)
-			if user != nil {
-				p := user.(*Player)
-				u.ConnAgent = p.ConnAgent
-				u.ConnAgent.SetUserData(p)
-			}else {
-				a.SetUserData(u)
-				u.ConnAgent = a
-			}
-
+			a.SetUserData(u)
+			u.ConnAgent = a
 
 			u.Password = m.GetPassWord()
 			u.Token = m.GetToken()

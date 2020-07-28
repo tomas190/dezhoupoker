@@ -18,7 +18,7 @@ func rpcNewAgent(args []interface{}) {
 	p := &Player{}
 	p.Init()
 	p.ConnAgent = a
-	a.SetUserData(p)
+	p.ConnAgent.SetUserData(p)
 }
 
 func rpcCloseAgent(args []interface{}) {
