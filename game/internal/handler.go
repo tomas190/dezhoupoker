@@ -91,7 +91,7 @@ func handleLogin(args []interface{}) {
 
 				//p.ConnAgent.Destroy()
 				p.ConnAgent = a
-				p.ConnAgent.SetUserData(user) //p
+				p.ConnAgent.SetUserData(u) //p
 				p.IsOnline = true
 			}
 		}
@@ -108,8 +108,16 @@ func handleLogin(args []interface{}) {
 
 			u.Init()
 			// 重新绑定信息
-			a.SetUserData(u)
-			u.ConnAgent = a
+			user, _ := hall.UserRecord.Load(u.Id)
+			if user != nil {
+				p := user.(*Player)
+				u.ConnAgent = p.ConnAgent
+				u.ConnAgent.SetUserData(p)
+			}else {
+				a.SetUserData(u)
+				u.ConnAgent = a
+			}
+
 
 			u.Password = m.GetPassWord()
 			u.Token = m.GetToken()
