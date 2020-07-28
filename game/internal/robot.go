@@ -3,7 +3,6 @@ package internal
 import (
 	"dezhoupoker/msg"
 	"fmt"
-	"github.com/name5566/leaf/log"
 	"math/rand"
 	"time"
 )
@@ -74,7 +73,7 @@ func RandomName() string {
 }
 
 func (p *Player) RobotDownBet(r *Room) {
-	log.Debug("机器人开始下注~")
+	//log.Debug("机器人开始下注~")
 	var actionType msg.ActionStatus
 	callMoney := r.preChips - p.lunDownBets
 	if callMoney > 0 {

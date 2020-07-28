@@ -103,6 +103,7 @@ func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 func (r *Room) Broadcast(msg interface{}) {
 	for _, v := range r.AllPlayer {
 		if v != nil && v.IsRobot == false {
+			log.Debug("广播真实玩家:%v",v)
 			v.SendMsg(msg)
 		}
 	}
