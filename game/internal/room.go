@@ -470,6 +470,7 @@ func (r *Room) betting(p *Player, blind float64) {
 	action.Chair = p.chair
 	action.Chips = p.chips // 这里传入房间筹码金额
 	action.DownBet = p.lunDownBets
+	action.PreChips = r.preChips
 	action.PotMoney = r.potMoney
 	action.ActionType = p.actStatus
 	r.Broadcast(action)
@@ -547,6 +548,7 @@ func (r *Room) Action(pos int) {
 				action.Chair = p.chair
 				action.Chips = p.chips // 这里传入房间筹码金额
 				action.DownBet = p.lunDownBets
+				action.PreChips = r.preChips
 				action.PotMoney = r.potMoney
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
