@@ -28,7 +28,7 @@ func rpcCloseAgent(args []interface{}) {
 		log.Debug("<-------------%v 主动断开链接--------------->", p.Id)
 
 		p.IsOnline = false
-		if p.totalDownBet > 0 {
+		if p.totalDownBet > 0 && p.gameStep == emInGaming{
 			rid := hall.UserRoom[p.Id]
 			v, _ := hall.RoomRecord.Load(rid)
 			if v != nil {

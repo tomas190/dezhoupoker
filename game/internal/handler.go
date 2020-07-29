@@ -106,8 +106,8 @@ func handleLogin(args []interface{}) {
 
 			u.Init()
 			// 重新绑定信息
-			a.SetUserData(u)
 			u.ConnAgent = a
+			a.SetUserData(u)
 
 			u.Password = m.GetPassWord()
 			u.Token = m.GetToken()
