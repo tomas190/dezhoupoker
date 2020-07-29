@@ -148,7 +148,7 @@ func handleLogout(args []interface{}) {
 			hall.UserRecord.Delete(p.Id)
 			leaveHall := &msg.Logout_S2C{}
 			a.WriteMsg(leaveHall)
-			p.ConnAgent.Close()
+			//p.ConnAgent.Close()
 		}
 	}
 }
