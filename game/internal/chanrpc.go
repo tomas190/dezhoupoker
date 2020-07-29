@@ -44,6 +44,7 @@ func rpcCloseAgent(args []interface{}) {
 				}
 			}
 		} else {
+			log.Debug("删除进来了1~")
 			hall.UserRecord.Delete(p.Id)
 			p.PlayerExitRoom()
 		}

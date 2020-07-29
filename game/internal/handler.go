@@ -143,6 +143,7 @@ func handleLogout(args []interface{}) {
 				a.WriteMsg(leaveHall)
 			}
 		} else {
+			log.Debug("删除进来了2~")
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			p.IsOnline = false
 			hall.UserRecord.Delete(p.Id)
