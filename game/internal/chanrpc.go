@@ -50,6 +50,6 @@ func rpcCloseAgent(args []interface{}) {
 		c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 		leaveHall := &msg.Logout_S2C{}
 		a.WriteMsg(leaveHall)
-		//a.Close()
+		a.Close()
 	}
 }

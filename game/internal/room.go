@@ -103,7 +103,6 @@ func (r *Room) BroadCastExcept(msg interface{}, except *Player) {
 func (r *Room) Broadcast(msg interface{}) {
 	for _, v := range r.AllPlayer {
 		if v != nil && v.IsRobot == false {
-			log.Debug("广播真实玩家:%v",v)
 			v.SendMsg(msg)
 		}
 	}
@@ -209,7 +208,7 @@ func (r *Room) KickPlayer() {
 			if v.chips+v.roomChips < 3 {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
 				v.PlayerExitRoom()
-				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v",v)
+				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v", v)
 			}
 		}
 	}
@@ -234,7 +233,7 @@ func (r *Room) KickPlayer() {
 
 	if r.PlayerLength() >= 9 {
 		if r.RealPlayerLength() <= 8 {
-			for _,v := range r.PlayerList {
+			for _, v := range r.PlayerList {
 				if v != nil && v.IsRobot == true {
 					v.PlayerExitRoom()
 					break
@@ -513,7 +512,7 @@ func (r *Room) Action(pos int) {
 			if num == 2 {
 				break
 			}
-			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && r.PlayerList[i].IsAction == false{
+			if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming && r.PlayerList[i].IsAction == false {
 				p := r.PlayerList[i]
 
 				if r.remain <= 1 {
@@ -538,8 +537,10 @@ func (r *Room) Action(pos int) {
 				changed.RoomData = room
 				r.Broadcast(changed)
 
-
 				IsRaised = p.GetAction(r, ticker)
+				if p.IsRobot == false {
+					log.Debug("真实玩家行动:%v,%v", p.Id, p.lunDownBets)
+				}
 
 				action := &msg.PlayerAction_S2C{}
 				action.Id = p.Id
