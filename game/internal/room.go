@@ -157,7 +157,8 @@ func (r *Room) TakeInRoomChips(p *Player) {
 	if p.Account > data.MaxTakeIn {
 		p.Account = p.Account - data.MaxTakeIn
 		p.chips = data.MinTakeIn
-		p.roomChips = data.MaxTakeIn - p.chips
+		p.roomChips = data.MaxTakeIn
+		p.roomChips -= p.chips
 	} else {
 		p.roomChips = p.Account
 		p.Account = p.Account - p.Account

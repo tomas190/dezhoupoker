@@ -616,7 +616,7 @@ func (c4c *Conn4Center) LockSettlement(p *Player) {
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
 	lockMoney.Info.ID = id
-	lockMoney.Info.LockMoney = p.Account
+	lockMoney.Info.LockMoney = p.roomChips
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = loseOrder
 	lockMoney.Info.PayReason = "lockMoney"

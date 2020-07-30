@@ -44,13 +44,12 @@ func rpcCloseAgent(args []interface{}) {
 				}
 			}
 		} else {
-			log.Debug("删除进来了1~")
 			hall.UserRecord.Delete(p.Id)
 			p.PlayerExitRoom()
+			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
+			leaveHall := &msg.Logout_S2C{}
+			a.WriteMsg(leaveHall)
+			a.Close()
 		}
-		c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
-		leaveHall := &msg.Logout_S2C{}
-		a.WriteMsg(leaveHall)
-		a.Close()
 	}
 }
