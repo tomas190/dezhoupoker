@@ -173,7 +173,7 @@ func handleChangeTable(args []interface{}) {
 
 	if ok {
 		// 判断玩家当前状态是否正在游戏
-		if p.gameStep == emInGaming {
+		if p.totalDownBet > 0 || p.gameStep == emInGaming {
 			//ErrorResp(a, msg.ErrorMsg_UserNotChangeTable, "玩家正在游戏,不能换桌")
 			return
 		}

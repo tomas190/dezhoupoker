@@ -11,7 +11,7 @@ func (p *Player) PlayerExitRoom() {
 	v, _ := hall.RoomRecord.Load(rId)
 	if v != nil {
 		room := v.(*Room)
-		if p.gameStep == emInGaming || p.totalDownBet > 0{
+		if p.totalDownBet > 0 || p.gameStep == emInGaming {
 			var exist bool
 			for _, v := range room.UserLeave {
 				if v == p.Id {
