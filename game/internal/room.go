@@ -737,6 +737,9 @@ func (r *Room) ReadyTimer() {
 			r.counter++
 			log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 4 {
+				// 设置玩家状态
+				r.SetPlayerStatus()
+
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)

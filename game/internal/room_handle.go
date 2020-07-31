@@ -75,13 +75,6 @@ func (r *Room) StartGameRun() {
 	}
 	log.Debug("游戏开始，玩家开始行动~")
 
-	// 当真实玩家大于等于2人时,则清空机器人
-	//if r.RealPlayerLength() >= 2 {
-	//	r.ClearRoomRobots()
-	//}
-
-	// 设置玩家状态
-	r.SetPlayerStatus()
 	// 洗牌
 	r.Cards.Shuffle()
 
