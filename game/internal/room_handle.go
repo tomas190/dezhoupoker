@@ -75,48 +75,6 @@ func (r *Room) StartGameRun() {
 	}
 	log.Debug("游戏开始，玩家开始行动~")
 
-	// 洗牌
-	r.Cards.Shuffle()
-
-	// 设置玩家状态
-	r.SetPlayerStatus()
-
-	// 产生庄家
-	var dealer *Player
-	banker := r.Banker
-	r.Each(int(banker+1)%MaxPlayer, func(p *Player) bool {
-		dealer = p
-		r.Banker = dealer.chair
-		dealer.IsButton = true
-		return false
-	})
-	if dealer == nil {
-		return
-	}
-	log.Debug("庄家的座位号为 :%v", dealer.chair)
-
-	r.remain = 0
-	r.allin = 0
-
-	//Round 1：preFlop 开始发手牌,下注
-	r.readyPlay()
-	r.Status = msg.GameStep_PreFlop
-	log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
-	r.Each(0, func(p *Player) bool {
-		// 生成玩家手牌,获取的是对应牌型生成二进制的数
-		p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-		p.cardData.HandCardKeys = p.cards.HexInt()
-
-		kind, _ := algorithm.De(p.cards.GetType())
-		p.cardData.SuitPattern = msg.CardSuit(kind)
-		log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
-
-		game := &msg.GameStepChange_S2C{}
-		game.RoomData = r.RespRoomData()
-		p.SendMsg(game)
-		return true
-	})
-
 	// 准备阶段定时任务
 	r.ReadyTimer()
 
@@ -299,12 +257,6 @@ showdown:
 	settle := &msg.SettleTime_S2C{}
 	settle.SettleTime = SettleTime
 	r.Broadcast(settle)
-
-	// 随机删除机器人
-	r.DelRobot()
-
-	// 根据房间机器数量来调整机器
-	r.AdjustRobot()
 
 	// 重新开始游戏
 	r.RestartGame()

@@ -193,6 +193,7 @@ func (r *Room) DelRobot() {
 		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == true {
 				v.PlayerExitRoom()
+				break
 			}
 		}
 	}
@@ -206,6 +207,7 @@ func (r *Room) AdjustRobot() {
 		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == true {
 				v.PlayerExitRoom()
+				break
 			}
 		}
 	}
