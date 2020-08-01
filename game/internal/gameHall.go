@@ -35,9 +35,12 @@ func HallInit() { // 大厅初始化增加一个房间
 		hall.RoomRecord.Store(r.roomId, r)
 		log.Debug("CreateRoom 创建新的房间:%v", r.roomId)
 
-		robot := gRobotCenter.CreateRobot()
-		r.PlayerJoinRoom(robot)
-		robot.StandUpTable()
+		// 装载房间机器人
+		r.LoadRoomRobots()
+
+		//robot := gRobotCenter.CreateRobot()
+		//r.PlayerJoinRoom(robot)
+		//robot.StandUpTable()
 	}
 
 }

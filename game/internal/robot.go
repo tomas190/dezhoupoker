@@ -172,3 +172,42 @@ func (p *Player) RobotDownBet(r *Room) {
 		}
 	}()
 }
+
+func (r *Room) AddRobot() {
+	// 机器人处理
+	robotRand := []int32{0, 1, 0, 1}
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(len(robotRand))
+	if robotRand[num] == 1 {
+		robot := gRobotCenter.CreateRobot()
+		r.PlayerJoinRoom(robot)
+	}
+}
+
+func (r *Room) DelRobot() {
+	// 机器人处理
+	robotRand := []int32{0, 1, 0, 1}
+	rand.Seed(time.Now().UnixNano())
+	num := rand.Intn(len(robotRand))
+	if robotRand[num] == 1 {
+		for k, v := range r.PlayerList {
+			if v != nil && v.IsRobot == true {
+				r.PlayerList = append(r.PlayerList[:k], r.PlayerList[k+1:]...)
+			}
+		}
+	}
+}
+
+func (r *Room) AdjustRobot() {
+	if r.RobotsLength() <= 3 {
+		robot := gRobotCenter.CreateRobot()
+		r.PlayerJoinRoom(robot)
+	} else if r.RobotsLength() >= 6 {
+		for k, v := range r.PlayerList {
+			if v != nil && v.IsRobot == true {
+				r.PlayerList = append(r.PlayerList[:k], r.PlayerList[k+1:]...)
+			}
+		}
+	}
+}
+
