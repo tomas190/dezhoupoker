@@ -231,17 +231,6 @@ func (r *Room) KickPlayer() {
 			r.PlayerList[v.chair] = nil
 		}
 	}
-
-	if r.PlayerLength() >= 9 {
-		if r.RealPlayerLength() <= 8 {
-			for _, v := range r.PlayerList {
-				if v != nil && v.IsRobot == true {
-					v.PlayerExitRoom()
-					break
-				}
-			}
-		}
-	}
 }
 
 // 玩家补充筹码

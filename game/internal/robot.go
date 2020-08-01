@@ -190,9 +190,9 @@ func (r *Room) DelRobot() {
 	rand.Seed(time.Now().UnixNano())
 	num := rand.Intn(len(robotRand))
 	if robotRand[num] == 1 {
-		for k, v := range r.PlayerList {
+		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == true {
-				r.PlayerList = append(r.PlayerList[:k], r.PlayerList[k+1:]...)
+				v.PlayerExitRoom()
 			}
 		}
 	}
@@ -203,9 +203,9 @@ func (r *Room) AdjustRobot() {
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)
 	} else if r.RobotsLength() >= 6 {
-		for k, v := range r.PlayerList {
+		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == true {
-				r.PlayerList = append(r.PlayerList[:k], r.PlayerList[k+1:]...)
+				v.PlayerExitRoom()
 			}
 		}
 	}
