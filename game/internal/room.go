@@ -45,7 +45,7 @@ const (
 
 const (
 	ReadyTime      = 6  // 开始准备时间
-	SettleTime     = 10  // 游戏结算时间
+	SettleTime     = 7  // 游戏结算时间
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
 )
@@ -773,8 +773,7 @@ func (r *Room) RestartGame() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("settleTime clock : %v ", r.counter)
-			if r.counter == SettleTime {
-				r.counter = 0
+			if r.counter == 4 {
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 随机删除机器人
@@ -789,6 +788,10 @@ func (r *Room) RestartGame() {
 				game := &msg.GameStepChange_S2C{}
 				game.RoomData = r.RespRoomData()
 				r.Broadcast(game)
+			}
+			
+			if r.counter == SettleTime {
+				r.counter = 0
 
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
