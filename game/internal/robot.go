@@ -203,10 +203,10 @@ func (r *Room) AdjustRobot() {
 			}
 		}
 	}else {
-		if r.RobotsLength() <= 3 {
+		if r.PlayerLength() <= 3 {
 			robot := gRobotCenter.CreateRobot()
 			r.PlayerJoinRoom(robot)
-		} else if r.RobotsLength() >= 6 {
+		} else if r.PlayerLength() >= 7 {
 			for _, v := range r.PlayerList {
 				if v != nil && v.IsRobot == true {
 					v.PlayerExitRoom()
