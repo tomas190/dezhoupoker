@@ -175,12 +175,14 @@ func (p *Player) RobotDownBet(r *Room) {
 
 func (r *Room) AddRobot() {
 	// 机器人处理
-	robotRand := []int32{0, 1, 0, 1}
-	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(len(robotRand))
-	if robotRand[num] == 1 {
-		robot := gRobotCenter.CreateRobot()
-		r.PlayerJoinRoom(robot)
+	if r.PlayerLength() <= 7 {
+		robotRand := []int32{0, 1, 0, 1}
+		rand.Seed(time.Now().UnixNano())
+		num := rand.Intn(len(robotRand))
+		if robotRand[num] == 1 {
+			robot := gRobotCenter.CreateRobot()
+			r.PlayerJoinRoom(robot)
+		}
 	}
 }
 
