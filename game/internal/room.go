@@ -730,7 +730,7 @@ func (r *Room) ReadyTimer() {
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)
 			}
-			if r.counter == ReadyTime {
+			if r.counter >= ReadyTime {
 				r.counter = 0
 				ReadyTimeChan <- true
 				return
@@ -790,7 +790,7 @@ func (r *Room) RestartGame() {
 				r.Broadcast(game)
 			}
 
-			if r.counter == SettleTime {
+			if r.counter >= SettleTime {
 				r.counter = 0
 
 				//开始新一轮游戏,重复调用StartGameRun函数
