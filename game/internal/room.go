@@ -725,7 +725,7 @@ func (r *Room) ReadyTimer() {
 		for range r.clock.C {
 			r.counter++
 			log.Debug("readyTime clock : %v ", r.counter)
-			if r.counter == 2 {
+			if r.counter == 3 {
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)
@@ -777,7 +777,7 @@ func (r *Room) RestartGame() {
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 随机删除机器人
-				r.DelRobot()
+				//r.DelRobot()
 				// 根据房间机器数量来调整机器
 				r.AdjustRobot()
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
@@ -789,7 +789,7 @@ func (r *Room) RestartGame() {
 				game.RoomData = r.RespRoomData()
 				r.Broadcast(game)
 			}
-			
+
 			if r.counter == SettleTime {
 				r.counter = 0
 

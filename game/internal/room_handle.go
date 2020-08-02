@@ -221,6 +221,9 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
+	// 随机添加机器人
+	r.AddRobot()
+
 	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
