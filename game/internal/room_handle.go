@@ -307,11 +307,10 @@ showdown:
 
 //ExitFromRoom 退出房间处理
 func (r *Room) ExitFromRoom(p *Player) {
-	//if p.chair != -1 {
-	//	r.PlayerList[p.chair] = nil
-	//}
 
-	r.PlayerList[p.chair] = nil
+	if p.chair != -1 {
+		r.PlayerList[p.chair] = nil
+	}
 
 	for k, v := range r.AllPlayer {
 		if v != nil && v.Id == p.Id {
