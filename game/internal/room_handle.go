@@ -221,9 +221,6 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	// 随机添加机器人
-	r.AddRobot()
-
 	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
@@ -310,9 +307,11 @@ showdown:
 
 //ExitFromRoom 退出房间处理
 func (r *Room) ExitFromRoom(p *Player) {
-	if p.chair != -1 {
-		r.PlayerList[p.chair] = nil
-	}
+	//if p.chair != -1 {
+	//	r.PlayerList[p.chair] = nil
+	//}
+
+	r.PlayerList[p.chair] = nil
 
 	for k, v := range r.AllPlayer {
 		if v != nil && v.Id == p.Id {

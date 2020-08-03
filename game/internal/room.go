@@ -366,8 +366,37 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
 			pd.TimerCount = v.timerCount
-			//pd.Account = v.Account + v.chips + v.roomChips
 			rd.PlayerData = append(rd.PlayerData, pd)
+		}
+	}
+	for _, v := range r.AllPlayer {
+		if v != nil {
+			pd := &msg.PlayerData{}
+			pd.PlayerInfo = new(msg.PlayerInfo)
+			pd.PlayerInfo.Id = v.Id
+			pd.PlayerInfo.NickName = v.NickName
+			pd.PlayerInfo.HeadImg = v.HeadImg
+			pd.PlayerInfo.Account = v.Account
+			pd.Chair = v.chair
+			pd.StandUPNum = v.standUPNum
+			pd.Chips = v.chips
+			pd.RoomChips = v.roomChips
+			pd.ActionStatus = v.actStatus
+			pd.GameStep = int32(v.gameStep)
+			pd.DownBets = v.downBets
+			pd.LunDownBets = v.lunDownBets
+			pd.TotalDownBet = v.totalDownBet
+			pd.CardSuitData = new(msg.CardSuitData)
+			pd.CardSuitData.HandCardKeys = v.cardData.HandCardKeys
+			pd.CardSuitData.PublicCardKeys = v.cardData.PublicCardKeys
+			pd.CardSuitData.SuitPattern = v.cardData.SuitPattern
+			pd.ResultMoney = v.resultMoney
+			pd.BlindType = v.blindType
+			pd.IsButton = v.IsButton
+			pd.IsAllIn = v.IsAllIn
+			pd.IsWinner = v.IsWinner
+			pd.TimerCount = v.timerCount
+			rd.AllPlayer = append(rd.AllPlayer, pd)
 		}
 	}
 	return rd
@@ -774,15 +803,6 @@ func (r *Room) RestartGame() {
 			r.counter++
 			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == 4 {
-				// 剔除房间玩家
-				r.KickPlayer()
-				// 随机删除机器人
-				//r.DelRobot()
-				// 根据房间机器数量来调整机器
-				r.AdjustRobot()
-				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
-				r.TimeOutStandUp()
-
 				r.Status = msg.GameStep_Waiting
 				// 游戏阶段变更
 				game := &msg.GameStepChange_S2C{}
@@ -792,6 +812,14 @@ func (r *Room) RestartGame() {
 
 			if r.counter >= SettleTime {
 				r.counter = 0
+				// 剔除房间玩家
+				r.KickPlayer()
+				// 随机删除机器人
+				//r.DelRobot()
+				// 根据房间机器数量来调整机器
+				r.AdjustRobot()
+				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
+				r.TimeOutStandUp()
 
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")

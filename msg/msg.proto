@@ -171,6 +171,7 @@ message RoomData {
     bool isHaveAllin = 11; // 是否有玩家ALLIN
     repeated int32 publicCards = 12; // 桌面公牌
     repeated PlayerData playerData = 13; // 房间玩家数据
+    repeated PlayerData AllPlayer = 14; // 房间所有玩家数据
 }
 
 message QuickStart_C2S {
