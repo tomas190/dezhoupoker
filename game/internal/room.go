@@ -679,62 +679,79 @@ func (r *Room) ResultMoney() {
 	for i := 0; i < len(r.PlayerList); i++ {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
-			p.resultMoney -= p.totalDownBet
-			nowTime := time.Now().Unix()
-			p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
-			var taxMoney float64
-			if p.resultMoney > 0 {
-				taxMoney = p.resultMoney * taxRate
-				p.WinResultMoney = p.resultMoney
-				if r.PlayerList[i].IsRobot == false {
+			if r.PlayerList[i].IsRobot == false {
+				p.resultMoney -= p.totalDownBet
+
+				nowTime := time.Now().Unix()
+				p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
+				var taxMoney float64
+				if p.resultMoney > 0 {
+					taxMoney = p.resultMoney * taxRate
+					p.WinResultMoney = p.resultMoney
 					winReason := "德州扑克赢钱"
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 					sur.HistoryWin += p.WinResultMoney
 					sur.TotalWinMoney += p.WinResultMoney
 				}
-			}
-			if p.resultMoney < 0 {
-				p.LoseResultMoney = p.resultMoney
-				loseReason := "德州扑克输钱"
-				if r.PlayerList[i].IsRobot == false {
+				if p.resultMoney < 0 {
+					p.LoseResultMoney = p.resultMoney
+					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 					sur.HistoryLose += p.LoseResultMoney
 					sur.TotalLoseMoney += p.LoseResultMoney
 				}
-			}
 
-			// 这里是玩家金额扣税
-			p.resultMoney -= taxMoney
+				// 这里是玩家金额扣税
+				p.resultMoney -= taxMoney
 
-			if p.resultMoney > 0 {
-				p.chips += p.totalDownBet
-				p.chips += p.resultMoney
-			}
+				if p.resultMoney > 0 {
+					p.chips += p.totalDownBet
+					p.chips += p.resultMoney
+				}
 
-			// 插入盈余池数据
-			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
-				InsertSurplusPool(sur)
-			}
-			// 跑马灯
-			if p.resultMoney > PaoMaDeng {
-				c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
-			}
-			// 插入运营数据
-			if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
-				data := &PlayerDownBetRecode{}
-				data.Id = p.Id
-				data.GameId = conf.Server.GameID
-				data.RoundId = p.RoundId
-				data.RoomId = r.roomId
-				data.DownBetInfo = p.totalDownBet
-				data.DownBetTime = nowTime
-				data.CardResult = msg.CardSuitData{}
-				data.CardResult.SuitPattern = p.cardData.SuitPattern
-				data.CardResult.HandCardKeys = p.cardData.HandCardKeys
-				data.CardResult.PublicCardKeys = p.cardData.PublicCardKeys
-				data.ResultMoney = p.resultMoney
-				data.TaxRate = taxRate
-				InsertAccessData(data)
+				// 插入盈余池数据
+				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
+					InsertSurplusPool(sur)
+				}
+				// 跑马灯
+				if p.resultMoney > PaoMaDeng {
+					c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
+				}
+				// 插入运营数据
+				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
+					data := &PlayerDownBetRecode{}
+					data.Id = p.Id
+					data.GameId = conf.Server.GameID
+					data.RoundId = p.RoundId
+					data.RoomId = r.roomId
+					data.DownBetInfo = p.totalDownBet
+					data.DownBetTime = nowTime
+					data.CardResult = msg.CardSuitData{}
+					data.CardResult.SuitPattern = p.cardData.SuitPattern
+					data.CardResult.HandCardKeys = p.cardData.HandCardKeys
+					data.CardResult.PublicCardKeys = p.cardData.PublicCardKeys
+					data.ResultMoney = p.resultMoney
+					data.TaxRate = taxRate
+					InsertAccessData(data)
+				}
+			} else {
+				p.resultMoney -= p.totalDownBet
+				var taxMoney float64
+				if p.resultMoney > 0 {
+					taxMoney = p.resultMoney * taxRate
+					p.WinResultMoney = p.resultMoney
+				}
+				if p.resultMoney < 0 {
+					p.LoseResultMoney = p.resultMoney
+				}
+
+				// 这里是玩家金额扣税
+				p.resultMoney -= taxMoney
+
+				if p.resultMoney > 0 {
+					p.chips += p.totalDownBet
+					p.chips += p.resultMoney
+				}
 			}
 		}
 	}
@@ -814,8 +831,6 @@ func (r *Room) RestartGame() {
 				r.counter = 0
 				// 剔除房间玩家
 				r.KickPlayer()
-				// 随机删除机器人
-				//r.DelRobot()
 				// 根据房间机器数量来调整机器
 				r.AdjustRobot()
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
