@@ -113,6 +113,23 @@ func handleLogin(args []interface{}) {
 			u.Token = m.GetToken()
 
 			hall.UserRecord.Store(u.Id, u)
+
+			rId := hall.UserRoom[u.Id]
+			v, _ := hall.RoomRecord.Load(rId)
+			if v != nil {
+				// 玩家如果已在游戏中，则返回房间数据
+				room := v.(*Room)
+				for i, userId := range room.UserLeave {
+					log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+					// 把玩家从掉线列表中移除
+					if userId == u.Id {
+						room.UserLeave = append(room.UserLeave[:i], room.UserLeave[i+1:]...)
+						log.Debug("AllocateUser 清除玩家记录~:%v", userId)
+						break
+					}
+					log.Debug("AllocateUser 长度~:%v", len(room.UserLeave))
+				}
+			}
 		})
 	}
 }
