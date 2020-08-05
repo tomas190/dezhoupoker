@@ -837,10 +837,10 @@ func (r *Room) RestartGame() {
 
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
+				r.StartGameRun()
 				return
 			}
 		}
-		defer r.StartGameRun()
 	}()
 }
 
