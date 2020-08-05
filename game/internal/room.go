@@ -550,7 +550,7 @@ func (r *Room) Action(pos int) {
 				ticker := time.Second * time.Duration(waitTime)
 
 				r.activeSeat = p.chair
-				log.Debug("行动玩家 ~ :%v", r.activeSeat)
+				//log.Debug("行动玩家 ~ :%v", r.activeSeat)
 
 				changed := &msg.PlayerActionChange_S2C{}
 				room := r.RespRoomData()
@@ -558,9 +558,9 @@ func (r *Room) Action(pos int) {
 				r.Broadcast(changed)
 
 				IsRaised = p.GetAction(r, ticker)
-				if p.IsRobot == false {
-					log.Debug("真实玩家行动:%v,%v", p.Id, p.lunDownBets)
-				}
+				//if p.IsRobot == false {
+				//	log.Debug("真实玩家行动:%v,%v", p.Id, p.lunDownBets)
+				//}
 
 				action := &msg.PlayerAction_S2C{}
 				action.Id = p.Id
@@ -571,7 +571,6 @@ func (r *Room) Action(pos int) {
 				action.PotMoney = r.potMoney
 				action.ActionType = p.actStatus
 				r.Broadcast(action)
-				//log.Debug("玩家下注行动:%+v", action)
 
 				if IsRaised == true {
 					actionPos = int(r.activeSeat)
@@ -818,7 +817,7 @@ func (r *Room) RestartGame() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			//log.Debug("settleTime clock : %v ", r.counter)
+			log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter == 4 {
 				r.Status = msg.GameStep_Waiting
 				// 游戏阶段变更
@@ -838,10 +837,10 @@ func (r *Room) RestartGame() {
 
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
-				r.StartGameRun()
 				return
 			}
 		}
+		defer r.StartGameRun()
 	}()
 }
 

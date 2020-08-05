@@ -153,7 +153,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	r.Status = msg.GameStep_Flop
@@ -194,7 +194,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	r.Status = msg.GameStep_Turn
