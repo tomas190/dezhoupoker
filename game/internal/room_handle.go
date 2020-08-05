@@ -233,7 +233,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	r.Status = msg.GameStep_River
@@ -274,7 +274,7 @@ showdown:
 
 	r.ResultMoney()
 
-	time.Sleep(time.Millisecond * 500)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 5: ShowDown 摊开底牌,开牌比大小
 	r.Status = msg.GameStep_ShowDown
