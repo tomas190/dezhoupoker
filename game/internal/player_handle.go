@@ -86,7 +86,7 @@ func (p *Player) SitDownTable() {
 			r.StartGameRun()
 		} else {
 			// 如果玩家中途加入游戏，则玩家视为弃牌状态
-			p.actStatus = msg.ActionStatus_FOLD
+			//p.actStatus = msg.ActionStatus_WAITING
 		}
 
 		sitDown := &msg.SitDown_S2C{}
