@@ -108,7 +108,6 @@ func (r *Room) Broadcast(msg interface{}) {
 	}
 }
 
-
 //IsCanJoin 房间是否还能加入
 func (r *Room) IsCanJoin() bool {
 	return r.PlayerLength() < MaxPlayer
@@ -510,6 +509,12 @@ func (r *Room) readyPlay() {
 		r.remain++
 		return true
 	})
+	for i := 0; i < len(r.AllPlayer); i++ {
+		if r.AllPlayer[i] != nil {
+			r.AllPlayer[i].downBets = 0
+			r.AllPlayer[i].lunDownBets = 0
+		}
+	}
 }
 
 func (r *Room) Action(pos int) {
