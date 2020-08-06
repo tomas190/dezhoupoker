@@ -207,6 +207,7 @@ message SitDown_C2S {
 
 message SitDown_S2C {
     PlayerData playerData = 1;
+    RoomData roomData = 2;
 }
 
 message StandUp_C2S {
