@@ -91,6 +91,7 @@ func (p *Player) SitDownTable() {
 
 		sitDown := &msg.SitDown_S2C{}
 		sitDown.PlayerData = p.RespPlayerData()
+		sitDown.RoomData = r.RespRoomData()
 		r.Broadcast(sitDown)
 	}
 }
