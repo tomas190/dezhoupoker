@@ -75,8 +75,6 @@ func (r *Room) StartGameRun() {
 	}
 	log.Debug("游戏开始，玩家开始行动~")
 
-
-
 	// 准备阶段定时任务
 	r.ReadyTimer()
 

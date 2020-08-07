@@ -772,6 +772,9 @@ func (r *Room) ReadyTimer() {
 	// 玩家补充筹码
 	r.PlayerAddChips()
 
+	r.Status = msg.GameStep_PreFlop
+	log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
+
 	go func() {
 		for range r.clock.C {
 			r.counter++
@@ -802,8 +805,7 @@ func (r *Room) ReadyTimer() {
 
 				//Round 1：preFlop 开始发手牌,下注
 				r.readyPlay()
-				r.Status = msg.GameStep_PreFlop
-				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
+
 				r.Each(0, func(p *Player) bool {
 					// 生成玩家手牌,获取的是对应牌型生成二进制的数
 					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
