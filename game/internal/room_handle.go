@@ -4,6 +4,7 @@ import (
 	"dezhoupoker/game/internal/algorithm"
 	"dezhoupoker/msg"
 	"github.com/name5566/leaf/log"
+	"time"
 )
 
 //PlayerJoinRoom 玩家加入房间
@@ -73,7 +74,7 @@ func (r *Room) StartGameRun() {
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}
-	log.Debug("%v房间 游戏开始，玩家开始行动~",r.cfgId)
+	log.Debug("%v房间 游戏开始，玩家开始行动~", r.cfgId)
 
 	// 准备阶段定时任务
 	r.ReadyTimer()
@@ -111,7 +112,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 2：Flop 翻牌圈,牌桌上发3张公牌
 	r.Status = msg.GameStep_Flop
@@ -140,7 +141,7 @@ func (r *Room) GameRunning() {
 	// 随机添加机器人
 	r.AddRobot()
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -152,7 +153,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 3：Turn 转牌圈,牌桌上发第4张公共牌
 	r.Status = msg.GameStep_Turn
@@ -179,7 +180,7 @@ func (r *Room) GameRunning() {
 	//1、准备阶段
 	r.readyPlay()
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
@@ -191,7 +192,7 @@ func (r *Room) GameRunning() {
 		goto showdown
 	}
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 4：River 河牌圈,牌桌上发第5张公共牌
 	r.Status = msg.GameStep_River
@@ -222,7 +223,7 @@ func (r *Room) GameRunning() {
 		}
 	}
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 	//3、行动、下注
 	r.Action(int(r.Banker + 1))
 
@@ -232,7 +233,7 @@ showdown:
 
 	r.ResultMoney()
 
-	//time.Sleep(time.Millisecond * 1000)
+	time.Sleep(time.Millisecond * 1000)
 
 	//Round 5: ShowDown 摊开底牌,开牌比大小
 	r.Status = msg.GameStep_ShowDown

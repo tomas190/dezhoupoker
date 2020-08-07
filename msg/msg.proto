@@ -163,7 +163,7 @@ message RoomData {
     GameStep gameStep = 3; // 当前游戏阶段状态
     double minRaise = 4; // 加注最小值（本轮水位）
     double preChips = 5; // 房间上个玩家下注金额
-    int32 actionSeat = 6; // 当前正在行动的玩家座位号
+    string activeId = 6; // 当前正在行动的玩家Id
     int32 banker = 7; // 庄家座位号
     double bigBlind = 8; // 大盲注金额
     double potMoney = 9; // 赌注池当前总共有多少钱

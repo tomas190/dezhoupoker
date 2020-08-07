@@ -25,6 +25,7 @@ type Room struct {
 	AllPlayer  []*Player // 房间，包括站起玩家座位号为-1
 
 	activeSeat  int32        // 当前正在行动玩家座位号
+	activeId    string       // 当前行动玩家Id
 	minRaise    float64      // 加注最小值
 	potMoney    float64      // 桌面注池金额
 	publicCards []int32      // 桌面公牌
@@ -77,6 +78,7 @@ func (r *Room) Init(cfgId string) {
 	rd := SetRoomConfig(cfgId)
 
 	r.activeSeat = -1
+	r.activeId = ""
 	r.minRaise = rd.BB
 	r.potMoney = 0
 	r.publicCards = nil
@@ -303,6 +305,7 @@ func (r *Room) TimeOutStandUp() {
 //ClearRoomData 清除房间数据
 func (r *Room) ClearRoomData() {
 	r.activeSeat = -1
+	r.activeId = ""
 	r.potMoney = 0
 	r.publicCards = nil
 	r.preChips = 0
@@ -343,7 +346,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 	rd.PreChips = r.preChips
 	rd.IsShowDown = r.IsShowDown
 	rd.IsHaveAllin = r.IsHaveAllin
-	rd.ActionSeat = r.activeSeat
+	rd.ActiveId = r.activeId
 	rd.BigBlind = r.BB
 	rd.Banker = r.Banker
 	rd.PotMoney = r.potMoney
@@ -482,6 +485,7 @@ func (r *Room) betting(p *Player, blind float64) {
 	log.Debug("玩家下注金额:%v", blind)
 	//当前行动玩家
 	r.activeSeat = p.chair
+	r.activeId = p.Id
 	//玩家筹码变动
 	p.chips = p.chips - blind
 	//本轮玩家下注额
@@ -566,6 +570,7 @@ func (r *Room) Action(pos int) {
 				ticker := time.Second * time.Duration(waitTime)
 
 				r.activeSeat = p.chair
+				r.activeId = p.Id
 				//log.Debug("行动玩家 ~ :%v", r.activeSeat)
 
 				changed := &msg.PlayerActionChange_S2C{}

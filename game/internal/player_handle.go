@@ -111,7 +111,7 @@ func (p *Player) StandUpTable() {
 			return
 		}
 
-		if r.activeSeat == p.chair {
+		if r.activeId == p.Id {
 			p.actStatus = msg.ActionStatus_FOLD
 		}
 
