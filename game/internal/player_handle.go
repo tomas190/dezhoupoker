@@ -81,18 +81,15 @@ func (p *Player) SitDownTable() {
 		p.standUPNum = 0
 		p.IsTimeOutFold = false
 
-		if r.Status == msg.GameStep_Waiting {
-			log.Debug("SitDownTable 开始运行游戏~")
-			r.StartGameRun()
-		} else {
-			// 如果玩家中途加入游戏，则玩家视为弃牌状态
-			//p.actStatus = msg.ActionStatus_WAITING
-		}
-
 		sitDown := &msg.SitDown_S2C{}
 		sitDown.PlayerData = p.RespPlayerData()
 		sitDown.RoomData = r.RespRoomData()
 		r.Broadcast(sitDown)
+
+		if r.RoomStat != RoomStatusRun {
+			log.Debug("SitDownTable 开始运行游戏~")
+			r.StartGameRun()
+		}
 	}
 }
 

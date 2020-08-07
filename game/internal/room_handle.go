@@ -28,7 +28,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 	r.AllPlayer = append(r.AllPlayer, p)
 
 	log.Debug("玩家加入房间: %v,房间状态: %v", p.Id, r.Status)
-	if r.Status == msg.GameStep_Waiting {
+	if r.RoomStat != RoomStatusRun {
 		// 返回房间数据
 		roomData := r.RespRoomData()
 
@@ -68,8 +68,9 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 func (r *Room) StartGameRun() {
 
 	// 当前房间人数存在两人及两人以上才开始游戏
-	n := r.PlayerLength()
-	if n < 2 {
+	if r.PlayerLength() < 2 {
+		r.RoomStat = RoomStatusNone
+
 		log.Debug("房间人数少于2人，不能开始游戏~")
 		return
 	}

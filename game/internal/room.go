@@ -10,6 +10,14 @@ import (
 	"time"
 )
 
+type RoomStatus int32
+
+const (
+	RoomStatusNone RoomStatus = 1 // 房间等待状态
+	RoomStatusRun  RoomStatus = 2 // 房间运行状态
+	RoomStatusOver RoomStatus = 3 // 房间结束状态
+)
+
 type Room struct {
 	roomId     string
 	cfgId      string    // 房间配置ID
@@ -20,6 +28,7 @@ type Room struct {
 	minRaise    float64      // 加注最小值
 	potMoney    float64      // 桌面注池金额
 	publicCards []int32      // 桌面公牌
+	RoomStat    RoomStatus   // 房间运行状态状态
 	Status      msg.GameStep // 房间当前阶段  就直接判断是否在等待状态
 
 	Cards      algorithm.Cards
@@ -44,8 +53,8 @@ const (
 )
 
 const (
-	ReadyTime      = 6  // 开始准备时间
-	SettleTime     = 7  // 游戏结算时间
+	ReadyTime      = 5  // 开始准备时间
+	SettleTime     = 6  // 游戏结算时间
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
 )
@@ -71,6 +80,7 @@ func (r *Room) Init(cfgId string) {
 	r.minRaise = rd.BB
 	r.potMoney = 0
 	r.publicCards = nil
+	r.RoomStat = RoomStatusNone
 	r.Status = msg.GameStep_Waiting
 	r.preChips = 0
 	r.IsShowDown = 0
@@ -764,6 +774,9 @@ func (r *Room) ResultMoney() {
 
 //TimerTask 游戏准备阶段定时器任务
 func (r *Room) ReadyTimer() {
+
+	r.RoomStat = RoomStatusRun
+
 	// 广播游戏准备时间
 	ready := &msg.ReadyTime_S2C{}
 	ready.ReadyTime = ReadyTime
@@ -771,9 +784,6 @@ func (r *Room) ReadyTimer() {
 
 	// 玩家补充筹码
 	r.PlayerAddChips()
-
-	r.Status = msg.GameStep_PreFlop
-	log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 
 	go func() {
 		for range r.clock.C {
@@ -805,7 +815,8 @@ func (r *Room) ReadyTimer() {
 
 				//Round 1：preFlop 开始发手牌,下注
 				r.readyPlay()
-
+				r.Status = msg.GameStep_PreFlop
+				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 				r.Each(0, func(p *Player) bool {
 					// 生成玩家手牌,获取的是对应牌型生成二进制的数
 					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
@@ -868,16 +879,8 @@ func (r *Room) RestartGame() {
 		for range r.clock.C {
 			r.counter++
 			log.Debug("settleTime clock : %v ", r.counter)
-			if r.counter == 4 {
-				// 游戏阶段变更
-				game := &msg.GameStepChange_S2C{}
-				game.RoomData = r.RespRoomData()
-				r.Broadcast(game)
-			}
-
 			if r.counter >= SettleTime {
 				r.counter = 0
-
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 根据房间机器数量来调整机器
@@ -885,6 +888,7 @@ func (r *Room) RestartGame() {
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
 				r.TimeOutStandUp()
 
+				r.RoomStat = RoomStatusOver
 				r.Status = msg.GameStep_Waiting
 				// 游戏阶段变更
 				game := &msg.GameStepChange_S2C{}
