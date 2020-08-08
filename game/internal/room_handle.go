@@ -119,7 +119,7 @@ func (r *Room) GameRunning() {
 	log.Debug("GameStep_Flop 阶段: %v", r.Status)
 	//2、生成桌面工牌赋值
 	pubCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
-	log.Debug("Flop桌面工牌数字 ~ :%v", pubCards.HexInt())
+	//log.Debug("Flop桌面工牌数字 ~ :%v", pubCards.HexInt())
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
@@ -161,7 +161,7 @@ func (r *Room) GameRunning() {
 
 	//2、生成桌面第四张公牌
 	pubCards = pubCards.Append(r.Cards.Take())
-	log.Debug("Turn桌面工牌数字 ~ :%v", pubCards.HexInt())
+	//log.Debug("Turn桌面工牌数字 ~ :%v", pubCards.HexInt())
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
@@ -200,7 +200,7 @@ func (r *Room) GameRunning() {
 
 	//2、生成桌面第五张公牌
 	pubCards = pubCards.Append(r.Cards.Take())
-	log.Debug("River桌面工牌数字 ~ :%v", pubCards.HexInt())
+	//log.Debug("River桌面工牌数字 ~ :%v", pubCards.HexInt())
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
@@ -214,7 +214,7 @@ func (r *Room) GameRunning() {
 
 			kind, _ := algorithm.De(cs.GetType())
 			p.cardData.SuitPattern = msg.CardSuit(kind)
-			log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
+			//log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
 
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}

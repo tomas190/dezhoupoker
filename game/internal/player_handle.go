@@ -19,6 +19,7 @@ func (p *Player) PlayerExitRoom() {
 				}
 			}
 			if exist == false {
+				log.Debug("添加离线玩家UserLeave:%v",p.Id)
 				room.UserLeave = append(room.UserLeave, p.Id)
 			}
 

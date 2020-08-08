@@ -482,7 +482,7 @@ func (r *Room) Blind(pos int32) *Player {
 
 //betting 小大盲下注
 func (r *Room) betting(p *Player, blind float64) {
-	log.Debug("玩家下注金额:%v", blind)
+	log.Debug("玩家盲注下注金额:%v", blind)
 	//当前行动玩家
 	r.activeSeat = p.chair
 	r.activeId = p.Id
@@ -507,7 +507,6 @@ func (r *Room) betting(p *Player, blind float64) {
 	action.PotMoney = r.potMoney
 	action.ActionType = p.actStatus
 	r.Broadcast(action)
-	log.Debug("玩家下注行动:%+v", action)
 }
 
 //readyPlay 准备阶段
@@ -651,7 +650,7 @@ func (r *Room) ShowDown() {
 		for _, pos := range pot.Pos {
 			player := r.PlayerList[pos]
 			if player != nil && player.gameStep == emInGaming && player.HandValue == maxPlayer.HandValue {
-				log.Debug("比牌手值:%v,%v", player.HandValue, maxPlayer.HandValue)
+				//log.Debug("比牌手值:%v,%v", player.HandValue, maxPlayer.HandValue)
 				winners = append(winners, pos)
 			}
 		}
@@ -665,7 +664,7 @@ func (r *Room) ShowDown() {
 		}
 
 	}
-	fmt.Println("比牌结果:")
+	//fmt.Println("比牌结果:")
 	for i, v := range r.Chips {
 		player := r.PlayerList[i]
 		if player == nil {
@@ -679,7 +678,7 @@ func (r *Room) ShowDown() {
 				player.IsWinner = true
 			}
 		}
-		fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
+		//fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
 	}
 }
 
@@ -793,7 +792,7 @@ func (r *Room) ReadyTimer() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			log.Debug("readyTime clock : %v ", r.counter)
+			//log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 3 {
 				// 洗牌
 				r.Cards.Shuffle()
@@ -883,7 +882,7 @@ func (r *Room) RestartGame() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			log.Debug("settleTime clock : %v ", r.counter)
+			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter >= SettleTime {
 				r.counter = 0
 				// 剔除房间玩家
