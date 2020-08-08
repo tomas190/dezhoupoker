@@ -244,10 +244,18 @@ func handleAction(args []interface{}) {
 	log.Debug("handleAction 玩家开始行动~ :%v", p.Id)
 
 	if ok {
-		p.action <- m.Action
-		p.downBets = m.BetAmount
-		p.lunDownBets += m.BetAmount
-		p.totalDownBet += m.BetAmount
+		roomId := hall.UserRoom[p.Id]
+		r, _ := hall.RoomRecord.Load(roomId)
+		if r != nil {
+			// 玩家如果已在游戏中，则返回房间数据
+			room := r.(*Room)
+			if room.activeId == p.Id {
+				p.action <- m.Action
+				p.downBets = m.BetAmount
+				p.lunDownBets += m.BetAmount
+				p.totalDownBet += m.BetAmount
+			}
+		}
 	}
 }
 
