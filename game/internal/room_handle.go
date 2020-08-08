@@ -286,10 +286,6 @@ func (r *Room) ExitFromRoom(p *Player) {
 	r.BroadCastExcept(leave, p)
 	log.Debug("玩家退出房间成功！:%v", p)
 
-	c4c.UserLoginCenter(p.Id, p.Password, p.Token, func(u *Player) {
-		p.Account = u.Account
-	})
-
 	// 如果房间总人数为0，删除房间缓存
 	if len(r.AllPlayer) == 0 {
 		for k, v := range hall.roomList {
