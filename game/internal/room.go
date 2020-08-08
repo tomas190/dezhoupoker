@@ -420,7 +420,7 @@ func (r *Room) SetPlayerStatus() {
 	for _, v := range r.PlayerList {
 		if v != nil {
 			v.gameStep = emInGaming
-			log.Debug("设置玩家状态:%v,%v", v.Id, v.gameStep)
+			//log.Debug("设置玩家状态:%v,%v", v.Id, v.gameStep)
 		}
 	}
 }
@@ -828,7 +828,7 @@ func (r *Room) ReadyTimer() {
 
 					kind, _ := algorithm.De(p.cards.GetType())
 					p.cardData.SuitPattern = msg.CardSuit(kind)
-					log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
+					//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
 
 					game := &msg.GameStepChange_S2C{}
 					game.RoomData = r.RespRoomData()
