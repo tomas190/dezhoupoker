@@ -625,7 +625,7 @@ func (r *Room) ShowDown() {
 	//2.计算分池
 	pots := CalPots(r.Chips)
 
-	r.PrintPots(pots)
+	//r.PrintPots(pots)
 
 	for i, _ := range r.Chips {
 		r.Chips[i] = 0
