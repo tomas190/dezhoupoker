@@ -24,6 +24,8 @@ func init() {
 	handlerReg(&msg.AddChips_C2S{}, handleAddChips)
 
 	handlerReg(&msg.RoomStatus_C2S{}, handleRoomStatus)
+
+	handlerReg(&msg.EmojiChat_C2S{}, handleEmojiChat)
 }
 
 // 注册消息处理函数
@@ -91,6 +93,19 @@ func handleLogin(args []interface{}) {
 				p.ConnAgent = a
 				p.ConnAgent.SetUserData(u) //p
 				p.IsOnline = true
+			}
+
+			// 处理重连
+			for _, r := range hall.roomList {
+				for _, v := range r.PlayerList {
+					if v != nil && v.Id == p.Id {
+						roomData := r.RespRoomData()
+						enter := &msg.EnterRoom_S2C{}
+						enter.RoomData = roomData
+						p.SendMsg(enter)
+						return
+					}
+				}
 			}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
@@ -300,5 +315,27 @@ func handleRoomStatus(args []interface{}) {
 		data.CfgId = m.CfgId
 		data.RoomIdNow = roomCfg
 		p.SendMsg(data)
+	}
+}
+
+func handleEmojiChat(args []interface{}) {
+	m := args[0].(*msg.EmojiChat_C2S)
+	a := args[1].(gate.Agent)
+
+	p, ok := a.UserData().(*Player)
+	if ok {
+		if p.chair == -1 {
+			return
+		}
+		roomId := hall.UserRoom[p.Id]
+		r, _ := hall.RoomRecord.Load(roomId)
+		if r != nil {
+			room := r.(*Room)
+			data := &msg.EmojiChat_S2C{}
+			data.ActNum = m.ActNum
+			data.ActChair = p.chair
+			data.GoalChair = m.GoalChair
+			room.Broadcast(data)
+		}
 	}
 }

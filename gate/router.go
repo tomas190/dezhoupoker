@@ -21,4 +21,6 @@ func init() {
 	msg.Processor.SetRouter(&msg.AddChips_C2S{}, game.ChanRPC)
 
 	msg.Processor.SetRouter(&msg.RoomStatus_C2S{}, game.ChanRPC)
+
+	msg.Processor.SetRouter(&msg.EmojiChat_C2S{}, game.ChanRPC)
 }

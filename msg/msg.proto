@@ -34,6 +34,8 @@ enum MessageID {
     MSG_PushCardTime_S2C = 27;
     MSG_RoomStatus_C2S = 28;
     MSG_RoomStatus_S2C = 29;
+    MSG_EmojiChat_C2S = 30;
+    MSG_EmojiChat_S2C = 31;
 }
 
 message Ping {
@@ -285,4 +287,17 @@ message RoomStatus_C2S {
 message RoomStatus_S2C {
     string cfgId = 1;
     string RoomIdNow = 2;
+}
+
+// 表情发送
+message EmojiChat_C2S {
+    int32 actNum = 1;
+    string goalChair = 2;
+}
+
+// 表情发送
+message EmojiChat_S2C {
+    int32 actNum = 1;
+    int32 actChair = 2;
+    string goalChair = 3;
 }
