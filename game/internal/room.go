@@ -54,7 +54,7 @@ const (
 )
 
 const (
-	ReadyTime      = 7  // 开始准备时间
+	ReadyTime      = 6  // 开始准备时间
 	SettleTime     = 5  // 游戏结算时间
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
@@ -380,6 +380,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
 			pd.IsInGame = v.IsInGame
+			pd.IsStandUp = v.IsStandUp
 			pd.TimerCount = v.timerCount
 			rd.PlayerData = append(rd.PlayerData, pd)
 		}
@@ -411,6 +412,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
 			pd.IsInGame = v.IsInGame
+			pd.IsStandUp = v.IsStandUp
 			pd.TimerCount = v.timerCount
 			rd.AllPlayer = append(rd.AllPlayer, pd)
 		}
@@ -797,7 +799,7 @@ func (r *Room) ReadyTimer() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
-			if r.counter == 3 {
+			if r.counter == 2 {
 				// 洗牌
 				r.Cards.Shuffle()
 
@@ -840,7 +842,7 @@ func (r *Room) ReadyTimer() {
 					return true
 				})
 			}
-			if r.counter == 5 {
+			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)

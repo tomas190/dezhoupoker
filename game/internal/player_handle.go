@@ -81,6 +81,7 @@ func (p *Player) SitDownTable() {
 		p.chair = r.FindAbleChair()
 		r.PlayerList[p.chair] = p
 		p.standUPNum = 0
+		p.IsStandUp = false
 		p.IsTimeOutFold = false
 
 		sitDown := &msg.SitDown_S2C{}
@@ -121,6 +122,7 @@ func (p *Player) StandUpTable() {
 
 		//站起改变状态，座位为 -1，视为观战
 		p.gameStep = emNotGaming
+		p.IsStandUp = true
 
 		standUp := &msg.StandUp_S2C{}
 		standUp.PlayerData = p.RespPlayerData()

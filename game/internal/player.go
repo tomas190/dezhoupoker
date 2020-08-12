@@ -50,6 +50,7 @@ type Player struct {
 	actTime         int32            // 当前行动时间
 	IsTimeOutFold   bool             // 是否超时弃牌
 	IsInGame        bool             // 是否在游戏中
+	IsStandUp       bool             // 玩家是否站起
 	timerCount      int32            // 玩家行动计时
 
 	HandValue uint32
@@ -83,6 +84,7 @@ func (p *Player) Init() {
 	p.IsTimeOutFold = false
 	p.timerCount = 0
 	p.IsInGame = false
+	p.IsStandUp = false
 	p.action = make(chan msg.ActionStatus)
 	p.IsRobot = false
 }
@@ -122,6 +124,7 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	data.IsWinner = p.IsWinner
 	data.IsInGame = p.IsInGame
 	data.TimerCount = p.timerCount
+	data.IsStandUp = p.IsStandUp
 	return data
 }
 
