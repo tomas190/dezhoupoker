@@ -85,6 +85,12 @@ func (r *Room) StartGameRun() {
 
 func (r *Room) GameRunning() {
 
+	push := &msg.PushCardTime_S2C{}
+	push.RoomData = r.RespRoomData()
+	r.Broadcast(push)
+
+	time.Sleep(time.Millisecond * 1000)
+	
 	// 定义公共牌
 	var pubCards algorithm.Cards
 
