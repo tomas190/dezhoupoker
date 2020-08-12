@@ -54,7 +54,7 @@ const (
 )
 
 const (
-	ReadyTime      = 5  // 开始准备时间
+	ReadyTime      = 6  // 开始准备时间
 	SettleTime     = 5  // 游戏结算时间
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
@@ -797,7 +797,7 @@ func (r *Room) ReadyTimer() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
-			if r.counter == 4 {
+			if r.counter == 2 {
 				// 洗牌
 				r.Cards.Shuffle()
 
@@ -839,6 +839,11 @@ func (r *Room) ReadyTimer() {
 					p.SendMsg(game)
 					return true
 				})
+			}
+			if r.counter == 4 {
+				push := &msg.PushCardTime_S2C{}
+				push.RoomData = r.RespRoomData()
+				r.Broadcast(push)
 			}
 			if r.counter >= ReadyTime {
 				r.counter = 0
