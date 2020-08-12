@@ -330,6 +330,7 @@ func (r *Room) ClearRoomData() {
 			v.IsAllIn = false
 			v.IsWinner = false
 			v.IsButton = false
+			v.IsInGame = false
 			v.HandValue = 0
 		}
 	}
@@ -408,6 +409,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsButton = v.IsButton
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
+			pd.IsInGame = v.IsInGame
 			pd.TimerCount = v.timerCount
 			rd.AllPlayer = append(rd.AllPlayer, pd)
 		}
@@ -420,6 +422,7 @@ func (r *Room) SetPlayerStatus() {
 	for _, v := range r.PlayerList {
 		if v != nil {
 			v.gameStep = emInGaming
+			v.IsInGame = true
 			//log.Debug("设置玩家状态:%v,%v", v.Id, v.gameStep)
 		}
 	}

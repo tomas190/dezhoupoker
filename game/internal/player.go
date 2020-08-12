@@ -49,6 +49,7 @@ type Player struct {
 	IsOnline        bool             // 是否在线
 	actTime         int32            // 当前行动时间
 	IsTimeOutFold   bool             // 是否超时弃牌
+	IsInGame        bool             // 是否在游戏中
 	timerCount      int32            // 玩家行动计时
 
 	HandValue uint32
@@ -81,6 +82,7 @@ func (p *Player) Init() {
 	p.IsOnline = true
 	p.IsTimeOutFold = false
 	p.timerCount = 0
+	p.IsInGame = false
 	p.action = make(chan msg.ActionStatus)
 	p.IsRobot = false
 }
@@ -118,6 +120,7 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	data.IsButton = p.IsButton
 	data.IsAllIn = p.IsAllIn
 	data.IsWinner = p.IsWinner
+	data.IsInGame = p.IsInGame
 	data.TimerCount = p.timerCount
 	return data
 }
@@ -132,7 +135,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	after := time.NewTicker(timeout)
 
 	// 机器人开始下注
-	if p.IsRobot == true{
+	if p.IsRobot == true {
 		p.RobotDownBet(r)
 	}
 

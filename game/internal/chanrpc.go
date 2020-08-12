@@ -28,8 +28,7 @@ func rpcCloseAgent(args []interface{}) {
 		log.Debug("<-------------%v 主动断开链接--------------->", p.Id)
 
 		p.IsOnline = false
-		log.Debug("玩家当前总下注和状态为:%v,%v", p.totalDownBet, p.gameStep == emInGaming)
-		if p.totalDownBet > 0 || p.gameStep == emInGaming {
+		if p.IsInGame == true {  //  p.gameStep == emInGaming || p.totalDownBet > 0
 			rid := hall.UserRoom[p.Id]
 			v, _ := hall.RoomRecord.Load(rid)
 			if v != nil {

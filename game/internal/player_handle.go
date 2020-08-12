@@ -11,7 +11,7 @@ func (p *Player) PlayerExitRoom() {
 	v, _ := hall.RoomRecord.Load(rId)
 	if v != nil {
 		room := v.(*Room)
-		if p.totalDownBet > 0 || p.gameStep == emInGaming {
+		if p.IsInGame == true{
 			var exist bool
 			for _, v := range room.UserLeave {
 				if v == p.Id {
@@ -55,6 +55,7 @@ func (p *Player) ClearPlayerData() {
 	p.IsButton = false
 	p.IsWinner = false
 	p.IsTimeOutFold = false
+	p.IsInGame = false
 	p.timerCount = 0
 	p.HandValue = 0
 }

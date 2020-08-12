@@ -156,7 +156,7 @@ func handleLogout(args []interface{}) {
 	log.Debug("handleLeaveHall 玩家退出大厅~ : %v", p.Id)
 
 	if ok {
-		if p.gameStep == emInGaming || p.totalDownBet > 0 {
+		if p.IsInGame == true {
 			var exist bool
 			rid := hall.UserRoom[p.Id]
 			v, _ := hall.RoomRecord.Load(rid)
@@ -206,7 +206,7 @@ func handleChangeTable(args []interface{}) {
 
 	if ok {
 		// 判断玩家当前状态是否正在游戏
-		if p.totalDownBet > 0 || p.gameStep == emInGaming {
+		if p.IsInGame == true {
 			//ErrorResp(a, msg.ErrorMsg_UserNotChangeTable, "玩家正在游戏,不能换桌")
 			return
 		}

@@ -155,8 +155,9 @@ message PlayerData {
     bool IsButton = 15; // 是否庄家
     bool IsAllIn = 16; // 是否AllIn
     bool IsWinner = 17; // 是否赢家
-    int32 timerCount = 18; // 玩家行动计时
-    double account = 19; // 玩家的总金额(每局更新)
+    bool IsInGame = 18; // 是否在游戏中
+    int32 timerCount = 19; // 玩家行动计时
+    double account = 20; // 玩家的总金额(每局更新)
 }
 
 message RoomData {
