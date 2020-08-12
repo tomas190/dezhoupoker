@@ -379,6 +379,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsButton = v.IsButton
 			pd.IsAllIn = v.IsAllIn
 			pd.IsWinner = v.IsWinner
+			pd.IsInGame = v.IsInGame
 			pd.TimerCount = v.timerCount
 			rd.PlayerData = append(rd.PlayerData, pd)
 		}
