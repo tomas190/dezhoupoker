@@ -54,7 +54,7 @@ const (
 )
 
 const (
-	ReadyTime      = 6  // 开始准备时间
+	ReadyTime      = 7  // 开始准备时间
 	SettleTime     = 5  // 游戏结算时间
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
