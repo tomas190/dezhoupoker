@@ -84,6 +84,7 @@ func (r *Room) StartGameRun() {
 }
 
 func (r *Room) GameRunning() {
+
 	// 定义公共牌
 	var pubCards algorithm.Cards
 

@@ -797,7 +797,7 @@ func (r *Room) ReadyTimer() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
-			if r.counter == 3 {
+			if r.counter == 2 {
 				// 洗牌
 				r.Cards.Shuffle()
 
@@ -839,7 +839,8 @@ func (r *Room) ReadyTimer() {
 					p.SendMsg(game)
 					return true
 				})
-
+			}
+			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
 				push.RoomData = r.RespRoomData()
 				r.Broadcast(push)
