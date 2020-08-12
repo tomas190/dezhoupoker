@@ -294,12 +294,12 @@ message RoomStatus_S2C {
 // 表情发送
 message EmojiChat_C2S {
     int32 actNum = 1;
-    string goalChair = 2;
+    int32 goalChair = 2;
 }
 
 // 表情发送
 message EmojiChat_S2C {
     int32 actNum = 1;
     int32 actChair = 2;
-    string goalChair = 3;
+    int32 goalChair = 3;
 }
