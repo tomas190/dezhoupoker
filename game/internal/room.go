@@ -445,7 +445,7 @@ func (r *Room) CalBet() {
 func (r *Room) PrintPots(pots []PotNode) {
 	for k, v := range pots {
 		fmt.Printf("分池%d:(%f) ", k, v.Bet)
-		fmt.Print("参与玩家(座位号):")
+		//fmt.Print("参与玩家(座位号):")
 		for _, pos := range v.Pos {
 			fmt.Printf("%d ", pos)
 		}
