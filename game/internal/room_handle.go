@@ -140,7 +140,7 @@ func (r *Room) GameRunning() {
 	r.readyPlay()
 
 	// 随机添加机器人
-	r.AddRobot()
+	//r.AddRobot()
 
 	time.Sleep(time.Millisecond * 1000)
 

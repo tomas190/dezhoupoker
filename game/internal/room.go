@@ -722,8 +722,8 @@ func (r *Room) ResultMoney() {
 					p.LoseResultMoney = p.resultMoney
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
-					sur.HistoryLose += p.LoseResultMoney
-					sur.TotalLoseMoney += p.LoseResultMoney
+					sur.HistoryLose -= p.LoseResultMoney // -- = +
+					sur.TotalLoseMoney -= p.LoseResultMoney
 				}
 
 				// 这里是玩家金额扣税
@@ -895,7 +895,7 @@ func (r *Room) RestartGame() {
 				// 剔除房间玩家
 				r.KickPlayer()
 				// 根据房间机器数量来调整机器
-				r.AdjustRobot()
+				//r.AdjustRobot()
 				// 超时弃牌站起,这里要设置房间为等待状态,不然不能站起玩家
 				r.TimeOutStandUp()
 
@@ -908,6 +908,32 @@ func (r *Room) RestartGame() {
 
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
+				//房间内真实玩家数量1名，匹配1~6个机器人
+				//房间内真实玩家数量2名，把2个玩家分开到2个房间，各匹配1~6个机器人
+				//房间内真实玩家数量3名，把3个玩家分开到3个房间，各匹配1~6个机器人
+				//房间内真实玩家数量4名，80%概率直接开始，20%概率回到等待队列重新匹配
+				//房间内真实玩家数量5名，80%概率直接开始，20%概率回到等待队列重新匹配
+				//房间内真实玩家数量6名，80%概率直接开始，20%概率回到等待队列重新匹配
+				//房间内真实玩家数量7名，直接开始
+				//房间内真实玩家数量8名，直接开始
+				//房间内真实玩家数量9名，直接开始
+				if r.RealPlayerLength() <= 3 {
+					for _, v := range r.PlayerList {
+						if v != nil {
+							hall.PlayerCreateRoom(r.cfgId, v)
+						}
+					}
+					return
+				}
+				if r.RealPlayerLength() <= 6 {
+					randNum := []int32{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+					rand.Seed(time.Now().UnixNano())
+					num := rand.Intn(len(randNum))
+					if randNum[num] >= 9 {
+
+						return
+					}
+				}
 				r.StartGameRun()
 				return
 			}
@@ -939,12 +965,14 @@ func (r *Room) RobotsLength() int32 {
 	return num
 }
 
-// 房间装载2-4机器人
+// 房间装载1-6机器人
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
 	rand.Seed(time.Now().UnixNano())
-	num := rand.Intn(2) + 4
-	for i := 0; i < num; i++ {
+	sliceNum := []int{1, 2, 3, 4, 5, 6}
+	rand.Seed(time.Now().UnixNano())
+	randNum := rand.Intn(len(sliceNum))
+	for i := 0; i < sliceNum[randNum]; i++ {
 		time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)

@@ -186,10 +186,6 @@ func (r *Room) AddRobot() {
 	}
 }
 
-func (r *Room) DelRobot() {
-
-}
-
 func (r *Room) AdjustRobot() {
 	// 机器人处理
 	robotRand := []int32{0, 1, 0, 1}
