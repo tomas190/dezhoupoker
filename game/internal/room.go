@@ -218,7 +218,8 @@ func (r *Room) KickPlayer() {
 	// 遍历桌面玩家，踢掉玩家筹码和房间小于房间最小带入金额
 	for _, v := range r.PlayerList { // 玩家筹码为0怎么办
 		if v != nil {
-			if v.chips+v.roomChips < 3 {
+			rd := SetRoomConfig(r.cfgId)
+			if v.chips+v.roomChips < rd.BB {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
 				v.PlayerExitRoom()
 				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v", v)
@@ -981,10 +982,11 @@ func (r *Room) ClearRoomRobots() {
 func (r *Room) PiPeiHandle() {
 	if r.ListRealPlayerLen() <= 2 {
 		for _, v := range r.AllPlayer {
-			if v != nil {
+			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
-				if v.chair == -1 {
+				if v.chair == -1 && v.IsStandUp == true {
+					log.Debug("玩家id,玩家座位:%v,%v", v.Id, v.chair)
 					r.ClearPiPeiData(v)
 					go func() {
 						time.Sleep(time.Second * 3)
@@ -1006,10 +1008,10 @@ func (r *Room) PiPeiHandle() {
 	}
 	if r.ListRealPlayerLen() <= 3 && r.ListRealPlayerLen() >= 6 {
 		for _, v := range r.AllPlayer {
-			if v != nil {
+			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
-				if v.chair == -1 {
+				if v.chair == -1 && v.IsStandUp == true {
 					r.ClearPiPeiData(v)
 					go func() {
 						time.Sleep(time.Second * 3)
