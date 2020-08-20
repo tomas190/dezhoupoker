@@ -40,5 +40,6 @@ func init() {
 	Processor.Register(&RoomStatus_S2C{})         //--29
 	Processor.Register(&EmojiChat_C2S{})          //--30
 	Processor.Register(&EmojiChat_S2C{})          //--31
+	Processor.Register(&PiPeiPlayer_S2C{})        //--32
 
 }

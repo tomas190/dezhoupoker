@@ -133,9 +133,19 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	//log.Debug("玩家行动时间: %v", time.Now().Format("2006-01-02 15:04:05"))
 
 	p.IsAction = true
-	p.timerCount = 0 // todo
 
 	after := time.NewTicker(timeout)
+
+	var nowAct = false
+	go func() {
+		for  {
+			time.Sleep(time.Second * 1)
+			if nowAct == true {
+				return
+			}
+			p.timerCount ++
+		}
+	}()
 
 	// 机器人开始下注
 	if p.IsRobot == true {
@@ -169,6 +179,8 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				r.potMoney += p.downBets
 			}
 
+			nowAct = true
+
 			if p.lunDownBets >= r.preChips {
 				r.preChips = p.lunDownBets
 			}
@@ -189,6 +201,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 		case <-after.C:
 			log.Debug("超时行动弃牌: %v", time.Now().Format("2006-01-02 15:04:05"))
 
+			nowAct = true
 			//ErrorResp(p.ConnAgent, msg.ErrorMsg_UserTimeOutFoldCard, "玩家超时弃牌")
 
 			p.gameStep = emNotGaming

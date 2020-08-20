@@ -36,6 +36,7 @@ enum MessageID {
     MSG_RoomStatus_S2C = 29;
     MSG_EmojiChat_C2S = 30;
     MSG_EmojiChat_S2C = 31;
+    MSG_PiPeiPlayer_S2C = 32;
 }
 
 message Ping {
@@ -302,4 +303,8 @@ message EmojiChat_S2C {
     int32 actNum = 1;
     int32 actChair = 2;
     int32 goalChair = 3;
+}
+
+message PiPeiPlayer_S2C {
+
 }
