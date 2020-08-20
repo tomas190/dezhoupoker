@@ -1047,7 +1047,7 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	p.Account += p.chips
 	p.Account += p.roomChips
 
-	log.Debug("匹配玩家退出房间成功！:%v", p)
+	//log.Debug("匹配玩家退出房间成功！:%v", p)
 
 	// 如果房间总人数为0，删除房间缓存
 	if len(r.AllPlayer) == 0 {
