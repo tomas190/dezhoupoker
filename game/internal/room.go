@@ -1000,37 +1000,38 @@ func (r *Room) PiPeiHandle() {
 					go func() {
 						time.Sleep(time.Second * 3)
 						hall.PlayerCreateRoom(r.cfgId, v)
+						v.PiPeiRoom(r.cfgId)
 						return
 					}()
 				}
 			}
 		}
 	}
-	if r.ListRealPlayerLen() <= 3 && r.ListRealPlayerLen() >= 6 {
-		for _, v := range r.AllPlayer {
-			if v != nil && v.IsRobot == false {
-				data := &msg.PiPeiPlayer_S2C{}
-				v.SendMsg(data)
-				if v.chair == -1 && v.IsStandUp == true {
-					r.ClearPiPeiData(v)
-					go func() {
-						time.Sleep(time.Second * 3)
-						leave := &msg.LeaveRoom_S2C{}
-						leave.PlayerData = v.RespPlayerData()
-						v.SendMsg(leave)
-						return
-					}()
-				} else {
-					r.ClearPiPeiData(v)
-					go func() {
-						time.Sleep(time.Second * 3)
-						hall.PlayerChangeTable(r, v)
-						return
-					}()
-				}
-			}
-		}
-	}
+	//if r.ListRealPlayerLen() <= 3 && r.ListRealPlayerLen() >= 6 {
+	//	for _, v := range r.AllPlayer {
+	//		if v != nil && v.IsRobot == false {
+	//			data := &msg.PiPeiPlayer_S2C{}
+	//			v.SendMsg(data)
+	//			if v.chair == -1 && v.IsStandUp == true {
+	//				r.ClearPiPeiData(v)
+	//				go func() {
+	//					time.Sleep(time.Second * 3)
+	//					leave := &msg.LeaveRoom_S2C{}
+	//					leave.PlayerData = v.RespPlayerData()
+	//					v.SendMsg(leave)
+	//					return
+	//				}()
+	//			} else {
+	//				r.ClearPiPeiData(v)
+	//				go func() {
+	//					time.Sleep(time.Second * 3)
+	//					hall.PlayerChangeTable(r, v)
+	//					return
+	//				}()
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 func (r *Room) ClearPiPeiData(p *Player) {
@@ -1064,4 +1065,55 @@ func (r *Room) ClearPiPeiData(p *Player) {
 
 	// 清除用户数据
 	p.ClearPlayerData()
+}
+
+
+
+func (p *Player) PiPeiRoom(cfgId string) {
+	r := &Room{}
+	r.Init(cfgId)
+
+	hall.roomList = append(hall.roomList, r)
+	hall.RoomRecord.Store(r.roomId, r)
+
+	log.Debug("PiPeiRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
+
+	if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+		// 装载房间机器人
+		r.LoadRoomRobots()
+	}
+	time.Sleep(time.Millisecond * 500)
+	// 查找用户是否存在，如果存在就插入数据库
+	if p.IsRobot == false {
+		p.FindPlayerInfo()
+	}
+
+	hall.UserRoom[p.Id] = r.roomId
+
+	// 玩家带入筹码
+	r.TakeInRoomChips(p)
+
+	p.chair = r.FindAbleChair()
+	r.PlayerList[p.chair] = p
+
+	// 房间总人数
+	r.AllPlayer = append(r.AllPlayer, p)
+
+	if r.RoomStat != RoomStatusRun {
+		data := &msg.PiPeiData_S2C{}
+		data.RoomData = r.RespRoomData()
+		p.SendMsg(data)
+
+		log.Debug("PiPeiRoom 开始运行游戏~")
+		r.StartGameRun()
+	} else {
+		// 如果玩家中途加入游戏，则玩家视为弃牌状态
+		p.actStatus = msg.ActionStatus_WAITING
+		p.gameStep = emNotGaming
+		// 返回房间数据
+
+		data := &msg.PiPeiData_S2C{}
+		data.RoomData = r.RespRoomData()
+		p.SendMsg(data)
+	}
 }
