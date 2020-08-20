@@ -990,7 +990,7 @@ func (r *Room) PiPeiHandle() {
 					r.ClearPiPeiData(v)
 					go func() {
 						time.Sleep(time.Second * 3)
-						v.PlayerExitRoom()
+						r.ExitFromRoom(v)
 						return
 					}()
 				} else {
