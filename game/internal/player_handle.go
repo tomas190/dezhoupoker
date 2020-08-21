@@ -56,6 +56,7 @@ func (p *Player) ClearPlayerData() {
 	p.IsWinner = false
 	p.IsTimeOutFold = false
 	p.IsInGame = false
+	p.IsStandUp = false
 	p.timerCount = 0
 	p.HandValue = 0
 }

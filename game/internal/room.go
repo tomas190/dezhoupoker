@@ -48,8 +48,8 @@ type Room struct {
 	IsHaveAllin bool     // 是否有玩家allin
 	UserLeave   []string // 用户是否在房间
 
-	PiPeiList   []*Player         // 匹配列表
-	StandUpList []*Player         // 站起列表
+	PiPeiList   []*Player // 匹配列表
+	StandUpList []*Player // 站起列表
 }
 
 const (
@@ -100,6 +100,9 @@ func (r *Room) Init(cfgId string) {
 	r.clock = time.NewTicker(time.Second)
 
 	r.IsHaveAllin = false
+
+	r.PiPeiList = make([]*Player, 0)
+	r.StandUpList = make([]*Player, 0)
 
 	ReadyTimeChan = make(chan bool)
 	ActionTimeChan = make(chan bool)
@@ -962,7 +965,6 @@ func (r *Room) RobotsLength() int32 {
 // 房间装载1-6机器人
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
-	rand.Seed(time.Now().UnixNano())
 	sliceNum := []int{1, 2, 3, 4, 5, 6}
 	rand.Seed(time.Now().UnixNano())
 	randNum := rand.Intn(len(sliceNum))
@@ -988,24 +990,62 @@ func (r *Room) PiPeiHandle() {
 			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
-				if v.chair == -1 && v.IsStandUp == true {
-					//log.Debug("玩家id,玩家座位:%v,%v,%v", v.Id, v.chair,v.IsStandUp)
-					go func() {
-						time.Sleep(time.Second * 3)
-						v.PlayerExitRoom()
-						return
-					}()
+				if v.chair == -1 {
+					r.StandUpList = append(r.StandUpList, v)
 				} else {
-					r.ClearPiPeiData(v)
-					go func() {
-						time.Sleep(time.Second * 3)
-						v.PiPeiRoom(r.cfgId)
-						return
-					}()
+					r.PiPeiList = append(r.PiPeiList, v)
 				}
+				r.ClearPiPeiData(v)
 			}
 		}
 	}
+
+	go func() {
+		sliceNum := []int{3, 4}
+		rand.Seed(time.Now().UnixNano())
+		randNum := rand.Intn(len(sliceNum))
+		time.Sleep(time.Second * time.Duration(sliceNum[randNum]))
+		for k, v := range r.StandUpList {
+			if v != nil {
+				leave := &msg.LeaveRoom_S2C{}
+				leave.PlayerData = v.RespPlayerData()
+				v.SendMsg(leave)
+				r.StandUpList = append(r.StandUpList[:k], r.StandUpList[k+1:]...)
+			}
+		}
+		for k, v := range r.PiPeiList {
+			if v != nil {
+				v.PiPeiRoom(r.cfgId)
+				r.PiPeiList = append(r.PiPeiList[:k], r.PiPeiList[k+1:]...)
+				time.Sleep(time.Millisecond * 500)
+			}
+		}
+		return
+	}()
+
+	//if r.ListRealPlayerLen() <= 2 {
+	//	for _, v := range r.AllPlayer {
+	//		if v != nil && v.IsRobot == false {
+	//			data := &msg.PiPeiPlayer_S2C{}
+	//			v.SendMsg(data)
+	//			if v.chair == -1 && v.IsStandUp == true {
+	//				//log.Debug("玩家id,玩家座位:%v,%v,%v", v.Id, v.chair,v.IsStandUp)
+	//				go func() {
+	//					time.Sleep(time.Second * 3)
+	//					v.PlayerExitRoom()
+	//					return
+	//				}()
+	//			} else {
+	//				r.ClearPiPeiData(v)
+	//				go func() {
+	//					time.Sleep(time.Second * 3)
+	//					v.PiPeiRoom(r.cfgId)
+	//					return
+	//				}()
+	//			}
+	//		}
+	//	}
+	//}
 	//if r.ListRealPlayerLen() <= 3 && r.ListRealPlayerLen() >= 6 {
 	//	for _, v := range r.AllPlayer {
 	//		if v != nil && v.IsRobot == false {
@@ -1065,8 +1105,6 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	// 清除用户数据
 	p.ClearPlayerData()
 }
-
-
 
 func (p *Player) PiPeiRoom(cfgId string) {
 	r := &Room{}
