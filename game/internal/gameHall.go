@@ -11,10 +11,10 @@ import (
 )
 
 type GameHall struct {
-	UserRecord sync.Map          // 用户记录
-	RoomRecord sync.Map          // 房间记录
-	roomList   []*Room           // 房间列表
-	UserRoom   map[string]string // 用户房间
+	UserRecord  sync.Map          // 用户记录
+	RoomRecord  sync.Map          // 房间记录
+	roomList    []*Room           // 房间列表
+	UserRoom    map[string]string // 用户房间
 }
 
 func NewHall() *GameHall {

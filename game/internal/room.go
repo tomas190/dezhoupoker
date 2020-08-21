@@ -47,6 +47,9 @@ type Room struct {
 
 	IsHaveAllin bool     // 是否有玩家allin
 	UserLeave   []string // 用户是否在房间
+
+	PiPeiList   []*Player         // 匹配列表
+	StandUpList []*Player         // 站起列表
 }
 
 const (
@@ -996,7 +999,6 @@ func (r *Room) PiPeiHandle() {
 					r.ClearPiPeiData(v)
 					go func() {
 						time.Sleep(time.Second * 3)
-						hall.PlayerCreateRoom(r.cfgId, v)
 						v.PiPeiRoom(r.cfgId)
 						return
 					}()
