@@ -986,11 +986,10 @@ func (r *Room) PiPeiHandle() {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
 				if v.chair == -1 && v.IsStandUp == true {
-					log.Debug("玩家id,玩家座位:%v,%v,%v", v.Id, v.chair,v.IsStandUp)
-					r.ClearPiPeiData(v)
+					//log.Debug("玩家id,玩家座位:%v,%v,%v", v.Id, v.chair,v.IsStandUp)
 					go func() {
 						time.Sleep(time.Second * 3)
-						r.ExitFromRoom(v)
+						v.PlayerExitRoom()
 						return
 					}()
 				} else {
