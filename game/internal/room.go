@@ -1017,7 +1017,6 @@ func (r *Room) PiPeiHandle() {
 			if v != nil {
 				v.PiPeiRoom(r.cfgId)
 				r.PiPeiList = append(r.PiPeiList[:k], r.PiPeiList[k+1:]...)
-				time.Sleep(time.Millisecond * 500)
 			}
 		}
 		return
