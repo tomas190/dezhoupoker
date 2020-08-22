@@ -759,13 +759,13 @@ func (r *Room) ResultMoney() {
 					data.CfgID = r.cfgId
 					data.SmallBlind = r.SBId
 					data.BigBlind = r.BBId
+					data.PublicCard = r.publicCards
 					for _, v := range r.PlayerList {
 						if v != nil {
 							res := &ResultData{}
 							res.Id = v.Id
 							res.Chair = v.chair
 							res.HandCard = v.cardData.HandCardKeys
-							res.PublicCard = v.cardData.PublicCardKeys
 							res.DownBet = v.totalDownBet
 							res.ResultMoney = v.resultMoney
 							data.ResultInfo = append(data.ResultInfo, res)
