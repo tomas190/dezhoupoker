@@ -1122,9 +1122,6 @@ func (p *Player) PiPeiRoom(cfgId string) {
 
 	log.Debug("PiPeiRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
 
-	// 装载机器人
-	r.LoadRoomRobots()
-
 	// 查找用户是否存在，如果存在就插入数据库
 	if p.IsRobot == false {
 		p.FindPlayerInfo()
@@ -1144,4 +1141,7 @@ func (p *Player) PiPeiRoom(cfgId string) {
 	data := &msg.PiPeiData_S2C{}
 	data.RoomData = r.RespRoomData()
 	p.SendMsg(data)
+
+	// 装载机器人
+	r.LoadRoomRobots()
 }
