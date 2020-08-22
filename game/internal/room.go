@@ -921,9 +921,7 @@ func (r *Room) RestartGame() {
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
 
-				r.PiPeiHandle()
-
-
+				//r.PiPeiHandle()
 
 				r.StartGameRun()
 				return
@@ -974,7 +972,7 @@ func (r *Room) LoadRoomRobots() {
 	rand.Seed(time.Now().UnixNano())
 	randNum := rand.Intn(len(sliceNum))
 	for i := 0; i < sliceNum[randNum]; i++ {
-		time.Sleep(time.Millisecond)
+		//time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)
 	}

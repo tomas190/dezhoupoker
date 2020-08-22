@@ -86,12 +86,13 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	// 延时5秒，重新开始游戏
 	for _, room := range hall.roomList {
 		if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+			room.PlayerJoinRoom(p)
+			time.Sleep(time.Millisecond * 1000)
 			if room.RealPlayerLength() <= 1 && room.RobotsLength() < 1 {
 				// 装载房间机器人
 				room.LoadRoomRobots()
 			}
-			time.Sleep(time.Millisecond * 1500)
-			room.PlayerJoinRoom(p)
+
 			return
 		}
 	}
@@ -140,12 +141,13 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 
 	for _, r := range hall.roomList {
 		if r.cfgId == cfgId && r.IsCanJoin() {
+			r.PlayerJoinRoom(p)
+			time.Sleep(time.Millisecond * 1000)
 			if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
 				// 装载房间机器人
 				r.LoadRoomRobots()
 			}
-			time.Sleep(time.Millisecond * 1500)
-			r.PlayerJoinRoom(p)
+
 			return
 		}
 	}
@@ -163,11 +165,12 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	hall.RoomRecord.Store(r.roomId, r)
 
 	log.Debug("CreateRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
+	r.PlayerJoinRoom(p)
+	time.Sleep(time.Millisecond * 1000)
 
 	if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
 		// 装载房间机器人
 		r.LoadRoomRobots()
 	}
-	time.Sleep(time.Millisecond * 1500)
-	r.PlayerJoinRoom(p)
+
 }
