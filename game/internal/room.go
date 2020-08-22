@@ -918,12 +918,13 @@ func (r *Room) RestartGame() {
 				game.RoomData = r.RespRoomData()
 				r.Broadcast(game)
 
+				IsReStart := r.PiPeiHandle()
+
 				//开始新一轮游戏,重复调用StartGameRun函数
 				log.Debug("RestartGame 开始运行游戏~")
-
-				//r.PiPeiHandle()
-
-				r.StartGameRun()
+				if IsReStart == true {
+					r.StartGameRun()
+				}
 				return
 			}
 		}
@@ -987,95 +988,75 @@ func (r *Room) ClearRoomRobots() {
 	}
 }
 
-func (r *Room) PiPeiHandle() {
+func (r *Room) PiPeiHandle() bool {
+
+	var IsReStart = true
+
 	if r.ListRealPlayerLen() <= 3 {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
-				r.ClearPiPeiData(v)
+			}
+		}
+		IsReStart = false
+	}
+	if r.ListRealPlayerLen() <= 4 && r.ListRealPlayerLen() >= 6 {
+		sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+		rand.Seed(time.Now().UnixNano())
+		randNum := rand.Intn(len(sliceNum))
+		if sliceNum[randNum] >= 9 {
+			for _, v := range r.AllPlayer {
+				if v != nil && v.IsRobot == false {
+					data := &msg.PiPeiPlayer_S2C{}
+					v.SendMsg(data)
+				}
+			}
+			IsReStart = false
+		} else {
+			IsReStart = true
+		}
+	}
+	if IsReStart == true {
+		return IsReStart
+	} else {
+		time.Sleep(time.Second * 4)
+	}
+
+	if r.ListRealPlayerLen() <= 3 {
+		for _, v := range r.AllPlayer {
+			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
-					v.IsLeaveR = true
-					r.StandUpList = append(r.StandUpList, v)
+					v.PlayerExitRoom()
 				} else {
-					v.IsLeaveR = false
-					r.PiPeiList = append(r.PiPeiList, v)
+					r.ClearPiPeiData(v)
+					v.PiPeiRoom(r.cfgId)
+				}
+			}
+		}
+	}
+	if r.ListRealPlayerLen() <= 4 && r.ListRealPlayerLen() >= 6 {
+		for _, v := range r.AllPlayer {
+			if v != nil && v.IsRobot == false {
+				if v.chair == -1 {
+					v.PlayerExitRoom()
+				} else {
+					r.ClearPiPeiData(v)
+					v.PiPeiRoom(r.cfgId)
 				}
 			}
 		}
 	}
 
-	go func() {
-		sliceNum := []int{3, 4}
-		rand.Seed(time.Now().UnixNano())
-		randNum := rand.Intn(len(sliceNum))
-		time.Sleep(time.Second * time.Duration(sliceNum[randNum]))
-		for k, v := range r.StandUpList {
-			if v != nil {
-				leave := &msg.LeaveRoom_S2C{}
-				leave.PlayerData = v.RespPlayerData()
-				v.SendMsg(leave)
-				r.StandUpList = append(r.StandUpList[:k], r.StandUpList[k+1:]...)
-			}
+	for k, v := range hall.roomList {
+		if v.roomId == r.roomId {
+			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
+			hall.RoomRecord.Delete(r.roomId)
+			log.Debug("Quick PiPei Room，so Delete this Room~")
 		}
-		for k, v := range r.PiPeiList {
-			if v != nil {
-				v.PiPeiRoom(r.cfgId)
-				r.PiPeiList = append(r.PiPeiList[:k], r.PiPeiList[k+1:]...)
-			}
-		}
-		return
-	}()
+	}
 
-
-	//if r.ListRealPlayerLen() <= 2 {
-	//	for _, v := range r.AllPlayer {
-	//		if v != nil && v.IsRobot == false {
-	//			data := &msg.PiPeiPlayer_S2C{}
-	//			v.SendMsg(data)
-	//			if v.chair == -1 && v.IsStandUp == true {
-	//				//log.Debug("玩家id,玩家座位:%v,%v,%v", v.Id, v.chair,v.IsStandUp)
-	//				go func() {
-	//					time.Sleep(time.Second * 3)
-	//					v.PlayerExitRoom()
-	//					return
-	//				}()
-	//			} else {
-	//				r.ClearPiPeiData(v)
-	//				go func() {
-	//					time.Sleep(time.Second * 3)
-	//					v.PiPeiRoom(r.cfgId)
-	//					return
-	//				}()
-	//			}
-	//		}
-	//	}
-	//}
-	//if r.ListRealPlayerLen() <= 3 && r.ListRealPlayerLen() >= 6 {
-	//	for _, v := range r.AllPlayer {
-	//		if v != nil && v.IsRobot == false {
-	//			data := &msg.PiPeiPlayer_S2C{}
-	//			v.SendMsg(data)
-	//			if v.chair == -1 && v.IsStandUp == true {
-	//				r.ClearPiPeiData(v)
-	//				go func() {
-	//					time.Sleep(time.Second * 3)
-	//					leave := &msg.LeaveRoom_S2C{}
-	//					leave.PlayerData = v.RespPlayerData()
-	//					v.SendMsg(leave)
-	//					return
-	//				}()
-	//			} else {
-	//				r.ClearPiPeiData(v)
-	//				go func() {
-	//					time.Sleep(time.Second * 3)
-	//					hall.PlayerChangeTable(r, v)
-	//					return
-	//				}()
-	//			}
-	//		}
-	//	}
-	//}
+	return IsReStart
 }
 
 func (r *Room) ClearPiPeiData(p *Player) {
@@ -1091,19 +1072,6 @@ func (r *Room) ClearPiPeiData(p *Player) {
 
 	p.Account += p.chips
 	p.Account += p.roomChips
-
-	//log.Debug("匹配玩家退出房间成功！:%v", p)
-
-	// 如果房间总人数为0，删除房间缓存
-	if len(r.AllPlayer) == 0 {
-		for k, v := range hall.roomList {
-			if v.roomId == r.roomId {
-				hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
-				hall.RoomRecord.Delete(r.roomId)
-				log.Debug("Room Player Number is 0，so Delete this Room~")
-			}
-		}
-	}
 
 	delete(hall.UserRoom, p.Id)
 
