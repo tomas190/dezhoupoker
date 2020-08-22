@@ -1144,8 +1144,4 @@ func (p *Player) PiPeiRoom(cfgId string) {
 	data := &msg.PiPeiData_S2C{}
 	data.RoomData = r.RespRoomData()
 	p.SendMsg(data)
-
-	log.Debug("PiPeiRoom 开始运行游戏~")
-	r.StartGameRun()
-
 }
