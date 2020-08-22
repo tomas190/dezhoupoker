@@ -48,8 +48,8 @@ type Room struct {
 	IsHaveAllin bool     // 是否有玩家allin
 	UserLeave   []string // 用户是否在房间
 
-	PiPeiList   []*Player // 匹配列表
-	StandUpList []*Player // 站起列表
+	ReadyTimeChan  chan bool // 准备时间chan
+	ActionTimeChan chan bool // 行动时间chan
 }
 
 const (
@@ -62,11 +62,6 @@ const (
 	ActionTime     = 15 // 玩家行动时间
 	ActionWaitTime = 2  // 行动等待时间
 )
-
-var ReadyTimeChan chan bool
-
-// 行动时间间隔
-var ActionTimeChan chan bool
 
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
@@ -101,11 +96,8 @@ func (r *Room) Init(cfgId string) {
 
 	r.IsHaveAllin = false
 
-	ReadyTimeChan = make(chan bool)
-	ActionTimeChan = make(chan bool)
-
-	r.PiPeiList = make([]*Player, 0)
-	r.StandUpList = make([]*Player, 0)
+	r.ReadyTimeChan = make(chan bool)
+	r.ActionTimeChan = make(chan bool)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
@@ -861,7 +853,7 @@ func (r *Room) ReadyTimer() {
 			}
 			if r.counter >= ReadyTime {
 				r.counter = 0
-				ReadyTimeChan <- true
+				r.ReadyTimeChan <- true
 				return
 			}
 		}
@@ -875,7 +867,7 @@ func (r *Room) ActionWaitTimer() {
 			r.counter++
 			if r.counter == ActionWaitTime {
 				r.counter = 0
-				ActionTimeChan <- true
+				r.ActionTimeChan <- true
 				return
 			}
 		}
@@ -886,7 +878,7 @@ func (r *Room) ActionWaitTimer() {
 func (r *Room) GameRunTask() {
 	go func() {
 		select {
-		case t := <-ReadyTimeChan:
+		case t := <-r.ReadyTimeChan:
 			if t == true {
 				// 游戏开始
 				r.GameRunning()
@@ -920,9 +912,9 @@ func (r *Room) RestartGame() {
 
 				IsReStart := r.PiPeiHandle()
 
-				//开始新一轮游戏,重复调用StartGameRun函数
-				log.Debug("RestartGame 开始运行游戏~")
 				if IsReStart == true {
+					//开始新一轮游戏,重复调用StartGameRun函数
+					log.Debug("RestartGame 开始运行游戏~")
 					r.StartGameRun()
 				}
 				return
