@@ -101,11 +101,11 @@ func (r *Room) Init(cfgId string) {
 
 	r.IsHaveAllin = false
 
-	r.PiPeiList = make([]*Player, 0)
-	r.StandUpList = make([]*Player, 0)
-
 	ReadyTimeChan = make(chan bool)
 	ActionTimeChan = make(chan bool)
+
+	r.PiPeiList = make([]*Player, 0)
+	r.StandUpList = make([]*Player, 0)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
@@ -338,6 +338,7 @@ func (r *Room) ClearRoomData() {
 			v.IsWinner = false
 			v.IsButton = false
 			v.IsInGame = false
+			v.IsLeaveR = true
 			v.HandValue = 0
 		}
 	}
@@ -388,6 +389,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsWinner = v.IsWinner
 			pd.IsInGame = v.IsInGame
 			pd.IsStandUp = v.IsStandUp
+			pd.IsLeaveR = v.IsLeaveR
 			pd.TimerCount = v.timerCount
 			rd.PlayerData = append(rd.PlayerData, pd)
 		}
@@ -420,6 +422,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.IsWinner = v.IsWinner
 			pd.IsInGame = v.IsInGame
 			pd.IsStandUp = v.IsStandUp
+			pd.IsLeaveR = v.IsLeaveR
 			pd.TimerCount = v.timerCount
 			rd.AllPlayer = append(rd.AllPlayer, pd)
 		}
@@ -985,17 +988,18 @@ func (r *Room) ClearRoomRobots() {
 }
 
 func (r *Room) PiPeiHandle() {
-	if r.ListRealPlayerLen() <= 2 {
+	if r.ListRealPlayerLen() <= 3 {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
 				if v.chair == -1 {
+					v.IsLeaveR = true
 					r.StandUpList = append(r.StandUpList, v)
 				} else {
+					v.IsLeaveR = false
 					r.PiPeiList = append(r.PiPeiList, v)
 				}
-				r.ClearPiPeiData(v)
 			}
 		}
 	}
@@ -1007,14 +1011,13 @@ func (r *Room) PiPeiHandle() {
 		time.Sleep(time.Second * time.Duration(sliceNum[randNum]))
 		for k, v := range r.StandUpList {
 			if v != nil {
-				leave := &msg.LeaveRoom_S2C{}
-				leave.PlayerData = v.RespPlayerData()
-				v.SendMsg(leave)
 				r.StandUpList = append(r.StandUpList[:k], r.StandUpList[k+1:]...)
+				v.PlayerExitRoom()
 			}
 		}
 		for k, v := range r.PiPeiList {
 			if v != nil {
+				v.PlayerExitRoom()
 				v.PiPeiRoom(r.cfgId)
 				r.PiPeiList = append(r.PiPeiList[:k], r.PiPeiList[k+1:]...)
 			}
@@ -1114,11 +1117,9 @@ func (p *Player) PiPeiRoom(cfgId string) {
 
 	log.Debug("PiPeiRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
 
-	if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-		// 装载房间机器人
-		r.LoadRoomRobots()
-	}
-	time.Sleep(time.Millisecond * 500)
+	// 装载机器人
+	r.LoadRoomRobots()
+
 	// 查找用户是否存在，如果存在就插入数据库
 	if p.IsRobot == false {
 		p.FindPlayerInfo()
@@ -1135,21 +1136,11 @@ func (p *Player) PiPeiRoom(cfgId string) {
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
 
-	if r.RoomStat != RoomStatusRun {
-		data := &msg.PiPeiData_S2C{}
-		data.RoomData = r.RespRoomData()
-		p.SendMsg(data)
+	data := &msg.PiPeiData_S2C{}
+	data.RoomData = r.RespRoomData()
+	p.SendMsg(data)
 
-		log.Debug("PiPeiRoom 开始运行游戏~")
-		r.StartGameRun()
-	} else {
-		// 如果玩家中途加入游戏，则玩家视为弃牌状态
-		p.actStatus = msg.ActionStatus_WAITING
-		p.gameStep = emNotGaming
-		// 返回房间数据
+	log.Debug("PiPeiRoom 开始运行游戏~")
+	r.StartGameRun()
 
-		data := &msg.PiPeiData_S2C{}
-		data.RoomData = r.RespRoomData()
-		p.SendMsg(data)
-	}
 }

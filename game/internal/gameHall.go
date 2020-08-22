@@ -19,10 +19,10 @@ type GameHall struct {
 
 func NewHall() *GameHall {
 	return &GameHall{
-		UserRecord: sync.Map{},
-		RoomRecord: sync.Map{},
-		roomList:   make([]*Room, 0),
-		UserRoom:   make(map[string]string),
+		UserRecord:  sync.Map{},
+		RoomRecord:  sync.Map{},
+		roomList:    make([]*Room, 0),
+		UserRoom:    make(map[string]string),
 	}
 }
 
@@ -81,8 +81,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 	}
 
 	// 玩家退出当前房间
-	//p.PlayerExitRoom()
-	r.ClearPiPeiData(p)
+	p.PlayerExitRoom()
 
 	// 延时5秒，重新开始游戏
 	for _, room := range hall.roomList {

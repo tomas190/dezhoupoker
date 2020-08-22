@@ -51,6 +51,7 @@ type Player struct {
 	IsTimeOutFold   bool             // 是否超时弃牌
 	IsInGame        bool             // 是否在游戏中
 	IsStandUp       bool             // 玩家是否站起
+	IsLeaveR        bool             // 判断客户端是否离开房间
 	timerCount      int32            // 玩家行动计时
 
 	HandValue uint32
@@ -85,6 +86,7 @@ func (p *Player) Init() {
 	p.timerCount = 0
 	p.IsInGame = false
 	p.IsStandUp = false
+	p.IsLeaveR = true
 	p.action = make(chan msg.ActionStatus)
 	p.IsRobot = false
 }
@@ -125,6 +127,7 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	data.IsInGame = p.IsInGame
 	data.TimerCount = p.timerCount
 	data.IsStandUp = p.IsStandUp
+	data.IsLeaveR = p.IsLeaveR
 	return data
 }
 
@@ -138,12 +141,12 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 
 	var nowAct = false
 	go func() {
-		for  {
+		for {
 			time.Sleep(time.Second * 1)
 			if nowAct == true {
 				return
 			}
-			p.timerCount ++
+			p.timerCount++
 		}
 	}()
 
