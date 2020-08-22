@@ -221,15 +221,24 @@ func UpdateSurPool(sur *SurPool) {
 
 // 玩家的记录
 type PlayerDownBetRecode struct {
-	Id          string           `json:"id" bson:"id"`                       // 玩家Id
-	GameId      string           `json:"game_id" bson:"game_id"`             // gameId
-	RoundId     string           `json:"round_id" bson:"round_id"`           // 随机Id
-	RoomId      string           `json:"room_id" bson:"room_id"`             // 所在房间
-	DownBetInfo float64          `json:"down_bet_info" bson:"down_bet_info"` // 玩家各注池下注的金额
-	DownBetTime int64            `json:"down_bet_time" bson:"down_bet_time"` // 下注时间
-	CardResult  msg.CardSuitData `json:"card_result" bson:"card_result"`     // 当局开牌结果
-	ResultMoney float64          `json:"result_money" bson:"result_money"`   // 当局输赢结果(税后)
-	TaxRate     float64          `json:"tax_rate" bson:"tax_rate"`           // 税率
+	GameId      string        `json:"game_id" bson:"game_id"`             // gameId
+	RoundId     string        `json:"round_id" bson:"round_id"`           // 随机Id
+	RoomId      string        `json:"room_id" bson:"room_id"`             // 所在房间
+	CfgID       string        `json:"cfg_id" bson:"cfg_id"`               // 房间类型
+	SmallBlind  string        `json:"small_blind" bson:"small_blind"`     // 小盲注Id
+	BigBlind    string        `json:"big_blind" bson:"big_blind"`         // 大盲注Id
+	ResultInfo  []*ResultData `json:"result_info" bson:"result_info"`     // 玩家结算信息
+	DownBetTime int64         `json:"down_bet_time" bson:"down_bet_time"` // 下注时间
+	TaxRate     float64       `json:"tax_rate" bson:"tax_rate"`           // 税率
+}
+
+type ResultData struct {
+	Id          string  `json:"id" bson:"id"`                     // 玩家ID
+	Chair       int32   `json:"chair" bson:"chair"`               // 玩家座位
+	HandCard    []int32 `json:"hand_card" bson:"hand_card"`       // 玩家手牌
+	PublicCard  []int32 `json:"public_card" bson:"public_card"`   // 桌面公牌
+	DownBet     float64 `json:"down_bet" bson:"down_bet"`         // 下注金币
+	ResultMoney float64 `json:"result_money" bson:"result_money"` // 结算金币(未税)
 }
 
 //InsertAccessData 插入运营数据接入

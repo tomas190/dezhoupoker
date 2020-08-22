@@ -90,11 +90,13 @@ func (r *Room) GameRunning() {
 
 	//1、产生小盲注
 	sb := r.Blind(r.Banker) //dealer.chair
+	r.SBId = sb.Id
 	sb.blindType = msg.BlindType_Small_Blind
 	log.Debug("小盲注座位号为 :%v", sb.chair)
 
 	//2、产生大盲注
 	bb := r.Blind(sb.chair)
+	r.BBId = bb.Id
 	bb.blindType = msg.BlindType_Big_Blind
 	log.Debug("大盲注座位号为 :%v", bb.chair)
 
@@ -247,10 +249,10 @@ showdown:
 	// 打印数据
 	//r.PlantData()
 
-	err := r.InsertRoomData()
-	if err != nil {
-		log.Debug("插入房间数据失败: %v", err)
-	}
+	//err := r.InsertRoomData()
+	//if err != nil {
+	//	log.Debug("插入房间数据失败: %v", err)
+	//}
 
 	// 清除房间数据
 	r.ClearRoomData()

@@ -41,6 +41,8 @@ type Room struct {
 	Banker     int32     // 庄家座位号
 	SB         float64   // 小盲注
 	BB         float64   // 大盲注
+	SBId       string    // 小盲注座位
+	BBId       string    // 大盲注座位
 
 	counter int32
 	clock   *time.Ticker
@@ -90,6 +92,8 @@ func (r *Room) Init(cfgId string) {
 	r.Banker = 0
 	r.SB = rd.SB
 	r.BB = rd.BB
+	r.SBId = ""
+	r.BBId = ""
 
 	r.counter = 0
 	r.clock = time.NewTicker(time.Second)
@@ -749,17 +753,25 @@ func (r *Room) ResultMoney() {
 				// 插入运营数据
 				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
 					data := &PlayerDownBetRecode{}
-					data.Id = p.Id
 					data.GameId = conf.Server.GameID
 					data.RoundId = p.RoundId
 					data.RoomId = r.roomId
-					data.DownBetInfo = p.totalDownBet
+					data.CfgID = r.cfgId
+					data.SmallBlind = r.SBId
+					data.BigBlind = r.BBId
+					for _, v := range r.PlayerList {
+						if v != nil {
+							res := &ResultData{}
+							res.Id = v.Id
+							res.Chair = v.chair
+							res.HandCard = v.cardData.HandCardKeys
+							res.PublicCard = v.cardData.PublicCardKeys
+							res.DownBet = v.totalDownBet
+							res.ResultMoney = v.resultMoney
+							data.ResultInfo = append(data.ResultInfo, res)
+						}
+					}
 					data.DownBetTime = nowTime
-					data.CardResult = msg.CardSuitData{}
-					data.CardResult.SuitPattern = p.cardData.SuitPattern
-					data.CardResult.HandCardKeys = p.cardData.HandCardKeys
-					data.CardResult.PublicCardKeys = p.cardData.PublicCardKeys
-					data.ResultMoney = p.resultMoney
 					data.TaxRate = taxRate
 					InsertAccessData(data)
 				}

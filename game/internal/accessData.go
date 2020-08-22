@@ -28,15 +28,16 @@ type ApiResp struct {
 }
 
 type GameData struct {
-	Time       int64       `json:"time"`
-	TimeFmt    string      `json:"time_fmt"`
-	PlayerId   string      `json:"player_id"`
-	RoundId    string      `json:"round_id"`
-	RoomId     string      `json:"room_id"`
-	TaxRate    float64     `json:"tax_rate"`
-	Card       interface{} `json:"card"`       // 开牌信息
-	BetInfo    interface{} `json:"bet_info"`   // 玩家下注信息
-	Settlement interface{} `json:"settlement"` // 结算信息 输赢结果
+	Time        int64         `json:"time"`
+	TimeFmt     string        `json:"time_fmt"`
+	RoundId     string        `json:"round_id"`
+	RoomId      string        `json:"room_id"`
+	CfgID       string        `json:"cfg_id"`
+	SmallBlind  string        `json:"small_blind"`
+	BigBlind    string        `json:"big_blind"`
+	ResultInfo  []*ResultData `json:"result_info"`
+	DownBetTime int64         `json:"down_bet_time"`
+	TaxRate     float64       `json:"tax_rate"`
 }
 
 type pageData struct {
@@ -150,12 +151,13 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 		pr := recodes[i]
 		gd.Time = pr.DownBetTime * 1000
 		gd.TimeFmt = FormatTime(pr.DownBetTime, "2006-01-02 15:04:05")
-		gd.PlayerId = pr.Id
-		gd.RoomId = pr.RoomId
 		gd.RoundId = pr.RoundId
-		gd.BetInfo = pr.DownBetInfo
-		gd.Card = pr.CardResult
-		gd.Settlement = pr.ResultMoney
+		gd.RoomId = pr.RoomId
+		gd.CfgID = pr.CfgID
+		gd.SmallBlind = pr.SmallBlind
+		gd.BigBlind = pr.BigBlind
+		gd.ResultInfo = pr.ResultInfo
+		gd.DownBetTime = pr.DownBetTime
 		gd.TaxRate = pr.TaxRate
 		gameData = append(gameData, gd)
 	}
@@ -266,7 +268,7 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 		sur.FinalPercentage = upt.FinalPercentage
 	}
 
-	sur.SurplusPool = (sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin) - float64(sur.TotalPlayer * sur.CoefficientToTotalPlayer)) * sur.FinalPercentage
+	sur.SurplusPool = (sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin) - float64(sur.TotalPlayer*sur.CoefficientToTotalPlayer)) * sur.FinalPercentage
 	// 更新盈余池数据
 	UpdateSurPool(&sur)
 
