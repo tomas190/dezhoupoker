@@ -923,6 +923,8 @@ func (r *Room) RestartGame() {
 
 				r.PiPeiHandle()
 
+
+
 				r.StartGameRun()
 				return
 			}
@@ -993,6 +995,7 @@ func (r *Room) PiPeiHandle() {
 			if v != nil && v.IsRobot == false {
 				data := &msg.PiPeiPlayer_S2C{}
 				v.SendMsg(data)
+				r.ClearPiPeiData(v)
 				if v.chair == -1 {
 					v.IsLeaveR = true
 					r.StandUpList = append(r.StandUpList, v)
@@ -1011,19 +1014,21 @@ func (r *Room) PiPeiHandle() {
 		time.Sleep(time.Second * time.Duration(sliceNum[randNum]))
 		for k, v := range r.StandUpList {
 			if v != nil {
+				leave := &msg.LeaveRoom_S2C{}
+				leave.PlayerData = v.RespPlayerData()
+				v.SendMsg(leave)
 				r.StandUpList = append(r.StandUpList[:k], r.StandUpList[k+1:]...)
-				v.PlayerExitRoom()
 			}
 		}
 		for k, v := range r.PiPeiList {
 			if v != nil {
-				v.PlayerExitRoom()
 				v.PiPeiRoom(r.cfgId)
 				r.PiPeiList = append(r.PiPeiList[:k], r.PiPeiList[k+1:]...)
 			}
 		}
 		return
 	}()
+
 
 	//if r.ListRealPlayerLen() <= 2 {
 	//	for _, v := range r.AllPlayer {
