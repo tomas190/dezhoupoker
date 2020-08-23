@@ -50,6 +50,8 @@ type Room struct {
 	IsHaveAllin bool     // 是否有玩家allin
 	UserLeave   []string // 用户是否在房间
 
+	IsPiPeiNow bool // 是否正在匹配中
+
 	ReadyTimeChan  chan bool // 准备时间chan
 	ActionTimeChan chan bool // 行动时间chan
 }
@@ -99,6 +101,8 @@ func (r *Room) Init(cfgId string) {
 	r.clock = time.NewTicker(time.Second)
 
 	r.IsHaveAllin = false
+
+	r.IsPiPeiNow = false
 
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
@@ -802,6 +806,7 @@ func (r *Room) ResultMoney() {
 func (r *Room) ReadyTimer() {
 
 	r.RoomStat = RoomStatusRun
+	r.IsPiPeiNow = false
 
 	// 广播游戏准备时间
 	ready := &msg.ReadyTime_S2C{}
@@ -1024,6 +1029,7 @@ func (r *Room) PiPeiHandle() bool {
 	if IsReStart == true {
 		return IsReStart
 	} else {
+		r.IsPiPeiNow = true // 主要是防止匹配中玩家坐下
 		time.Sleep(time.Second * 4)
 	}
 

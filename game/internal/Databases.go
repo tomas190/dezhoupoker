@@ -163,7 +163,7 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	SurPool := &SurPool{}
 	SurPool.GameId = conf.Server.GameID
 	SurPool.SurplusPool = sur.PoolMoney
-	SurPool.PlayerTotalLoseWin = sur.HistoryWin + sur.HistoryLose
+	SurPool.PlayerTotalLoseWin = sur.HistoryLose - sur.HistoryWin
 	SurPool.PlayerTotalLose = sur.HistoryLose
 	SurPool.PlayerTotalWin = sur.HistoryWin
 	SurPool.TotalPlayer = sur.PlayerNum

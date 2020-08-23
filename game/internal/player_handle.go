@@ -74,6 +74,9 @@ func (p *Player) SitDownTable() {
 			//ErrorResp(p.ConnAgent, msg.ErrorMsg_ChairAlreadyFull, "桌面位置已满")
 			return
 		}
+		if r.IsPiPeiNow == true {
+			return
+		}
 		// 玩家坐下筹码重置为房间最少带入金额
 		data := SetRoomConfig(r.cfgId)
 		p.roomChips += p.chips
