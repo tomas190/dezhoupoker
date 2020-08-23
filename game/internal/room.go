@@ -1040,7 +1040,7 @@ func (r *Room) PiPeiHandle() bool {
 		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == false {
 				r.ClearPiPeiData(v)
-				v.PiPeiRoom(r.cfgId)
+				v.PiPeiCreatRoom(r.cfgId)
 			}
 		}
 	}
@@ -1055,7 +1055,7 @@ func (r *Room) PiPeiHandle() bool {
 		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == false {
 				r.ClearPiPeiData(v)
-				v.PiPeiRoom(r.cfgId)
+				v.PiPeiQuickRoom(r)
 			}
 		}
 	}
@@ -1091,7 +1091,7 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	p.ClearPlayerData()
 }
 
-func (p *Player) PiPeiRoom(cfgId string) {
+func (p *Player) PiPeiCreatRoom(cfgId string) {
 	r := &Room{}
 	r.Init(cfgId)
 
@@ -1116,10 +1116,38 @@ func (p *Player) PiPeiRoom(cfgId string) {
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
 
+	// 装载机器人
+	r.LoadRoomRobots()
+
 	data := &msg.PiPeiData_S2C{}
 	data.RoomData = r.RespRoomData()
 	p.SendMsg(data)
+}
 
-	// 装载机器人
-	r.LoadRoomRobots()
+func (p *Player) PiPeiQuickRoom(r *Room) {
+	for _, room := range hall.roomList {
+		if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+			// 查找用户是否存在，如果存在就插入数据库
+			if p.IsRobot == false {
+				p.FindPlayerInfo()
+			}
+
+			hall.UserRoom[p.Id] = r.roomId
+
+			// 玩家带入筹码
+			r.TakeInRoomChips(p)
+
+			p.chair = r.FindAbleChair()
+			r.PlayerList[p.chair] = p
+
+			// 房间总人数
+			r.AllPlayer = append(r.AllPlayer, p)
+
+			data := &msg.PiPeiData_S2C{}
+			data.RoomData = r.RespRoomData()
+			p.SendMsg(data)
+			return
+		}
+	}
+	p.PiPeiCreatRoom(r.cfgId)
 }
