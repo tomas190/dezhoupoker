@@ -1034,11 +1034,13 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					v.PlayerExitRoom()
-				} else {
-					r.ClearPiPeiData(v)
-					log.Debug("玩家进来了:%v",v.NickName)
-					v.PiPeiRoom(r.cfgId)
 				}
+			}
+		}
+		for _, v := range r.PlayerList {
+			if v != nil && v.IsRobot == false {
+				r.ClearPiPeiData(v)
+				v.PiPeiRoom(r.cfgId)
 			}
 		}
 	}
@@ -1047,10 +1049,13 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					v.PlayerExitRoom()
-				} else {
-					r.ClearPiPeiData(v)
-					v.PiPeiRoom(r.cfgId)
 				}
+			}
+		}
+		for _, v := range r.PlayerList {
+			if v != nil && v.IsRobot == false {
+				r.ClearPiPeiData(v)
+				v.PiPeiRoom(r.cfgId)
 			}
 		}
 	}
@@ -1059,7 +1064,7 @@ func (r *Room) PiPeiHandle() bool {
 		if v.roomId == r.roomId {
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
-			log.Debug("Quick PiPei Room，so Delete this Room~,目前数量为:%v",len(hall.roomList))
+			log.Debug("Quick PiPei Room，so Delete this Room~,目前数量为:%v", len(hall.roomList))
 		}
 	}
 
