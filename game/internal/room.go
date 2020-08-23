@@ -135,7 +135,7 @@ func (r *Room) PlayerLength() int32 {
 			num++
 		}
 	}
-	log.Debug("房间号:%v  玩家人数:%v", r.roomId, num)
+	//log.Debug("房间号:%v  玩家人数:%v", r.roomId, num)
 	return num
 }
 
@@ -187,7 +187,7 @@ func (r *Room) FindAbleChair() int32 {
 	// 先判断玩家历史座位是否已存在其他玩家，如果没有还是坐下历史座位
 	for chair, p := range r.PlayerList {
 		if p == nil {
-			log.Debug("座位号下标为~ :%v", chair)
+			//log.Debug("座位号下标为~ :%v", chair)
 			return int32(chair)
 		}
 	}
@@ -1005,7 +1005,7 @@ func (r *Room) PiPeiHandle() bool {
 		}
 		IsReStart = false
 	}
-	if r.ListRealPlayerLen() <= 4 && r.ListRealPlayerLen() >= 6 {
+	if r.ListRealPlayerLen() >= 4 && r.ListRealPlayerLen() <= 6 {
 		sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 		rand.Seed(time.Now().UnixNano())
 		randNum := rand.Intn(len(sliceNum))
@@ -1027,6 +1027,8 @@ func (r *Room) PiPeiHandle() bool {
 		time.Sleep(time.Second * 4)
 	}
 
+	r.PlantData()
+
 	if r.ListRealPlayerLen() <= 3 {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
@@ -1034,12 +1036,13 @@ func (r *Room) PiPeiHandle() bool {
 					v.PlayerExitRoom()
 				} else {
 					r.ClearPiPeiData(v)
+					log.Debug("玩家进来了:%v",v.NickName)
 					v.PiPeiRoom(r.cfgId)
 				}
 			}
 		}
 	}
-	if r.ListRealPlayerLen() <= 4 && r.ListRealPlayerLen() >= 6 {
+	if r.ListRealPlayerLen() >= 4 && r.ListRealPlayerLen() <= 6 {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
@@ -1056,7 +1059,7 @@ func (r *Room) PiPeiHandle() bool {
 		if v.roomId == r.roomId {
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
-			log.Debug("Quick PiPei Room，so Delete this Room~")
+			log.Debug("Quick PiPei Room，so Delete this Room~,目前数量为:%v",len(hall.roomList))
 		}
 	}
 

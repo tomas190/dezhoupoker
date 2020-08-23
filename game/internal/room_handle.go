@@ -14,7 +14,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		p.FindPlayerInfo()
 	}
 
-	log.Debug("Player Join Game Room ~")
+	//log.Debug("Player Join Game Room ~")
 
 	hall.UserRoom[p.Id] = r.roomId
 
@@ -35,7 +35,6 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		enter := &msg.JoinRoom_S2C{}
 		enter.RoomData = roomData
 		p.SendMsg(enter)
-		log.Debug("发送加入房间")
 
 		if r.AllPlayerLength() > 1 { // 广播其他玩家进入游戏
 			notice := &msg.NoticeJoin_S2C{}
@@ -307,10 +306,9 @@ func (r *Room) ExitFromRoom(p *Player) {
 }
 
 func (r *Room) PlantData() {
-
-	for _, v := range r.PlayerList {
-		if v != nil {
-			log.Debug("玩家的ID: %v, 金额为: %v, 筹码为: %v", v.Id, v.Account, v.chips)
+	for _, v := range r.AllPlayer {
+		if v != nil && v.IsRobot == false {
+			log.Debug("玩家的ID: %v,玩家name:%v, 金额为: %v, 筹码为: %v", v.Id, v.NickName, v.Account, v.chips)
 		}
 	}
 }
