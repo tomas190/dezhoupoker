@@ -134,6 +134,8 @@ func FindSurplusPool() *SurplusPoolDB {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
 
+	c.RemoveAll(nil) // todo
+
 	sur := &SurplusPoolDB{}
 	err := c.Find(nil).Sort("-updatetime").One(sur)
 	if err != nil {
@@ -148,8 +150,6 @@ func FindSurplusPool() *SurplusPoolDB {
 func InsertSurplusPool(sur *SurplusPoolDB) {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
-
-	c.RemoveAll(nil) // todo
 
 	sur.PoolMoney = (sur.HistoryLose - (sur.HistoryWin * 1)) * 0.5
 	log.Debug("surplusPoolDB 数据: %v", sur)
