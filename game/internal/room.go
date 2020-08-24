@@ -763,6 +763,8 @@ func (r *Room) ResultMoney() {
 					data.CfgID = r.cfgId
 					data.SmallBlind = r.SBId
 					data.BigBlind = r.BBId
+					data.SmallMoney = r.SB
+					data.BigMoney = r.BB
 					data.PublicCard = r.publicCards
 					for _, v := range r.PlayerList {
 						if v != nil {
@@ -776,6 +778,7 @@ func (r *Room) ResultMoney() {
 						}
 					}
 					data.DownBetTime = nowTime
+					data.PotMoney = r.potMoney
 					data.TaxRate = taxRate
 					InsertAccessData(data)
 				}

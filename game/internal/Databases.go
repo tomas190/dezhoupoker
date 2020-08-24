@@ -229,9 +229,12 @@ type PlayerDownBetRecode struct {
 	CfgID       string        `json:"cfg_id" bson:"cfg_id"`               // 房间类型
 	SmallBlind  string        `json:"small_blind" bson:"small_blind"`     // 小盲注Id
 	BigBlind    string        `json:"big_blind" bson:"big_blind"`         // 大盲注Id
+	SmallMoney  float64       `json:"small_money" bson:"small_money"`     // 小盲注金额
+	BigMoney    float64       `json:"big_money" bson:"big_money"`         // 大盲注金额
 	PublicCard  []int32       `json:"public_card" bson:"public_card"`     // 桌面公牌
 	ResultInfo  []*ResultData `json:"result_info" bson:"result_info"`     // 玩家结算信息
 	DownBetTime int64         `json:"down_bet_time" bson:"down_bet_time"` // 下注时间
+	PotMoney    float64       `json:"pot_money" bson:"pot_money"`         // 当局房间底池金额
 	TaxRate     float64       `json:"tax_rate" bson:"tax_rate"`           // 税率
 }
 
