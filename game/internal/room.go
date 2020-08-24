@@ -982,7 +982,6 @@ func (r *Room) LoadRoomRobots() {
 	rand.Seed(time.Now().UnixNano())
 	randNum := rand.Intn(len(sliceNum))
 	for i := 0; i < sliceNum[randNum]; i++ {
-		//time.Sleep(time.Millisecond)
 		robot := gRobotCenter.CreateRobot()
 		r.PlayerJoinRoom(robot)
 	}
