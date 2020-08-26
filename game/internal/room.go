@@ -1044,7 +1044,7 @@ func (r *Room) PiPeiHandle() bool {
 					r.ClearPiPeiData(v)
 					v.chair = -1
 					v.IsStandUp = true
-					v.PiPeiQuickRoom(r)
+					v.PiPeiStandUp(r)
 				}
 			}
 		}
@@ -1062,7 +1062,7 @@ func (r *Room) PiPeiHandle() bool {
 					r.ClearPiPeiData(v)
 					v.chair = -1
 					v.IsStandUp = true
-					v.PiPeiQuickRoom(r)
+					v.PiPeiStandUp(r)
 				}
 			}
 		}
@@ -1153,6 +1153,31 @@ func (p *Player) PiPeiQuickRoom(r *Room) {
 
 			p.chair = r.FindAbleChair()
 			r.PlayerList[p.chair] = p
+
+			// 房间总人数
+			r.AllPlayer = append(r.AllPlayer, p)
+
+			data := &msg.PiPeiData_S2C{}
+			data.RoomData = r.RespRoomData()
+			p.SendMsg(data)
+			return
+		}
+	}
+	p.PiPeiCreatRoom(r.cfgId)
+}
+
+func (p *Player) PiPeiStandUp(r *Room) {
+	for _, room := range hall.roomList {
+		if room.cfgId == r.cfgId && room.IsCanJoin() && room.roomId != r.roomId {
+			// 查找用户是否存在，如果存在就插入数据库
+			if p.IsRobot == false {
+				p.FindPlayerInfo()
+			}
+
+			hall.UserRoom[p.Id] = r.roomId
+
+			// 玩家带入筹码
+			r.TakeInRoomChips(p)
 
 			// 房间总人数
 			r.AllPlayer = append(r.AllPlayer, p)
