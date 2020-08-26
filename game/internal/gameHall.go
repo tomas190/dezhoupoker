@@ -7,21 +7,22 @@ import (
 	"github.com/name5566/leaf/log"
 	"strconv"
 	"sync"
+	"time"
 )
 
 type GameHall struct {
-	UserRecord  sync.Map          // 用户记录
-	RoomRecord  sync.Map          // 房间记录
-	roomList    []*Room           // 房间列表
-	UserRoom    map[string]string // 用户房间
+	UserRecord sync.Map          // 用户记录
+	RoomRecord sync.Map          // 房间记录
+	roomList   []*Room           // 房间列表
+	UserRoom   map[string]string // 用户房间
 }
 
 func NewHall() *GameHall {
 	return &GameHall{
-		UserRecord:  sync.Map{},
-		RoomRecord:  sync.Map{},
-		roomList:    make([]*Room, 0),
-		UserRoom:    make(map[string]string),
+		UserRecord: sync.Map{},
+		RoomRecord: sync.Map{},
+		roomList:   make([]*Room, 0),
+		UserRoom:   make(map[string]string),
 	}
 }
 
@@ -159,10 +160,24 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 
 	log.Debug("CreateRoom 创建新的房间:%v,当前房间数量:%v", r.roomId, len(hall.roomList))
 
-
 	if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
 		// 装载房间机器人
 		r.LoadRoomRobots()
 	}
 	r.PlayerJoinRoom(p)
+
+	go func() {
+		for {
+			r, _ := hall.RoomRecord.Load(r.roomId)
+			if r != nil {
+				room := r.(*Room)
+				time.Sleep(time.Second * 1)
+				data := &msg.SendRoomData_S2C{}
+				data.RoomData = room.RespRoomData()
+				room.Broadcast(data)
+			} else {
+				return
+			}
+		}
+	}()
 }

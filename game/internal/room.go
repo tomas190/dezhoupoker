@@ -727,15 +727,15 @@ func (r *Room) ResultMoney() {
 					p.WinResultMoney = p.resultMoney
 					winReason := "德州扑克赢钱"
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
-					sur.HistoryWin += p.WinResultMoney
-					sur.TotalWinMoney += p.WinResultMoney
+					sur.HistoryWin += Decimal(p.WinResultMoney)
+					sur.TotalWinMoney += Decimal(p.WinResultMoney)
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
-					sur.HistoryLose -= p.LoseResultMoney // -- = +
-					sur.TotalLoseMoney -= p.LoseResultMoney
+					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
+					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
 				}
 
 				// 这里是玩家金额扣税
@@ -924,6 +924,7 @@ func (r *Room) RestartGame() {
 
 				r.RoomStat = RoomStatusOver
 				r.Status = msg.GameStep_Waiting
+				r.UserLeave = []string{}
 				// 游戏阶段变更
 				game := &msg.GameStepChange_S2C{}
 				game.RoomData = r.RespRoomData()
@@ -1040,7 +1041,8 @@ func (r *Room) PiPeiHandle() bool {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
-					v.PlayerExitRoom()
+					r.ClearPiPeiData(v)
+					v.PiPeiQuickRoom(r)
 				}
 			}
 		}
@@ -1055,7 +1057,8 @@ func (r *Room) PiPeiHandle() bool {
 		for _, v := range r.AllPlayer {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
-					v.PlayerExitRoom()
+					r.ClearPiPeiData(v)
+					v.PiPeiQuickRoom(r)
 				}
 			}
 		}

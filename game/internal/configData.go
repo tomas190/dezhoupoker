@@ -2,8 +2,10 @@ package internal
 
 import (
 	"dezhoupoker/msg"
+	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
+	"strconv"
 )
 
 type RoomData struct {
@@ -29,6 +31,12 @@ func SetRoomConfig(cfgId string) RoomData {
 		}
 	}
 	return RoomData{}
+}
+
+func Decimal(value float64) float64 {
+	value, _ = strconv.ParseFloat(fmt.Sprintf("%.2f", value), 64)
+	return value
+
 }
 
 //ErrorResp 错误消息返回

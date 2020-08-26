@@ -38,6 +38,8 @@ enum MessageID {
     MSG_EmojiChat_S2C = 31;
     MSG_PiPeiPlayer_S2C = 32;
     MSG_PiPeiData_S2C = 33;
+    MSG_SendRoomData_S2C = 34;
+
 }
 
 message Ping {
@@ -159,7 +161,7 @@ message PlayerData {
     bool IsWinner = 17; // 是否赢家
     bool IsInGame = 18; // 是否在游戏中
     bool IsStandUp = 19; // 玩家是否站起
-    bool IsLeaveR = 20;  // 客户端是否离开房间
+    bool IsLeaveR = 20; // 客户端是否离开房间
     int32 timerCount = 21; // 玩家行动计时
     double account = 22; // 玩家的总金额(每局更新)
 }
@@ -312,5 +314,9 @@ message PiPeiPlayer_S2C {
 }
 
 message PiPeiData_S2C {
+    RoomData roomData = 1;
+}
+
+message SendRoomData_S2C {
     RoomData roomData = 1;
 }
