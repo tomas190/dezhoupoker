@@ -913,7 +913,6 @@ func (r *Room) RestartGame() {
 	go func() {
 		for range r.clock.C {
 			r.counter++
-			//log.Debug("settleTime clock : %v ", r.counter)
 			if r.counter >= SettleTime {
 				r.counter = 0
 				// 剔除房间玩家
