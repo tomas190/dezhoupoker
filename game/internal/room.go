@@ -1042,6 +1042,8 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					r.ClearPiPeiData(v)
+					v.chair = -1
+					v.IsStandUp = true
 					v.PiPeiQuickRoom(r)
 				}
 			}
@@ -1058,6 +1060,8 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					r.ClearPiPeiData(v)
+					v.chair = -1
+					v.IsStandUp = true
 					v.PiPeiQuickRoom(r)
 				}
 			}
