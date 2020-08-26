@@ -168,13 +168,14 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 
 	go func() {
 		for {
+			time.Sleep(time.Second * 1)
 			r, _ := hall.RoomRecord.Load(r.roomId)
 			if r != nil {
 				room := r.(*Room)
-				time.Sleep(time.Second * 1)
 				data := &msg.SendRoomData_S2C{}
 				data.RoomData = room.RespRoomData()
 				room.Broadcast(data)
+				log.Debug("发送房间数据")
 			} else {
 				return
 			}
