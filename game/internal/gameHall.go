@@ -48,7 +48,7 @@ func HallInit() { // 大厅初始化增加一个房间
 					data := &msg.SendRoomData_S2C{}
 					data.RoomData = room.RespRoomData()
 					room.Broadcast(data)
-					log.Debug("发送房间数据")
+					//log.Debug("发送房间数据")
 				} else {
 					return
 				}
@@ -191,7 +191,7 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 				data := &msg.SendRoomData_S2C{}
 				data.RoomData = room.RespRoomData()
 				room.Broadcast(data)
-				log.Debug("发送房间数据")
+				//log.Debug("发送房间数据")
 			} else {
 				return
 			}
