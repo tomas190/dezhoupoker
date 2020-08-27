@@ -1188,5 +1188,33 @@ func (p *Player) PiPeiStandUp(r *Room) {
 			return
 		}
 	}
-	p.PiPeiCreatRoom(r.cfgId)
+
+	rm := &Room{}
+	rm.Init(r.cfgId)
+
+	hall.roomList = append(hall.roomList, rm)
+	hall.RoomRecord.Store(rm.roomId, rm)
+
+	log.Debug("PiPeiRoom 创建新的房间:%v,当前房间数量:%v", rm.roomId, len(hall.roomList))
+
+	// 查找用户是否存在，如果存在就插入数据库
+	if p.IsRobot == false {
+		p.FindPlayerInfo()
+	}
+
+	hall.UserRoom[p.Id] = rm.roomId
+
+	// 玩家带入筹码
+	rm.TakeInRoomChips(p)
+
+
+	// 房间总人数
+	rm.AllPlayer = append(rm.AllPlayer, p)
+
+	// 装载机器人
+	rm.LoadRoomRobots()
+
+	data := &msg.PiPeiData_S2C{}
+	data.RoomData = rm.RespRoomData()
+	p.SendMsg(data)
 }
