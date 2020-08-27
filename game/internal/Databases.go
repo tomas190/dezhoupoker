@@ -134,7 +134,7 @@ func FindSurplusPool() *SurplusPoolDB {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
 
-	c.RemoveAll(nil) // todo
+	//c.RemoveAll(nil) // todo
 
 	sur := &SurplusPoolDB{}
 	err := c.Find(nil).Sort("-updatetime").One(sur)
