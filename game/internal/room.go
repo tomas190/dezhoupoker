@@ -759,6 +759,7 @@ func (r *Room) ResultMoney() {
 					data := &PlayerDownBetRecode{}
 					data.GameId = conf.Server.GameID
 					data.RoundId = p.RoundId
+					data.Id = p.Id
 					data.RoomId = r.roomId
 					data.CfgID = r.cfgId
 					data.SmallBlind = r.SBId
@@ -1206,7 +1207,6 @@ func (p *Player) PiPeiStandUp(r *Room) {
 
 	// 玩家带入筹码
 	rm.TakeInRoomChips(p)
-
 
 	// 房间总人数
 	rm.AllPlayer = append(rm.AllPlayer, p)

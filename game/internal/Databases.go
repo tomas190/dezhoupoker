@@ -134,7 +134,7 @@ func FindSurplusPool() *SurplusPoolDB {
 	s, c := connect(dbName, surPlusDB)
 	defer s.Close()
 
-	c.RemoveAll(nil) // todo
+	//c.RemoveAll(nil) // todo
 
 	sur := &SurplusPoolDB{}
 	err := c.Find(nil).Sort("-updatetime").One(sur)
@@ -225,6 +225,7 @@ func UpdateSurPool(sur *SurPool) {
 type PlayerDownBetRecode struct {
 	GameId      string        `json:"game_id" bson:"game_id"`             // gameId
 	RoundId     string        `json:"round_id" bson:"round_id"`           // 随机Id
+	Id          string        `json:"id" bson:"id"`                       // 玩家Id
 	RoomId      string        `json:"room_id" bson:"room_id"`             // 所在房间
 	CfgID       string        `json:"cfg_id" bson:"cfg_id"`               // 房间类型
 	SmallBlind  string        `json:"small_blind" bson:"small_blind"`     // 小盲注Id
