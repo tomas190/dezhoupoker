@@ -162,10 +162,10 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 
 	SurPool := &SurPool{}
 	SurPool.GameId = conf.Server.GameID
-	SurPool.SurplusPool = sur.PoolMoney
-	SurPool.PlayerTotalLoseWin = sur.HistoryLose - sur.HistoryWin
-	SurPool.PlayerTotalLose = sur.HistoryLose
-	SurPool.PlayerTotalWin = sur.HistoryWin
+	SurPool.SurplusPool = Decimal(sur.PoolMoney)
+	SurPool.PlayerTotalLoseWin = Decimal(sur.HistoryLose - sur.HistoryWin)
+	SurPool.PlayerTotalLose = Decimal(sur.HistoryLose)
+	SurPool.PlayerTotalWin = Decimal(sur.HistoryWin)
 	SurPool.TotalPlayer = sur.PlayerNum
 	SurPool.FinalPercentage = 0.5
 	SurPool.PercentageToTotalWin = 1
@@ -251,7 +251,7 @@ func InsertAccessData(data *PlayerDownBetRecode) {
 	s, c := connect(dbName, accessDB)
 	defer s.Close()
 
-	log.Debug("AccessData 数据: %v", data)
+	//log.Debug("AccessData 数据: %v", data)
 	err := c.Insert(data)
 	if err != nil {
 		log.Error("<----- 运营接入数据插入失败 ~ ----->: %v", err)
