@@ -1,5 +1,6 @@
 package algorithm
 
+
 func (this *Cards) Counter() *ValueCounter {
 	var counter ValueCounter
 	counter.Set(*this)

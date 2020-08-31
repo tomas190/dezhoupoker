@@ -982,7 +982,7 @@ func (r *Room) RobotsLength() int32 {
 // 房间装载1-6机器人
 func (r *Room) LoadRoomRobots() {
 	// 当玩家创建新房间时,则安排随机2-4机器人
-	sliceNum := []int{1, 2, 3, 4, 5, 6}
+	sliceNum := []int{2, 3, 4, 5, 6}
 	rand.Seed(time.Now().UnixNano())
 	randNum := rand.Intn(len(sliceNum))
 	for i := 0; i < sliceNum[randNum]; i++ {

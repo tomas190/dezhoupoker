@@ -2354,7 +2354,15 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/room_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room_handle.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/flush_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/flush_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/pk.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/pk.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/sort_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/sort_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3195,14 +3203,60 @@
       <recent name="C:\Users\tomas\go\src\dezhoupoker\msg" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build gameHall.go">
-    <configuration name="go build gameHall.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm">
+    <configuration name="Test11Base in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="server" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <kind value="DIRECTORY" />
-      <filePath value="$PROJECT_DIR$/game/internal/gameHall.go" />
-      <package value="dezhoupoker" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
       <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^Test11Base$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCards_Flush in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestCards_Flush$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestCards_Straight$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestCards_TwoPair in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestCards_TwoPair$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestFlush1 in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestFlush1$" />
       <method v="2" />
     </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false">
@@ -3228,37 +3282,22 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Go Build.go build gameHall.go" />
       <item itemvalue="Go Test.dezhoupoker" />
+      <item itemvalue="Go Test.Test11Base in dezhoupoker/game/internal/algorithm" />
+      <item itemvalue="Go Test.TestFlush1 in dezhoupoker/game/internal/algorithm" />
+      <item itemvalue="Go Test.TestCards_Flush in dezhoupoker/game/internal/algorithm" />
+      <item itemvalue="Go Test.TestCards_TwoPair in dezhoupoker/game/internal/algorithm" />
+      <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build gameHall.go" />
+        <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
+        <item itemvalue="Go Test.TestCards_TwoPair in dezhoupoker/game/internal/algorithm" />
+        <item itemvalue="Go Test.TestCards_Flush in dezhoupoker/game/internal/algorithm" />
+        <item itemvalue="Go Test.TestFlush1 in dezhoupoker/game/internal/algorithm" />
+        <item itemvalue="Go Test.Test11Base in dezhoupoker/game/internal/algorithm" />
       </list>
     </recent_temporary>
-  </component>
-  <component name="TestHistory">
-    <history-entry file="Test_Pot_in_dezhoupoker_game_internal - 2019.12.28 at 17h 05m 05s.xml">
-      <configuration name="Test_Pot in dezhoupoker/game/internal" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker_game_internal - 2019.12.28 at 17h 54m 06s.xml">
-      <configuration name="Test_Pot in dezhoupoker/game/internal" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker_game_internal - 2019.12.28 at 17h 54m 27s.xml">
-      <configuration name="Test_Pot in dezhoupoker/game/internal" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker_game_internal - 2019.12.30 at 08h 26m 43s.xml">
-      <configuration name="Test_Pot in dezhoupoker/game/internal" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker_game_internal - 2019.12.30 at 08h 28m 08s.xml">
-      <configuration name="Test_Pot in dezhoupoker/game/internal" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker - 2019.12.30 at 08h 35m 11s.xml">
-      <configuration name="Test_Pot in dezhoupoker" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="Test_Pot_in_dezhoupoker - 2019.12.30 at 08h 35m 23s.xml">
-      <configuration name="Test_Pot in dezhoupoker" configurationId="GoTestRunConfiguration" />
-    </history-entry>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -3268,10 +3307,46 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
+    <state width="1237" height="209" key="GridCell.Tab.0.bottom" timestamp="1598806019552">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="209" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1598806019552" />
+    <state width="1237" height="209" key="GridCell.Tab.0.center" timestamp="1598806019551">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="209" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1598806019551" />
+    <state width="1237" height="209" key="GridCell.Tab.0.left" timestamp="1598806019550">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="209" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1598806019550" />
+    <state width="1237" height="209" key="GridCell.Tab.0.right" timestamp="1598806019551">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="209" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1598806019551" />
+    <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1598792923771">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="249" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1598792923771" />
+    <state width="1237" height="249" key="GridCell.Tab.1.center" timestamp="1598792923770">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="249" key="GridCell.Tab.1.center/0.0.1280.680@0.0.1280.680" timestamp="1598792923770" />
+    <state width="1237" height="249" key="GridCell.Tab.1.left" timestamp="1598792923770">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="249" key="GridCell.Tab.1.left/0.0.1280.680@0.0.1280.680" timestamp="1598792923770" />
+    <state width="1237" height="249" key="GridCell.Tab.1.right" timestamp="1598792923771">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1598792923771" />
     <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1598102178015">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1598102178015" />
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1598794288019">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="383" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1598794288019" />
     <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1597238672335">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -256,3 +256,116 @@ func (this *Cards) HexInt() []int32 {
 	}
 	return hex
 }
+
+func CardString(cards []int32) []string {
+	var str []string
+	for _, num := range cards {
+		switch num {
+		case 1:
+			str = append(str, "♠A")
+		case 2:
+			str = append(str, "♠2")
+		case 3:
+			str = append(str, "♠3")
+		case 4:
+			str = append(str, "♠4")
+		case 5:
+			str = append(str, "♠5")
+		case 6:
+			str = append(str, "♠6")
+		case 7:
+			str = append(str, "♠7")
+		case 8:
+			str = append(str, "♠8")
+		case 9:
+			str = append(str, "♠9")
+		case 10:
+			str = append(str, "♠10")
+		case 11:
+			str = append(str, "♠J")
+		case 12:
+			str = append(str, "♠Q")
+		case 13:
+			str = append(str, "♠K")
+		case 14:
+			str = append(str, "♣A")
+		case 15:
+			str = append(str, "♣2")
+		case 16:
+			str = append(str, "♣3")
+		case 17:
+			str = append(str, "♣4")
+		case 18:
+			str = append(str, "♣5")
+		case 19:
+			str = append(str, "♣6")
+		case 20:
+			str = append(str, "♣7")
+		case 21:
+			str = append(str, "♣8")
+		case 22:
+			str = append(str, "♣9")
+		case 23:
+			str = append(str, "♣10")
+		case 24:
+			str = append(str, "♣J")
+		case 25:
+			str = append(str, "♣Q")
+		case 26:
+			str = append(str, "♣K")
+		case 27:
+			str = append(str, "♥A")
+		case 28:
+			str = append(str, "♥2")
+		case 29:
+			str = append(str, "♥3")
+		case 30:
+			str = append(str, "♥4")
+		case 31:
+			str = append(str, "♥5")
+		case 32:
+			str = append(str, "♥6")
+		case 33:
+			str = append(str, "♥7")
+		case 34:
+			str = append(str, "♥8")
+		case 35:
+			str = append(str, "♥9")
+		case 36:
+			str = append(str, "♥10")
+		case 37:
+			str = append(str, "♥J")
+		case 38:
+			str = append(str, "♥Q")
+		case 39:
+			str = append(str, "♥K")
+		case 40:
+			str = append(str, "♦A")
+		case 41:
+			str = append(str, "♦2")
+		case 42:
+			str = append(str, "♦3")
+		case 43:
+			str = append(str, "♦4")
+		case 44:
+			str = append(str, "♦5")
+		case 45:
+			str = append(str, "♦6")
+		case 46:
+			str = append(str, "♦7")
+		case 47:
+			str = append(str, "♦8")
+		case 48:
+			str = append(str, "♦9")
+		case 49:
+			str = append(str, "♦10")
+		case 50:
+			str = append(str, "♦J")
+		case 51:
+			str = append(str, "♦Q")
+		case 52:
+			str = append(str, "♠K")
+		}
+	}
+	return str
+}

@@ -942,6 +942,7 @@ func TestFlush1(t *testing.T) {
 		//t.Log(De(cards.FullFouse(cards.Counter())))
 		fmt.Println("1",array)
 		fmt.Println(cards)
+
 	}
 
 }

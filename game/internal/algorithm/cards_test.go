@@ -1,9 +1,11 @@
 package algorithm
 
 import (
-	"testing"
-	"strings"
+	"dezhoupoker/msg"
+	"fmt"
 	"github.com/stretchr/testify/assert"
+	"strings"
+	"testing"
 )
 
 func TestFour(t *testing.T) {
@@ -40,26 +42,43 @@ func TestCards_OnePair(t *testing.T) {
 
 func TestCards_Straight(t *testing.T) {
 
-	cards := Cards{0x12, 0x03, 0x24, 0x35, 0x26, 0x17, 0x33}
-	k, v := De(cards.GetType())
-	assert.Equal(t, k, STRAIGHT)
-	assert.Equal(t, v, uint32(7))
+	//cards := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
+	//k, _ := De(cards.GetType())
+	//fmt.Println("卡牌类型:",msg.CardSuit(k))
+	//fmt.Println("转换1:",CardString(cards.HexInt()))
+	////fmt.Println("显示:",cards.GetCardHexInt())
+	//a := msg.CardSuit(k)
+	//En(uint8(a),cards.GetType())
+	//fmt.Println("转换2:",CardString(cards.HexInt()))
 
-	cards = Cards{0x12, 0x03, 0x24, 0x34, 0x26, 0x17, 0x37}
-	assert.Equal(t, k, STRAIGHT)
-	assert.Equal(t, v, uint32(7))
+	//cards2 := Cards{0x06, 0x32, 0x1d, 0x04, 0x03, 0x16, 0x25}
+	cards2 := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
+	k2, _ := De(cards2.GetType())
+	fmt.Println("卡牌类型:",msg.CardSuit(k2))
+	fmt.Println("转换1:",CardString(cards2.HexInt()))
+	//fmt.Println("显示:",cards.GetCardHexInt())
+	a2 := msg.CardSuit(k2)
+	En(uint8(a2),cards2.GetType())
+	fmt.Println("转换2:",CardString(cards2.HexInt()))
 
-	cards = Cards{0x12, 0x03, 0x24, 0x34, 0x25, 0x17, 0x3E}
-
-	k, v = De(cards.GetType())
-	assert.Equal(t, k, STRAIGHT)
-	assert.Equal(t, v, uint32(0x5))
-
-
-	cards = Cards{0x12, 0x03, 0x2a, 0x3c, 0x2b, 0x1d, 0x3E}
-	k, v = De(cards.GetType())
-	assert.Equal(t, k, STRAIGHT)
-	assert.Equal(t, v, uint32(0xe))
+	//assert.Equal(t, k, STRAIGHT)
+	//assert.Equal(t, v, uint32(7))
+	//
+	//cards = Cards{0x12, 0x03, 0x24, 0x34, 0x26, 0x17, 0x37}
+	//assert.Equal(t, k, STRAIGHT)
+	//assert.Equal(t, v, uint32(7))
+	//
+	//cards = Cards{0x12, 0x03, 0x24, 0x34, 0x25, 0x17, 0x3E}
+	//
+	//k, v = De(cards.GetType())
+	//assert.Equal(t, k, STRAIGHT)
+	//assert.Equal(t, v, uint32(0x5))
+	//
+	//
+	//cards = Cards{0x12, 0x03, 0x2a, 0x3c, 0x2b, 0x1d, 0x3E}
+	//k, v = De(cards.GetType())
+	//assert.Equal(t, k, STRAIGHT)
+	//assert.Equal(t, v, uint32(0xe))
 }
 
 func TestCards_Flush(t *testing.T) {
@@ -68,6 +87,7 @@ func TestCards_Flush(t *testing.T) {
 
 	k, _ := De(cards.GetType())
 	assert.Equal(t, k,FLUSH)
+	fmt.Println("转换1:",CardString(cards.HexInt()))
 	//assert.Equal(t, v, uint32(6))
 }
 
@@ -77,6 +97,7 @@ func TestCards_TwoPair(t *testing.T) {
 
 	k, _ := De(cards.GetType())
 	assert.Equal(t, k, TWO_PAIR)
+	fmt.Println("转换1:",CardString(cards.HexInt()))
 }
 func TestCards_RoyalFlush(t *testing.T) {
 

@@ -1,6 +1,9 @@
 package algorithm
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func Test11Base(t *testing.T) {
 
@@ -10,6 +13,8 @@ func Test11Base(t *testing.T) {
 	ASort(cards, 0, int8(len(cards) -1), &a)
 
 	t.Logf("%#v ",cards)
+	fmt.Println(cards.HexInt())
+	fmt.Println(CardString(cards.HexInt()))
 }
 func Test10Base(t *testing.T) {
 	arr := Cards([]byte{1, 2, 3, 4, 4, 5, 6})
@@ -20,3 +25,4 @@ func Test10Base(t *testing.T) {
 
 	t.Logf("%#v ", arr)
 }
+
