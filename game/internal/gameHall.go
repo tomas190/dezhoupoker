@@ -7,7 +7,6 @@ import (
 	"github.com/name5566/leaf/log"
 	"strconv"
 	"sync"
-	"time"
 )
 
 type GameHall struct {
@@ -39,21 +38,6 @@ func HallInit() { // 大厅初始化增加一个房间
 		r.PlayerJoinRoom(robot)
 		robot.StandUpTable()
 
-		go func() {
-			for {
-				time.Sleep(time.Millisecond * 200)
-				r, _ := hall.RoomRecord.Load(r.roomId)
-				if r != nil {
-					room := r.(*Room)
-					data := &msg.SendRoomData_S2C{}
-					data.RoomData = room.RespRoomData()
-					room.Broadcast(data)
-					//log.Debug("发送房间数据")
-				} else {
-					return
-				}
-			}
-		}()
 	}
 
 }
