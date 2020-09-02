@@ -52,7 +52,7 @@ type Player struct {
 	IsInGame        bool             // 是否在游戏中
 	IsStandUp       bool             // 玩家是否站起
 	IsLeaveR        bool             // 判断客户端是否离开房间
-	timerCount      int32            // 玩家行动计时
+	timerCount      float64          // 玩家行动计时
 
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
@@ -142,11 +142,15 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	var nowAct = false
 	go func() {
 		for {
-			time.Sleep(time.Second * 1)
+			time.Sleep(time.Millisecond * 200)
 			if nowAct == true {
 				return
 			}
-			p.timerCount++
+			p.timerCount += 0.2
+			data := &msg.SendActTimer_S2C{}
+			data.ActChair = p.chair
+			data.Timer = p.timerCount
+			r.Broadcast(data)
 		}
 	}()
 

@@ -1,6 +1,7 @@
 package algorithm
 
 import (
+	"fmt"
 	"math/rand"
 	"time"
 )
@@ -152,6 +153,7 @@ func (this *Cards) flush() uint32 {
 							handvalue |= (1 << (value - 1))
 						}
 					}
+					fmt.Println("转换1111:",CardString(this.HexInt()))
 					return En(FLUSH, uint32(handvalue))
 				}
 			}

@@ -182,19 +182,4 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	}
 	r.PlayerJoinRoom(p)
 
-	go func() {
-		for {
-			time.Sleep(time.Millisecond * 200)
-			r, _ := hall.RoomRecord.Load(r.roomId)
-			if r != nil {
-				room := r.(*Room)
-				data := &msg.SendRoomData_S2C{}
-				data.RoomData = room.RespRoomData()
-				room.Broadcast(data)
-				//log.Debug("发送房间数据")
-			} else {
-				return
-			}
-		}
-	}()
 }

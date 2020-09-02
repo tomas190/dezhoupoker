@@ -50,9 +50,16 @@ func TestCards_Straight(t *testing.T) {
 	//a := msg.CardSuit(k)
 	//En(uint8(a),cards.GetType())
 	//fmt.Println("转换2:",CardString(cards.HexInt()))
-
+	//var a ColorCounter
 	//cards2 := Cards{0x06, 0x32, 0x1d, 0x04, 0x03, 0x16, 0x25}
-	cards2 := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
+	cards2 := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
+	//Sort(cards2,0,int8(len(cards2))-1)
+	//fmt.Println("转换:",CardString(cards2.HexInt()))
+	SortCards(cards2,0,int8(len(cards2))-1)
+	fmt.Println("转换01:",CardString(cards2.HexInt()))
+	//ASort(cards2,0,int8(len(cards2))-1,cards2.Counter())
+	//fmt.Println("转换02:",CardString(cards2.HexInt()))
+	//cards2 := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
 	k2, _ := De(cards2.GetType())
 	fmt.Println("卡牌类型:",msg.CardSuit(k2))
 	fmt.Println("转换1:",CardString(cards2.HexInt()))
