@@ -46,8 +46,12 @@ func (rc *RobotsCenter) CreateRobot() *Player {
 
 //生成随机机器人ID
 func RandomID() string {
-	RobotId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(100000000))
-	return RobotId
+	for {
+		RobotId := fmt.Sprintf("%09v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(800000000))
+		if RobotId[0:1] != "0" {
+			return RobotId
+		}
+	}
 }
 
 //生成随机机器人头像IMG
@@ -67,9 +71,12 @@ func RandomIMG() string {
 
 //生成随机机器人NickName
 func RandomName() string {
-	randNum := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000000))
-	RobotName := randNum
-	return RobotName
+	for {
+		randNum := fmt.Sprintf("%09v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(8000000000))
+		if randNum[0:1] != "0" {
+			return randNum
+		}
+	}
 }
 
 func (p *Player) RobotDownBet(r *Room) {
