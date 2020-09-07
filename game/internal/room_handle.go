@@ -246,7 +246,7 @@ showdown:
 	r.Broadcast(result)
 
 	// 打印数据
-	r.PlantData()
+	//r.PlantData()
 
 	//err := r.InsertRoomData()
 	//if err != nil {
