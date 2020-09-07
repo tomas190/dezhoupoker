@@ -1,7 +1,6 @@
 package algorithm
 
 import (
-	"fmt"
 	"math/rand"
 	"time"
 )
@@ -26,13 +25,14 @@ func (this *Cards) Shuffle() {
 
 // todo 两对和四张起脚牌的判定
 var StraightMask = []uint16{15872, 7936, 3968, 1984, 992, 496, 248, 124, 62, 31}
+
 //顺子（Straight，亦称“蛇”）
 //此牌由五张顺序扑克牌组成。
 //平手牌：如果不止一人抓到此牌，则五张牌中点数最大的赢得此局，
 //如果所有牌点数都相同，平分彩池。
 func (this *Cards) straight() uint32 {
 	var handvalue uint16
-	for _, v := range (*this) {
+	for _, v := range *this {
 		value := v & 0xF
 		if value == 0xE {
 			handvalue |= 1
@@ -153,7 +153,6 @@ func (this *Cards) flush() uint32 {
 							handvalue |= (1 << (value - 1))
 						}
 					}
-					fmt.Println("转换1111:",CardString(this.HexInt()))
 					return En(FLUSH, uint32(handvalue))
 				}
 			}

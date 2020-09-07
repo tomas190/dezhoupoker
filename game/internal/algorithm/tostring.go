@@ -369,3 +369,7 @@ func CardString(cards []int32) []string {
 	}
 	return str
 }
+
+func ShowCards(cards []string)  {
+
+}
