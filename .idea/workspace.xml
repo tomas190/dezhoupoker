@@ -2354,9 +2354,9 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/player.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/room_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room_handle.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
@@ -3301,22 +3301,22 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1237" height="209" key="GridCell.Tab.0.bottom" timestamp="1599455979083">
+    <state width="1237" height="209" key="GridCell.Tab.0.bottom" timestamp="1599467511976">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="209" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1599455979083" />
-    <state width="1237" height="209" key="GridCell.Tab.0.center" timestamp="1599455979082">
+    <state width="1237" height="209" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1599467511976" />
+    <state width="1237" height="209" key="GridCell.Tab.0.center" timestamp="1599467511975">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="209" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1599455979082" />
-    <state width="1237" height="209" key="GridCell.Tab.0.left" timestamp="1599455979081">
+    <state width="1237" height="209" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1599467511975" />
+    <state width="1237" height="209" key="GridCell.Tab.0.left" timestamp="1599467511975">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="209" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1599455979081" />
-    <state width="1237" height="209" key="GridCell.Tab.0.right" timestamp="1599455979083">
+    <state width="1237" height="209" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1599467511975" />
+    <state width="1237" height="209" key="GridCell.Tab.0.right" timestamp="1599467511976">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="209" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1599455979083" />
+    <state width="1237" height="209" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1599467511976" />
     <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1599029526826">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -3333,10 +3333,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1599041159178">
+    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1599456576037">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1599041159178" />
+    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1599456576037" />
     <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1598948182005">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

@@ -217,7 +217,7 @@ func (r *Room) GameRunning() {
 			cardSlice := cs.GetCardHexInt()
 			p.cardData.PublicCardKeys = cardSlice[2:]
 
-			//algorithm.ShowCards()
+			algorithm.ShowCards(kind, cardSlice)
 			//log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
 
 			// 游戏阶段变更

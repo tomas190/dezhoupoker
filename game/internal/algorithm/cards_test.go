@@ -1,7 +1,6 @@
 package algorithm
 
 import (
-	"dezhoupoker/msg"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -56,18 +55,19 @@ func TestCards_Straight(t *testing.T) {
 	//Sort(cards2,0,int8(len(cards2))-1)
 	//fmt.Println("转换:",CardString(cards2.HexInt()))
 	SortCards(cards2, 0, int8(len(cards2))-1)
+	k2, _ := De(cards2.GetType())
+	ShowCards(k2, cards2.HexInt())
 	fmt.Println("转换01:", cards2.HexInt())
 	fmt.Println("转换01:", CardString(cards2.HexInt()))
 	//ASort(cards2,0,int8(len(cards2))-1,cards2.Counter())
 	//fmt.Println("转换02:",CardString(cards2.HexInt()))
 	//cards2 := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
-	k2, _ := De(cards2.GetType())
-	fmt.Println("卡牌类型:", msg.CardSuit(k2))
-	fmt.Println("转换1:", CardString(cards2.HexInt()))
+	//fmt.Println("卡牌类型:", msg.CardSuit(k2))
+	//fmt.Println("转换1:", CardString(cards2.HexInt()))
 	//fmt.Println("显示:",cards.GetCardHexInt())
-	a2 := msg.CardSuit(k2)
-	En(uint8(a2), cards2.GetType())
-	fmt.Println("转换2:", CardString(cards2.HexInt()))
+	//a2 := msg.CardSuit(k2)
+	//En(uint8(a2), cards2.GetType())
+	//fmt.Println("转换2:", CardString(cards2.HexInt()))
 
 	//assert.Equal(t, k, STRAIGHT)
 	//assert.Equal(t, v, uint32(7))

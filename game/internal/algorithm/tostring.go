@@ -2,6 +2,7 @@ package algorithm
 
 import (
 	"fmt"
+	"github.com/name5566/leaf/log"
 	"strings"
 )
 
@@ -370,6 +371,22 @@ func CardString(cards []int32) []string {
 	return str
 }
 
-func ShowCards(cards []string)  {
+func ShowCards(kind uint8, cards []int32) {
+	str := CardString(cards)
+	log.Debug("str:%v", str)
+	switch kind {
+	case 1:
 
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	case 10:
+	case 11:
+	case 12:
+	}
 }

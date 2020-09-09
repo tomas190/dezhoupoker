@@ -142,11 +142,11 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	var nowAct = false
 	go func() {
 		for {
-			time.Sleep(time.Millisecond * 200)
+			time.Sleep(time.Millisecond * 100)
 			if nowAct == true {
 				return
 			}
-			p.timerCount += 0.2
+			p.timerCount += 0.1
 			data := &msg.SendActTimer_S2C{}
 			data.ActChair = p.chair
 			data.Timer = p.timerCount
