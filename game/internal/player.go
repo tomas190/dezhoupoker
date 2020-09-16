@@ -149,10 +149,6 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 				return
 			}
 			p.timerCount += 0.1
-			data := &msg.SendActTimer_S2C{}
-			data.ActChair = p.chair
-			data.Timer = p.timerCount
-			r.Broadcast(data)
 		}
 	}()
 
