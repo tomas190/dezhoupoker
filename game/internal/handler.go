@@ -103,12 +103,6 @@ func handleLogin(args []interface{}) {
 						enter := &msg.EnterRoom_S2C{}
 						enter.RoomData = roomData
 						p.SendMsg(enter)
-
-						data := &msg.SendActTimer_S2C{}
-						data.ActChair = r.activeSeat
-						data.Timer = p.timerCount
-						r.Broadcast(data)
-						return
 					}
 				}
 			}
