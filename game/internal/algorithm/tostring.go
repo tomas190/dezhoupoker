@@ -365,28 +365,56 @@ func CardString(cards []int32) []string {
 		case 51:
 			str = append(str, "♦Q")
 		case 52:
-			str = append(str, "♠K")
+			str = append(str, "♦K")
 		}
 	}
 	return str
 }
 
-func ShowCards(kind uint8, cards []int32) {
+func ShowCards(kind uint8, cards []int32) []int32 {
+
+	switch kind {
+	case 1: // 高牌
+	case 2: // 一对
+	case 3: // 两对
+		cardShow := ShowTwoPairs(cards)
+		return cardShow
+	case 4: // 三条
+	case 5: // 顺子
+	case 6: // 同花
+	case 7: // 葫芦
+	case 8: // 四条
+	case 9: // 同花顺
+	case 10: // 皇家同花顺
+	}
+	return cards
+}
+
+func NewString(str string) string {
+	str = strings.TrimPrefix(str, "♥")
+	str = strings.TrimPrefix(str, "♠")
+	str = strings.TrimPrefix(str, "♣")
+	str = strings.TrimPrefix(str, "♦")
+	fmt.Println(str)
+	return str
+}
+
+func ShowTwoPairs(cards []int32) []int32 {
 	str := CardString(cards)
 	log.Debug("str:%v", str)
-	switch kind {
-	case 1:
-
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-	case 8:
-	case 9:
-	case 10:
-	case 11:
-	case 12:
-	}
+	num0 := str[0]
+	num1 := str[1]
+	num2 := str[2]
+	num3 := str[3]
+	num4 := str[4]
+	num5 := str[5]
+	num6 := str[6]
+	num0 = NewString(num0)
+	num1 = NewString(num1)
+	num2 = NewString(num2)
+	num3 = NewString(num3)
+	num4 = NewString(num4)
+	num5 = NewString(num5)
+	num6 = NewString(num6)
+	return cards
 }

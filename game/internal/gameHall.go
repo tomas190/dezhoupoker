@@ -136,7 +136,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 	}
 
 	for _, r := range hall.roomList {
-		if r.cfgId == cfgId && r.IsCanJoin() {
+		if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
 			if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
 				// 装载房间机器人
 				r.LoadRoomRobots()

@@ -1,6 +1,7 @@
 package algorithm
 
 import (
+	"dezhoupoker/msg"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -42,23 +43,37 @@ func TestCards_OnePair(t *testing.T) {
 func TestCards_Straight(t *testing.T) {
 
 	//cards := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
-	//k, _ := De(cards.GetType())
-	//fmt.Println("卡牌类型:",msg.CardSuit(k))
-	//fmt.Println("转换1:",CardString(cards.HexInt()))
+	//cards := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
+	//cards := Cards{0x12, 0x03, 0x24, 0x34, 0x25, 0x17, 0x3E}
+	//cards := Cards{0x12, 0x03, 0x24, 0x34, 0x26, 0x17, 0x37}
+	//cards := Cards{0x32, 0x33, 0x34, 0x35, 0x36, 0x27, 0x28}
+	//cards := Cards{0x32, 0x33, 0x34, 0x35, 0x3E, 0x37, 0x28}
+	//cards := Cards{0x32, 0x33, 0x34, 0x35, 0x3E, 0x36, 0x28}
+	//cards := Cards{0x3e, 0x3a, 0x34, 0x35, 0x26, 0x37, 0x28}  // 顺子 后
+	//cards := Cards{0x12, 0x26, 0x34, 0x35, 0x25, 0x38, 0x28}  // 2对  前
+	//cards := Cards{0x33, 0x33, 0x33, 0x35, 0x25, 0x35, 0x28}  // 葫芦 前
+	cards := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
+
+	k, _ := De(cards.GetType())
+
+	fmt.Println("卡牌:", cards)
+	fmt.Println("卡牌类型:", msg.CardSuit(k))
+	fmt.Println("转换1:", CardString(cards.HexInt()))
 	////fmt.Println("显示:",cards.GetCardHexInt())
 	//a := msg.CardSuit(k)
 	//En(uint8(a),cards.GetType())
 	//fmt.Println("转换2:",CardString(cards.HexInt()))
 	//var a ColorCounter
-	//cards2 := Cards{0x06, 0x32, 0x1d, 0x04, 0x03, 0x16, 0x25}
-	cards2 := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
-	//Sort(cards2,0,int8(len(cards2))-1)
-	//fmt.Println("转换:",CardString(cards2.HexInt()))
-	SortCards(cards2, 0, int8(len(cards2))-1)
-	k2, _ := De(cards2.GetType())
-	ShowCards(k2, cards2.HexInt())
-	fmt.Println("转换01:", cards2.HexInt())
-	fmt.Println("转换01:", CardString(cards2.HexInt()))
+	//cards2 := Cards{0x09, 0x32, 0x1d, 0x04, 0x03, 0x16, 0x18}
+	////cards2 := Cards{0x06, 0x32, 0x1d, 0x04, 0x03, 0x16, 0x25}
+	////cards2 := Cards{0x28, 0x23, 0x1a, 0x2a, 0x22, 0x33, 0x26}
+	////Sort(cards2,0,int8(len(cards2))-1)
+	////fmt.Println("转换:",CardString(cards2.HexInt()))
+	//SortCards(cards2, 0, int8(len(cards2))-1)
+	//k2, _ := De(cards2.GetType())
+	//ShowCards(k2, cards2.HexInt())
+	//fmt.Println("转换01:", cards2.HexInt())
+	//fmt.Println("转换01:", CardString(cards2.HexInt()))
 	//ASort(cards2,0,int8(len(cards2))-1,cards2.Counter())
 	//fmt.Println("转换02:",CardString(cards2.HexInt()))
 	//cards2 := Cards{0x12, 0x22, 0x34, 0x35, 0x25, 0x38, 0x28}
@@ -135,9 +150,12 @@ func TestCards_FLUSH1(t *testing.T) {
 func TestCards_FLUSH(t *testing.T) {
 	cards1 := Cards{0x22, 0x22, 0x24, 0x25, 0x38, 0x28}
 	cards2 := Cards{0x32, 0x32, 0x33, 0x34, 0x25, 0x36}
+	fmt.Println(CardString(cards1.HexInt()))
+	fmt.Println(CardString(cards2.HexInt()))
 	v1 := cards1.GetType()
 	v2 := cards2.GetType()
-
+	fmt.Println(CardString(cards1.HexInt()))
+	fmt.Println(CardString(cards2.HexInt()))
 	assert.Equal(t, v1 > v2, true)
 }
 

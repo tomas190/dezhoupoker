@@ -18,6 +18,7 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 
 	hall.UserRoom[p.Id] = r.roomId
 
+	p.PreRoomId = r.roomId
 	// 玩家带入筹码
 	r.TakeInRoomChips(p)
 
@@ -217,7 +218,7 @@ func (r *Room) GameRunning() {
 			cardSlice := cs.GetCardHexInt()
 			p.cardData.PublicCardKeys = cardSlice[2:]
 
-			algorithm.ShowCards(kind, cardSlice)
+			//algorithm.ShowCards(kind, cardSlice)
 			//log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
 
 			// 游戏阶段变更

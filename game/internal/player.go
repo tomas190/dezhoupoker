@@ -54,6 +54,7 @@ type Player struct {
 	IsLeaveR        bool             // 判断客户端是否离开房间
 	timerCount      float64          // 玩家行动计时
 
+	PreRoomId string // 记录上次房间id
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
 
@@ -88,6 +89,7 @@ func (p *Player) Init() {
 	p.IsStandUp = false
 	p.IsLeaveR = true
 	p.action = make(chan msg.ActionStatus)
+	p.PreRoomId = ""
 	p.IsRobot = false
 }
 
