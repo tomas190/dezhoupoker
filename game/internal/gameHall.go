@@ -7,6 +7,7 @@ import (
 	"github.com/name5566/leaf/log"
 	"strconv"
 	"sync"
+	"time"
 )
 
 type GameHall struct {
@@ -80,6 +81,8 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 
 	// 玩家退出当前房间
 	p.PlayerExitRoom()
+
+	time.Sleep(time.Millisecond * 1500)
 
 	// 延时5秒，重新开始游戏
 	for _, room := range hall.roomList {

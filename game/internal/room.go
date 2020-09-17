@@ -245,11 +245,11 @@ func (r *Room) KickPlayer() {
 		}
 	}
 
-	for _, v := range r.PlayerList {
-		if v != nil && v.chair == -1 {
-			r.PlayerList[v.chair] = nil
-		}
-	}
+	//for _, v := range r.PlayerList {
+	//	if v != nil && v.chair == -1 {
+	//		r.PlayerList[v.chair] = nil
+	//	}
+	//}
 }
 
 // 玩家补充筹码
