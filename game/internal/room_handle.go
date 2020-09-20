@@ -216,8 +216,14 @@ func (r *Room) GameRunning() {
 			p.cardData.SuitPattern = msg.CardSuit(kind)
 
 			cardSlice := cs.GetCardHexInt()
-			p.cardData.PublicCardKeys = cardSlice[2:]
-
+			if kind == 5 {
+				p.cardData.PublicCardKeys = cardSlice[:len(cardSlice)-2]
+			} else if kind == 6 {
+				cardSlice = algorithm.ShowCards(kind, cardSlice)
+				p.cardData.PublicCardKeys = cardSlice[:len(cardSlice)-2]
+			} else {
+				p.cardData.PublicCardKeys = cardSlice[2:]
+			}
 			//algorithm.ShowCards(kind, cardSlice)
 			//log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
 

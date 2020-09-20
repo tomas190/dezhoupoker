@@ -2,7 +2,7 @@ package algorithm
 
 import (
 	"fmt"
-	"github.com/name5566/leaf/log"
+	"sort"
 	"strings"
 )
 
@@ -263,7 +263,7 @@ func CardString(cards []int32) []string {
 	for _, num := range cards {
 		switch num {
 		case 1:
-			str = append(str, "♠A")
+			str = append(str, "♠1")
 		case 2:
 			str = append(str, "♠2")
 		case 3:
@@ -281,15 +281,15 @@ func CardString(cards []int32) []string {
 		case 9:
 			str = append(str, "♠9")
 		case 10:
-			str = append(str, "♠10")
+			str = append(str, "♠A")
 		case 11:
-			str = append(str, "♠J")
+			str = append(str, "♠B")
 		case 12:
-			str = append(str, "♠Q")
+			str = append(str, "♠C")
 		case 13:
-			str = append(str, "♠K")
+			str = append(str, "♠D")
 		case 14:
-			str = append(str, "♣A")
+			str = append(str, "♣1")
 		case 15:
 			str = append(str, "♣2")
 		case 16:
@@ -307,15 +307,15 @@ func CardString(cards []int32) []string {
 		case 22:
 			str = append(str, "♣9")
 		case 23:
-			str = append(str, "♣10")
+			str = append(str, "♣A")
 		case 24:
-			str = append(str, "♣J")
+			str = append(str, "♣B")
 		case 25:
-			str = append(str, "♣Q")
+			str = append(str, "♣C")
 		case 26:
-			str = append(str, "♣K")
+			str = append(str, "♣D")
 		case 27:
-			str = append(str, "♥A")
+			str = append(str, "♥1")
 		case 28:
 			str = append(str, "♥2")
 		case 29:
@@ -333,15 +333,15 @@ func CardString(cards []int32) []string {
 		case 35:
 			str = append(str, "♥9")
 		case 36:
-			str = append(str, "♥10")
+			str = append(str, "♥A")
 		case 37:
-			str = append(str, "♥J")
+			str = append(str, "♥B")
 		case 38:
-			str = append(str, "♥Q")
+			str = append(str, "♥C")
 		case 39:
-			str = append(str, "♥K")
+			str = append(str, "♥D")
 		case 40:
-			str = append(str, "♦A")
+			str = append(str, "♦1")
 		case 41:
 			str = append(str, "♦2")
 		case 42:
@@ -359,13 +359,13 @@ func CardString(cards []int32) []string {
 		case 48:
 			str = append(str, "♦9")
 		case 49:
-			str = append(str, "♦10")
+			str = append(str, "♦A")
 		case 50:
-			str = append(str, "♦J")
+			str = append(str, "♦B")
 		case 51:
-			str = append(str, "♦Q")
+			str = append(str, "♦C")
 		case 52:
-			str = append(str, "♦K")
+			str = append(str, "♦D")
 		}
 	}
 	return str
@@ -381,7 +381,11 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 		return cardShow
 	case 4: // 三条
 	case 5: // 顺子
+		cardShow := ShowStraight(cards)
+		return cardShow
 	case 6: // 同花
+		cardShow := ShowFlush(cards)
+		return cardShow
 	case 7: // 葫芦
 	case 8: // 四条
 	case 9: // 同花顺
@@ -390,18 +394,9 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	return cards
 }
 
-func NewString(str string) string {
-	str = strings.TrimPrefix(str, "♥")
-	str = strings.TrimPrefix(str, "♠")
-	str = strings.TrimPrefix(str, "♣")
-	str = strings.TrimPrefix(str, "♦")
-	fmt.Println(str)
-	return str
-}
-
 func ShowTwoPairs(cards []int32) []int32 {
 	str := CardString(cards)
-	log.Debug("str:%v", str)
+	fmt.Println("str:", str)
 	num0 := str[0]
 	num1 := str[1]
 	num2 := str[2]
@@ -416,5 +411,209 @@ func ShowTwoPairs(cards []int32) []int32 {
 	num4 = NewString(num4)
 	num5 = NewString(num5)
 	num6 = NewString(num6)
+
+	cs := []string{num0, num1, num2, num3, num4, num5, num6}
+	cs2 := SortString(cs)
+	fmt.Println("cs2:", cs2)
+
+	var data []int32
+
+	//for _, v := range cs2 {
+	//	if v == num0 {
+	//		data = append(data, cards[0])
+	//		continue
+	//	}
+	//	if v == num1 {
+	//		data = append(data, cards[1])
+	//		continue
+	//	}
+	//	if v == num2 {
+	//		data = append(data, cards[2])
+	//		continue
+	//	}
+	//	if v == num3 {
+	//		data = append(data, cards[3])
+	//		continue
+	//	}
+	//	if v == num4 {
+	//		data = append(data, cards[4])
+	//		continue
+	//	}
+	//	if v == num5 {
+	//		data = append(data, cards[5])
+	//		continue
+	//	}
+	//	if v == num6 {
+	//		data = append(data, cards[6])
+	//		continue
+	//	}
+	//}
+	return data
+}
+func ShowStraight(cards []int32) []int32 {
+	str := CardString(cards)
+	fmt.Println("str:", str)
+	num0 := str[0]
+	num1 := str[1]
+	num2 := str[2]
+	num3 := str[3]
+	num4 := str[4]
+	num5 := str[5]
+	num6 := str[6]
+	num0 = NewString(num0)
+	num1 = NewString(num1)
+	num2 = NewString(num2)
+	num3 = NewString(num3)
+	num4 = NewString(num4)
+	num5 = NewString(num5)
+	num6 = NewString(num6)
+	cs := []string{num0, num1, num2, num3, num4, num5, num6}
+	cs2 := SortString(cs)
+	fmt.Println("cs2:", cs2)
+
 	return cards
+}
+func ShowFlush(cards []int32) []int32 {
+	str := CardString(cards)
+	fmt.Println("str:", str)
+	num0 := str[0]
+	num1 := str[1]
+	num2 := str[2]
+	num3 := str[3]
+	num4 := str[4]
+	num5 := str[5]
+	num6 := str[6]
+	n0 := NewNumber(num0)
+	n1 := NewNumber(num1)
+	n2 := NewNumber(num2)
+	n3 := NewNumber(num3)
+	n4 := NewNumber(num4)
+	n5 := NewNumber(num5)
+	n6 := NewNumber(num6)
+	ns := []string{n0, n1, n2, n3, n4, n5, n6}
+	var hei []string
+	var hong []string
+	var fang []string
+	var ying []string
+	for i := 0; i < len(ns); i++ {
+		if ns[i] == "♠" {
+			hei = append(hei, str[i])
+		}
+		if ns[i] == "♥" {
+			hong = append(hong, str[i])
+		}
+		if ns[i] == "♦" {
+			fang = append(fang, str[i])
+		}
+		if ns[i] == "♣" {
+			ying = append(ying, str[i])
+		}
+	}
+	var cs2 []string
+
+
+	if len(hei) >= 5 {
+		cs2 = GetCards(hei, str)
+	}
+	if len(hong) >= 5 {
+		cs2 = GetCards(hong, str)
+	}
+	if len(fang) >= 5 {
+		cs2 = GetCards(fang, str)
+	}
+	if len(ying) >= 5 {
+		cs2 = GetCards(ying, str)
+	}
+
+	var data []int32
+	for _, v := range cs2 {
+		if v == num0 {
+			data = append(data, cards[0])
+			continue
+		}
+		if v == num1 {
+			data = append(data, cards[1])
+			continue
+		}
+		if v == num2 {
+			data = append(data, cards[2])
+			continue
+		}
+		if v == num3 {
+			data = append(data, cards[3])
+			continue
+		}
+		if v == num4 {
+			data = append(data, cards[4])
+			continue
+		}
+		if v == num5 {
+			data = append(data, cards[5])
+			continue
+		}
+		if v == num6 {
+			data = append(data, cards[6])
+			continue
+		}
+	}
+
+	return data
+}
+
+func GetCards(pai, str []string) []string {
+	sort.Sort(sort.Reverse(sort.StringSlice(pai)))
+	fmt.Println("pai:", pai)
+	var data []string
+	for k, v := range pai {
+		s := NewString(v)
+		if s == "1" {
+			data = append(data, v)
+			pai = append(pai[:k], pai[k+1:]...)
+		}
+	}
+	for k, v := range str {
+		s := NewString(v)
+		if s == "1" {
+			str = append(str[:k], str[k+1:]...)
+		}
+	}
+	for _, v := range pai {
+		for k, v2 := range str {
+			if v == v2 {
+				data = append(data, v2)
+				str = append(str[:k], str[k+1:]...)
+			}
+		}
+	}
+	data = append(data, str...)
+	return data
+}
+
+func NewString(str string) string {
+	str = strings.TrimPrefix(str, "♥")
+	str = strings.TrimPrefix(str, "♠")
+	str = strings.TrimPrefix(str, "♣")
+	str = strings.TrimPrefix(str, "♦")
+	return str
+}
+func NewNumber(str string) string {
+	str = strings.TrimRight(str, "1")
+	str = strings.TrimRight(str, "2")
+	str = strings.TrimRight(str, "3")
+	str = strings.TrimRight(str, "4")
+	str = strings.TrimRight(str, "5")
+	str = strings.TrimRight(str, "6")
+	str = strings.TrimRight(str, "7")
+	str = strings.TrimRight(str, "8")
+	str = strings.TrimRight(str, "9")
+	str = strings.TrimRight(str, "A")
+	str = strings.TrimRight(str, "B")
+	str = strings.TrimRight(str, "C")
+	str = strings.TrimRight(str, "D")
+	return str
+}
+
+func SortString(cs []string) []string {
+	sort.Sort(sort.Reverse(sort.StringSlice(cs)))
+	return cs
 }
