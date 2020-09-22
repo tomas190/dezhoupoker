@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
+	"math/rand"
 	"strconv"
+	"time"
 )
 
 type RoomData struct {
@@ -36,6 +38,12 @@ func SetRoomConfig(cfgId string) RoomData {
 func Decimal(value float64) float64 {
 	value, _ = strconv.ParseFloat(fmt.Sprintf("%.6f", value), 64)
 	return value
+}
+
+func RandInRange(min int, max int) int {
+	rand.Seed(time.Now().UnixNano())
+	time.Sleep(1 * time.Nanosecond)
+	return rand.Intn(max-min) + min
 }
 
 //ErrorResp 错误消息返回

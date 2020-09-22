@@ -1127,7 +1127,8 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 
 	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
-	r.Banker ++
+	num := RandInRange(0, 8)
+	r.Banker = int32(num)
 
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
