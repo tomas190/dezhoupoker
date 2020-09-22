@@ -936,7 +936,6 @@ func (r *Room) RestartGame() {
 				if IsReStart == true {
 					//开始新一轮游戏,重复调用StartGameRun函数
 					log.Debug("RestartGame 开始运行游戏~")
-					r.Banker ++
 					r.StartGameRun()
 				}
 				return
@@ -1128,6 +1127,7 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 
 	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
+	r.Banker ++
 
 	// 房间总人数
 	r.AllPlayer = append(r.AllPlayer, p)
