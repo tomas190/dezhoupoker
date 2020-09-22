@@ -471,28 +471,305 @@ func ShowStraight(cards []int32) []int32 {
 	cs2 := SortString(cs)
 	fmt.Println("cs2:", cs2)
 
-	GetStraight(cs2)
+	cs3 := GetStraight(cs2)
 
-	return cards
+	fmt.Println("cs3:", cs3)
+
+	var data []int32
+
+	var n0 int
+	var n1 int
+	var n2 int
+	var n3 int
+	var n4 int
+	var n5 int
+	var n6 int
+	for _, v := range cs3 {
+		if n0 == 0 {
+			if v == num0 {
+				data = append(data, cards[0])
+				n0++
+				continue
+			}
+		}
+		if n1 == 0 {
+			if v == num1 {
+				data = append(data, cards[1])
+				n1++
+				continue
+			}
+		}
+		if n2 == 0 {
+			if v == num2 {
+				data = append(data, cards[2])
+				n2++
+				continue
+			}
+		}
+		if n3 == 0 {
+			if v == num3 {
+				data = append(data, cards[3])
+				n3++
+				continue
+			}
+		}
+		if n4 == 0 {
+			if v == num4 {
+				data = append(data, cards[4])
+				n4++
+				continue
+			}
+		}
+		if n5 == 0 {
+			if v == num5 {
+				data = append(data, cards[5])
+				n5++
+				continue
+			}
+		}
+		if n6 == 0 {
+			if v == num6 {
+				data = append(data, cards[6])
+				n6++
+				continue
+			}
+		}
+	}
+	return data
 }
 
 func GetStraight(cards []string) []string {
+	cards = RemoveRepByLoop(cards)
+	fmt.Println("c4:", cards)
+
 	if cards[0] == "D" {
 		if cards[1] == "C" {
 			if cards[2] == "B" {
-				return cards[:len(cards)-2]
+				return cards
 			}
 		}
 	}
 	if cards[0] == "C" {
 		if cards[1] == "B" {
 			if cards[2] == "A" {
-				return cards[1:]
+				return cards
 			}
 		}
 	}
-
-	return cards
+	if cards[0] == "B" {
+		if cards[1] == "A" {
+			if cards[2] == "9" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "A" {
+		if cards[1] == "9" {
+			if cards[2] == "8" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "9" {
+		if cards[1] == "8" {
+			if cards[2] == "7" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "8" {
+		if cards[1] == "7" {
+			if cards[2] == "6" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "7" {
+		if cards[1] == "6" {
+			if cards[2] == "5" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "6" {
+		if cards[1] == "5" {
+			if cards[2] == "4" {
+				return cards
+			}
+		}
+	}
+	if cards[0] == "5" {
+		if cards[1] == "4" {
+			if cards[2] == "3" {
+				return cards
+			}
+		}
+	}
+	if cards[1] == "D" {
+		if cards[2] == "C" {
+			if cards[3] == "B" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "C" {
+		if cards[2] == "B" {
+			if cards[3] == "A" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "B" {
+		if cards[2] == "A" {
+			if cards[3] == "9" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "A" {
+		if cards[2] == "9" {
+			if cards[3] == "8" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "9" {
+		if cards[2] == "8" {
+			if cards[3] == "7" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "8" {
+		if cards[2] == "7" {
+			if cards[3] == "6" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "7" {
+		if cards[2] == "6" {
+			if cards[3] == "5" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "6" {
+		if cards[2] == "5" {
+			if cards[3] == "4" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[1] == "5" {
+		if cards[2] == "4" {
+			if cards[3] == "3" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "D" {
+		if cards[3] == "C" {
+			if cards[4] == "B" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "C" {
+		if cards[3] == "B" {
+			if cards[4] == "A" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "B" {
+		if cards[3] == "A" {
+			if cards[4] == "9" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "A" {
+		if cards[3] == "9" {
+			if cards[4] == "8" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "9" {
+		if cards[3] == "8" {
+			if cards[4] == "7" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "8" {
+		if cards[3] == "7" {
+			if cards[4] == "6" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "7" {
+		if cards[3] == "6" {
+			if cards[4] == "5" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "6" {
+		if cards[3] == "5" {
+			if cards[4] == "4" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "5" {
+		if cards[3] == "4" {
+			if cards[4] == "3" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
+				return str
+			}
+		}
+	}
+	str2 := cards[2:]
+	str2 = append(str2, cards[:2]...)
+	return str2
 }
 
 func ShowFlush(cards []int32) []int32 {
@@ -632,6 +909,26 @@ func NewNumber(str string) string {
 	str = strings.TrimRight(str, "C")
 	str = strings.TrimRight(str, "D")
 	return str
+}
+
+func RemoveRepByLoop(slc []string) []string {
+	result := []string{} // 存放结果
+	str := []string{}
+	for i := range slc {
+		flag := true
+		for j := range result {
+			if slc[i] == result[j] {
+				str = append(str, slc[i])
+				flag = false // 存在重复元素，标识为false
+				break
+			}
+		}
+		if flag { // 标识为false，不添加进结果
+			result = append(result, slc[i])
+		}
+	}
+	result = append(result, str...)
+	return result
 }
 
 func SortString(cs []string) []string {

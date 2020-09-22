@@ -217,6 +217,7 @@ func (r *Room) GameRunning() {
 
 			cardSlice := cs.GetCardHexInt()
 			if kind == 5 {
+				cardSlice = algorithm.ShowCards(kind, cardSlice)
 				p.cardData.PublicCardKeys = cardSlice[:len(cardSlice)-2]
 			} else if kind == 6 {
 				cardSlice = algorithm.ShowCards(kind, cardSlice)
