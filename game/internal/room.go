@@ -91,7 +91,7 @@ func (r *Room) Init(cfgId string) {
 	r.remain = 0
 	r.allin = 0
 	r.Chips = make([]float64, MaxPlayer)
-	r.Banker = 0
+	//r.Banker = 0
 	r.SB = rd.SB
 	r.BB = rd.BB
 	r.SBId = ""

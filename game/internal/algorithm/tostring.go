@@ -471,8 +471,30 @@ func ShowStraight(cards []int32) []int32 {
 	cs2 := SortString(cs)
 	fmt.Println("cs2:", cs2)
 
+	GetStraight(cs2)
+
 	return cards
 }
+
+func GetStraight(cards []string) []string {
+	if cards[0] == "D" {
+		if cards[1] == "C" {
+			if cards[2] == "B" {
+				return cards[:len(cards)-2]
+			}
+		}
+	}
+	if cards[0] == "C" {
+		if cards[1] == "B" {
+			if cards[2] == "A" {
+				return cards[1:]
+			}
+		}
+	}
+
+	return cards
+}
+
 func ShowFlush(cards []int32) []int32 {
 	str := CardString(cards)
 	fmt.Println("str:", str)
@@ -510,7 +532,6 @@ func ShowFlush(cards []int32) []int32 {
 		}
 	}
 	var cs2 []string
-
 
 	if len(hei) >= 5 {
 		cs2 = GetCards(hei, str)
