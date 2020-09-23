@@ -84,6 +84,7 @@ message PlayerInfo {
 
 message Login_S2C {
     PlayerInfo playerInfo = 1;
+    bool backroom = 2;
 }
 
 message Logout_C2S {
