@@ -377,8 +377,8 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	case 1: // 高牌
 	case 2: // 一对
 	case 3: // 两对
-		cardShow := ShowTwoPairs(cards)
-		return cardShow
+		//cardShow := ShowTwoPairs(cards)
+		//return cardShow
 	case 4: // 三条
 	case 5: // 顺子
 		cardShow := ShowStraight(cards)
