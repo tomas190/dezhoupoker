@@ -126,7 +126,7 @@ func (r *Room) GameRunning() {
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+		if r.PlayerList[i] != nil && r.PlayerList[i].cardData.HandCardKeys != nil {
 			p := r.PlayerList[i]
 			cs := pubCards.Append(p.cards...)
 			kind, _ := algorithm.De(cs.GetType())
@@ -168,18 +168,18 @@ func (r *Room) GameRunning() {
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+		if r.PlayerList[i] != nil && r.PlayerList[i].cardData.HandCardKeys != nil {
 			p := r.PlayerList[i]
 			cs := pubCards.Append(p.cards...)
 			kind, _ := algorithm.De(cs.GetType())
 			p.cardData.SuitPattern = msg.CardSuit(kind)
-
 			// 游戏阶段变更
 			game := &msg.GameStepChange_S2C{}
 			game.RoomData = r.RespRoomData()
 			r.Broadcast(game)
 		}
 	}
+
 	//1、准备阶段
 	r.readyPlay()
 
@@ -207,7 +207,7 @@ func (r *Room) GameRunning() {
 
 	r.publicCards = pubCards.HexInt()
 	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].gameStep == emInGaming {
+		if r.PlayerList[i] != nil && r.PlayerList[i].cardData.HandCardKeys != nil {
 			p := r.PlayerList[i]
 			cs := pubCards.Append(p.cards...)
 			p.HandValue = cs.GetType()
