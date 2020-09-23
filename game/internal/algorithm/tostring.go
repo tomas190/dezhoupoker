@@ -865,25 +865,15 @@ func GetCards(pai, str []string) []string {
 	for k, v := range pai {
 		s := NewString(v)
 		if s == "1" {
-			data = append(data, v)
 			pai = append(pai[:k], pai[k+1:]...)
+			data = append(data, v)
+			data = append(data, pai...)
 		}
 	}
-	for k, v := range str {
-		s := NewString(v)
-		if s == "1" {
-			str = append(str[:k], str[k+1:]...)
-		}
-	}
-	for _, v := range pai {
-		for k, v2 := range str {
-			if v == v2 {
-				data = append(data, v2)
-				str = append(str[:k], str[k+1:]...)
-			}
-		}
-	}
-	data = append(data, str...)
+
+	_, sk := checkSliceBInA(data, str)
+
+	data = append(data, sk...)
 	return data
 }
 
@@ -929,6 +919,34 @@ func RemoveRepByLoop(slc []string) []string {
 	}
 	result = append(result, str...)
 	return result
+}
+
+func checkSliceBInA(a []string, b []string) (isIn bool, diffSlice []string) {
+
+	lengthA := len(a)
+
+	for _, valueB := range b {
+
+		temp := valueB //遍历取出B中的元素
+
+		for j := 0; j < lengthA; j++ {
+			if temp == a[j] { //如果相同 比较下一个
+				break
+			} else {
+				if lengthA == (j + 1) { //如果不同 查看a的元素个数及当前比较元素的位置 将不同的元素添加到返回slice中
+					diffSlice = append(diffSlice, temp)
+				}
+			}
+		}
+	}
+
+	if len(diffSlice) == 0 {
+		isIn = true
+	} else {
+		isIn = false
+	}
+
+	return isIn, diffSlice
 }
 
 func SortString(cs []string) []string {

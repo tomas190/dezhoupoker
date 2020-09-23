@@ -2354,7 +2354,8 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/room_handle.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room_handle.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3299,22 +3300,22 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1237" height="210" key="GridCell.Tab.0.bottom" timestamp="1600839715427">
+    <state width="1237" height="210" key="GridCell.Tab.0.bottom" timestamp="1600854892868">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="210" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1600839715427" />
-    <state width="1237" height="210" key="GridCell.Tab.0.center" timestamp="1600839715418">
+    <state width="1237" height="210" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1600854892868" />
+    <state width="1237" height="210" key="GridCell.Tab.0.center" timestamp="1600854892868">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="210" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1600839715418" />
-    <state width="1237" height="210" key="GridCell.Tab.0.left" timestamp="1600839715411">
+    <state width="1237" height="210" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1600854892868" />
+    <state width="1237" height="210" key="GridCell.Tab.0.left" timestamp="1600854892868">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="210" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1600839715411" />
-    <state width="1237" height="210" key="GridCell.Tab.0.right" timestamp="1600839715422">
+    <state width="1237" height="210" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1600854892868" />
+    <state width="1237" height="210" key="GridCell.Tab.0.right" timestamp="1600854892868">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="210" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1600839715422" />
+    <state width="1237" height="210" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1600854892868" />
     <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1599029526826">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
