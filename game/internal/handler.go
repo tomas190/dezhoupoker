@@ -88,6 +88,12 @@ func handleLogin(args []interface{}) {
 				login.PlayerInfo.HeadImg = u.HeadImg
 				login.PlayerInfo.Account = u.Account
 
+				roomId := hall.UserRoom[p.Id]
+				rm, _ := hall.RoomRecord.Load(roomId)
+				if rm != nil {
+					login.Backroom = true
+				}
+				a.WriteMsg(login)
 				//p.ConnAgent.Destroy()
 				p.ConnAgent = a
 				p.ConnAgent.SetUserData(u) //p
@@ -95,7 +101,6 @@ func handleLogin(args []interface{}) {
 			}
 
 			// 处理重连
-			var IsBackRoom bool
 			for _, r := range hall.roomList {
 				for _, v := range r.PlayerList {
 					if v != nil && v.Id == p.Id {
@@ -103,12 +108,10 @@ func handleLogin(args []interface{}) {
 						enter := &msg.EnterRoom_S2C{}
 						enter.RoomData = roomData
 						p.SendMsg(enter)
-						IsBackRoom = true
 					}
 				}
 			}
-			login.Backroom = IsBackRoom
-			a.WriteMsg(login)
+
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
 		c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {
