@@ -382,9 +382,11 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	case 4: // 三条
 	case 5: // 顺子
 		cardShow := ShowStraight(cards)
+		fmt.Println("顺子:",cardShow)
 		return cardShow
 	case 6: // 同花
 		cardShow := ShowFlush(cards)
+		fmt.Println("同花:",cardShow)
 		return cardShow
 	case 7: // 葫芦
 	case 8: // 四条
@@ -469,11 +471,11 @@ func ShowStraight(cards []int32) []int32 {
 	num6 = NewString(num6)
 	cs := []string{num0, num1, num2, num3, num4, num5, num6}
 	cs2 := SortString(cs)
-	fmt.Println("cs2:", cs2)
+	//fmt.Println("cs2:", cs2)
 
 	cs3 := GetStraight(cs2)
 
-	fmt.Println("cs3:", cs3)
+	//fmt.Println("cs3:", cs3)
 
 	var data []int32
 

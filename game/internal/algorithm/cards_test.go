@@ -59,6 +59,16 @@ func TestCards_Straight(t *testing.T) {
 
 	k, _ := De(cards.GetType())
 
+	cardSlice := cards.HexInt()
+	for i := 0; i < 2; i++ {
+		cardSlice = ShowCards(k, cardSlice)
+		fmt.Println("当前卡牌类型", k, cardSlice)
+		c := cardSlice[:len(cardSlice)-2]
+		fmt.Println("当前卡牌数据", c)
+		fmt.Println("转换2:", CardString(ShowCards(k, cards.HexInt())))
+	}
+
+
 	fmt.Println("卡牌:", cards)
 	fmt.Println("卡牌类型:", k)
 	fmt.Println("转换1:", CardString(cards.HexInt()))

@@ -221,7 +221,7 @@ func (r *Room) GameRunning() {
 			cardSlice := cs.HexInt()
 			if kind == 5 || kind == 6 {
 				cardSlice = algorithm.ShowCards(kind, cardSlice)
-				p.cardData.PublicCardKeys = cardSlice[:len(cardSlice)-2]
+				p.cardData.PublicCardKeys = cardSlice[:5]
 				log.Debug("当前卡牌类型:%v,%v", kind, p.cardData.PublicCardKeys)
 			} else {
 				p.cardData.PublicCardKeys = cardSlice[2:]
