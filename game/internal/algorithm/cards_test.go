@@ -53,26 +53,25 @@ func TestCards_Straight(t *testing.T) {
 	//cards := Cards{0x05, 0x35, 0x34, 0x25, 0x26, 0x37, 0x28}  // 顺子 后
 	//cards := Cards{0x12, 0x26, 0x34, 0x35, 0x25, 0x38, 0x28} // 2对  前
 	//cards := Cards{0x33, 0x33, 0x33, 0x35, 0x25, 0x35, 0x28}  // 葫芦 前
-	cards := Cards{0x28, 0x23, 0x24, 0x22, 0x2e, 0x27, 0x3e}
+	cards := Cards{0x28, 0x23, 0x24, 0x22, 0x2e, 0x27, 0x3e}  // 同花1
+	//cards := Cards{0x02, 0x24, 0x06, 0x07, 0x09, 0x0c, 0x3d} // 同花2
+
 	//cards := Cards{0x2e, 0x22, 0x06, 0x24, 0x05, 0x33, 0x19}
 	//cards := Cards{0x12, 0x25, 0x06, 0x24, 0x05, 0x33, 0x19}
 
 	k, _ := De(cards.GetType())
 
 	cardSlice := cards.HexInt()
-	for i := 0; i < 2; i++ {
-		cardSlice = ShowCards(k, cardSlice)
-		fmt.Println("当前卡牌类型", k, cardSlice)
-		c := cardSlice[:len(cardSlice)-2]
-		fmt.Println("当前卡牌数据", c)
-		fmt.Println("转换2:", CardString(ShowCards(k, cards.HexInt())))
-	}
-
-
-	fmt.Println("卡牌:", cards)
-	fmt.Println("卡牌类型:", k)
-	fmt.Println("转换1:", CardString(cards.HexInt()))
+	cardSlice = ShowCards(k, cardSlice)
+	fmt.Println("当前卡牌类型", k, cardSlice)
+	c := cardSlice[:5]
+	fmt.Println("当前卡牌数据", c)
 	fmt.Println("转换2:", CardString(ShowCards(k, cards.HexInt())))
+
+	//fmt.Println("卡牌:", cards)
+	//fmt.Println("卡牌类型:", k)
+	//fmt.Println("转换1:", CardString(cards.HexInt()))
+	//fmt.Println("转换2:", CardString(ShowCards(k, cards.HexInt())))
 	////fmt.Println("显示:",cards.GetCardHexInt())
 	//a := msg.CardSuit(k)
 	//En(uint8(a),cards.GetType())

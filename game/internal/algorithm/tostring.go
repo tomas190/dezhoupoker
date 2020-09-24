@@ -382,11 +382,11 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	case 4: // 三条
 	case 5: // 顺子
 		cardShow := ShowStraight(cards)
-		fmt.Println("顺子:",cardShow)
+		fmt.Println("顺子:", cardShow)
 		return cardShow
 	case 6: // 同花
 		cardShow := ShowFlush(cards)
-		fmt.Println("同花:",cardShow)
+		fmt.Println("同花:", cardShow)
 		return cardShow
 	case 7: // 葫芦
 	case 8: // 四条
@@ -864,13 +864,18 @@ func GetCards(pai, str []string) []string {
 	sort.Sort(sort.Reverse(sort.StringSlice(pai)))
 	fmt.Println("pai:", pai)
 	var data []string
+	var flag bool
 	for k, v := range pai {
 		s := NewString(v)
 		if s == "1" {
+			flag = true
 			pai = append(pai[:k], pai[k+1:]...)
 			data = append(data, v)
 			data = append(data, pai...)
 		}
+	}
+	if flag == false {
+		data = pai
 	}
 
 	_, sk := checkSliceBInA(data, str)
