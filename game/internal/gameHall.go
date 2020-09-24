@@ -40,13 +40,15 @@ func HallInit() { // 大厅初始化增加一个房间
 		robot.StandUpTable()
 
 		go func() {
-			if r.IsCloseSend == true {
-				return
+			for {
+				if r.IsCloseSend == true {
+					return
+				}
+				time.Sleep(time.Millisecond * 300)
+				data := &msg.SendRoomData_S2C{}
+				data.RoomData = r.RespRoomData()
+				r.Broadcast(data)
 			}
-			time.Sleep(time.Millisecond * 300)
-			data := &msg.SendRoomData_S2C{}
-			data.RoomData = r.RespRoomData()
-			r.Broadcast(data)
 		}()
 	}
 
@@ -179,12 +181,14 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	r.PlayerJoinRoom(p)
 
 	go func() {
-		if r.IsCloseSend == true {
-			return
+		for {
+			if r.IsCloseSend == true {
+				return
+			}
+			time.Sleep(time.Millisecond * 300)
+			data := &msg.SendRoomData_S2C{}
+			data.RoomData = r.RespRoomData()
+			r.Broadcast(data)
 		}
-		time.Sleep(time.Millisecond * 300)
-		data := &msg.SendRoomData_S2C{}
-		data.RoomData = r.RespRoomData()
-		r.Broadcast(data)
 	}()
 }

@@ -1144,13 +1144,15 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	p.SendMsg(data)
 
 	go func() {
-		if r.IsCloseSend == true {
-			return
+		for {
+			if r.IsCloseSend == true {
+				return
+			}
+			time.Sleep(time.Millisecond * 300)
+			data := &msg.SendRoomData_S2C{}
+			data.RoomData = r.RespRoomData()
+			r.Broadcast(data)
 		}
-		time.Sleep(time.Millisecond * 300)
-		data := &msg.SendRoomData_S2C{}
-		data.RoomData = r.RespRoomData()
-		r.Broadcast(data)
 	}()
 }
 
@@ -1234,12 +1236,14 @@ func (p *Player) PiPeiStandUp(r *Room) {
 	p.SendMsg(data)
 
 	go func() {
-		if r.IsCloseSend == true {
-			return
+		for {
+			if r.IsCloseSend == true {
+				return
+			}
+			time.Sleep(time.Millisecond * 300)
+			data := &msg.SendRoomData_S2C{}
+			data.RoomData = r.RespRoomData()
+			r.Broadcast(data)
 		}
-		time.Sleep(time.Millisecond * 300)
-		data := &msg.SendRoomData_S2C{}
-		data.RoomData = r.RespRoomData()
-		r.Broadcast(data)
 	}()
 }
