@@ -51,6 +51,7 @@ type Room struct {
 	UserLeave   []string // 用户是否在房间
 
 	IsPiPeiNow bool // 是否正在匹配中
+	IsCloseSend bool // 是否关闭发送roomData
 
 	ReadyTimeChan  chan bool // 准备时间chan
 	ActionTimeChan chan bool // 行动时间chan
@@ -103,6 +104,7 @@ func (r *Room) Init(cfgId string) {
 	r.IsHaveAllin = false
 
 	r.IsPiPeiNow = false
+	r.IsCloseSend = false
 
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
@@ -1077,6 +1079,7 @@ func (r *Room) PiPeiHandle() bool {
 
 	for k, v := range hall.roomList {
 		if v.roomId == r.roomId {
+			r.IsCloseSend = true
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
 			log.Debug("Quick PiPei Room，so Delete this Room~,目前数量为:%v", len(hall.roomList))
@@ -1139,6 +1142,16 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	data := &msg.PiPeiData_S2C{}
 	data.RoomData = r.RespRoomData()
 	p.SendMsg(data)
+
+	go func() {
+		if r.IsCloseSend == true {
+			return
+		}
+		time.Sleep(time.Millisecond * 300)
+		data := &msg.SendRoomData_S2C{}
+		data.RoomData = r.RespRoomData()
+		r.Broadcast(data)
+	}()
 }
 
 func (p *Player) PiPeiQuickRoom(r *Room) {
@@ -1219,4 +1232,14 @@ func (p *Player) PiPeiStandUp(r *Room) {
 	data := &msg.PiPeiData_S2C{}
 	data.RoomData = rm.RespRoomData()
 	p.SendMsg(data)
+
+	go func() {
+		if r.IsCloseSend == true {
+			return
+		}
+		time.Sleep(time.Millisecond * 300)
+		data := &msg.SendRoomData_S2C{}
+		data.RoomData = r.RespRoomData()
+		r.Broadcast(data)
+	}()
 }

@@ -39,7 +39,7 @@ enum MessageID {
     MSG_PiPeiPlayer_S2C = 32;
     MSG_PiPeiData_S2C = 33;
     MSG_SendActTimer_S2C = 34;
-
+    MSG_SendRoomData_S2C = 35;
 }
 
 message Ping {
@@ -321,4 +321,8 @@ message PiPeiData_S2C {
 message SendActTimer_S2C {
     int32 actChair = 1;
     double timer = 2;
+}
+
+message SendRoomData_S2C {
+    RoomData roomData = 1;
 }

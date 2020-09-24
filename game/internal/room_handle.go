@@ -131,12 +131,13 @@ func (r *Room) GameRunning() {
 			cs := pubCards.Append(p.cards...)
 			kind, _ := algorithm.De(cs.GetType())
 			p.cardData.SuitPattern = msg.CardSuit(kind)
-
-			// 游戏阶段变更
-			game := &msg.GameStepChange_S2C{}
-			game.RoomData = r.RespRoomData()
-			r.Broadcast(game)
 		}
+	}
+	if r.Status == 2 {
+		// 游戏阶段变更
+		game := &msg.GameStepChange_S2C{}
+		game.RoomData = r.RespRoomData()
+		r.Broadcast(game)
 	}
 	//1、准备阶段
 	r.readyPlay()
@@ -173,11 +174,13 @@ func (r *Room) GameRunning() {
 			cs := pubCards.Append(p.cards...)
 			kind, _ := algorithm.De(cs.GetType())
 			p.cardData.SuitPattern = msg.CardSuit(kind)
-			// 游戏阶段变更
-			game := &msg.GameStepChange_S2C{}
-			game.RoomData = r.RespRoomData()
-			r.Broadcast(game)
 		}
+	}
+	if r.Status == 3 {
+		// 游戏阶段变更
+		game := &msg.GameStepChange_S2C{}
+		game.RoomData = r.RespRoomData()
+		r.Broadcast(game)
 	}
 
 	//1、准备阶段
@@ -223,14 +226,13 @@ func (r *Room) GameRunning() {
 			} else {
 				p.cardData.PublicCardKeys = cardSlice[2:]
 			}
-			//algorithm.ShowCards(kind, cardSlice)
-			//log.Debug("玩家手牌最后牌型: %v , 类型: %v, 牌值: %v ", p.Id, kind, p.cardData.PublicCardKeys)
-
-			// 游戏阶段变更
-			game := &msg.GameStepChange_S2C{}
-			game.RoomData = r.RespRoomData()
-			r.Broadcast(game)
 		}
+	}
+	if r.Status == 4 {
+		// 游戏阶段变更
+		game := &msg.GameStepChange_S2C{}
+		game.RoomData = r.RespRoomData()
+		r.Broadcast(game)
 	}
 
 	time.Sleep(time.Millisecond * 1000)
@@ -300,6 +302,7 @@ func (r *Room) ExitFromRoom(p *Player) {
 	if len(r.AllPlayer) == 0 {
 		for k, v := range hall.roomList {
 			if v.roomId == r.roomId {
+				r.IsCloseSend = true
 				hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 				hall.RoomRecord.Delete(r.roomId)
 				log.Debug("Room Player Number is 0，so Delete this Room~")
