@@ -227,7 +227,7 @@ func (r *Room) KickPlayer() {
 	for _, v := range r.PlayerList { // 玩家筹码为0怎么办
 		if v != nil {
 			rd := SetRoomConfig(r.cfgId)
-			if v.chips+v.roomChips < rd.BB {
+			if v.chips+v.roomChips < rd.MinTakeIn {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
 				v.PlayerExitRoom()
 				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v", v)
@@ -1100,13 +1100,32 @@ func (r *Room) ClearPiPeiData(p *Player) {
 		}
 	}
 
-	p.Account += p.chips
-	p.Account += p.roomChips
+	//p.Account += p.chips
+	//p.Account += p.roomChips
 
 	delete(hall.UserRoom, p.Id)
 
 	// 清除用户数据
-	p.ClearPlayerData()
+	p.chair = 0
+	p.actStatus = msg.ActionStatus_WAITING
+	p.gameStep = emNotGaming
+	p.downBets = 0
+	p.lunDownBets = 0
+	p.totalDownBet = 0
+	p.cardData = msg.CardSuitData{}
+	p.resultMoney = 0
+	p.WinResultMoney = 0
+	p.LoseResultMoney = 0
+	p.blindType = msg.BlindType_No_Blind
+	p.IsAllIn = false
+	p.IsButton = false
+	p.IsWinner = false
+	p.IsTimeOutFold = false
+	p.IsInGame = false
+	p.IsStandUp = false
+	p.IsLeaveR = true
+	p.timerCount = 0
+	p.HandValue = 0
 }
 
 func (p *Player) PiPeiCreatRoom(cfgId string) {
@@ -1126,7 +1145,7 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	hall.UserRoom[p.Id] = r.roomId
 
 	// 玩家带入筹码
-	r.TakeInRoomChips(p)
+	//r.TakeInRoomChips(p)
 
 	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
@@ -1167,7 +1186,7 @@ func (p *Player) PiPeiQuickRoom(r *Room) {
 			hall.UserRoom[p.Id] = r.roomId
 
 			// 玩家带入筹码
-			r.TakeInRoomChips(p)
+			//r.TakeInRoomChips(p)
 
 			p.chair = r.FindAbleChair()
 			r.PlayerList[p.chair] = p
@@ -1195,7 +1214,7 @@ func (p *Player) PiPeiStandUp(r *Room) {
 			hall.UserRoom[p.Id] = r.roomId
 
 			// 玩家带入筹码
-			r.TakeInRoomChips(p)
+			//r.TakeInRoomChips(p)
 
 			// 房间总人数
 			r.AllPlayer = append(r.AllPlayer, p)
@@ -1223,7 +1242,7 @@ func (p *Player) PiPeiStandUp(r *Room) {
 	hall.UserRoom[p.Id] = rm.roomId
 
 	// 玩家带入筹码
-	rm.TakeInRoomChips(p)
+	//rm.TakeInRoomChips(p)
 
 	// 房间总人数
 	rm.AllPlayer = append(rm.AllPlayer, p)

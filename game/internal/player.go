@@ -31,7 +31,7 @@ type Player struct {
 	chips           float64          // 玩家筹码
 	roomChips       float64          // 玩家房间筹码
 	chair           int32            // 座位号(站起为-1)
-	standUPNum      int32            // 站起玩家局数(站起5局直接踢出)
+	standUPNum      int32            // 站起玩家局数(站起6局直接踢出)
 	actStatus       msg.ActionStatus // 玩家行动状态
 	gameStep        GameStatus       // 玩家游戏状态
 	downBets        float64          // 下注金额
