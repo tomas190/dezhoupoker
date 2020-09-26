@@ -50,7 +50,7 @@ type Room struct {
 	IsHaveAllin bool     // 是否有玩家allin
 	UserLeave   []string // 用户是否在房间
 
-	IsPiPeiNow bool // 是否正在匹配中
+	IsPiPeiNow  bool // 是否正在匹配中
 	IsCloseSend bool // 是否关闭发送roomData
 
 	ReadyTimeChan  chan bool // 准备时间chan
@@ -334,6 +334,7 @@ func (r *Room) ClearRoomData() {
 			v.totalDownBet = 0
 			v.cardData = msg.CardSuitData{}
 			v.resultMoney = 0
+			v.resultGetMoney = 0
 			v.WinResultMoney = 0
 			v.LoseResultMoney = 0
 			v.blindType = msg.BlindType_No_Blind
@@ -386,6 +387,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.CardSuitData.PublicCardKeys = v.cardData.PublicCardKeys
 			pd.CardSuitData.SuitPattern = v.cardData.SuitPattern
 			pd.ResultMoney = v.resultMoney
+			pd.ResultGetMoney = v.resultGetMoney
 			pd.BlindType = v.blindType
 			pd.IsButton = v.IsButton
 			pd.IsAllIn = v.IsAllIn
@@ -419,6 +421,7 @@ func (r *Room) RespRoomData() *msg.RoomData {
 			pd.CardSuitData.PublicCardKeys = v.cardData.PublicCardKeys
 			pd.CardSuitData.SuitPattern = v.cardData.SuitPattern
 			pd.ResultMoney = v.resultMoney
+			pd.ResultGetMoney = v.resultGetMoney
 			pd.BlindType = v.blindType
 			pd.IsButton = v.IsButton
 			pd.IsAllIn = v.IsAllIn
@@ -695,6 +698,7 @@ func (r *Room) ShowDown() {
 			player := r.PlayerList[i]
 			player.WinResultMoney = v
 			player.resultMoney += v
+			player.resultGetMoney += v
 			if v-player.totalDownBet > 0 {
 				player.IsWinner = true
 			}
@@ -744,9 +748,13 @@ func (r *Room) ResultMoney() {
 				// 这里是玩家金额扣税
 				p.resultMoney -= taxMoney
 
-				if p.resultMoney > 0 {
-					p.chips += p.totalDownBet
-					p.chips += p.resultMoney
+				if p.resultGetMoney > 0 {
+					if p.resultMoney > 0 {
+						p.chips += p.totalDownBet
+						p.chips += p.resultMoney
+					} else {
+						p.chips += p.resultGetMoney
+					}
 				}
 
 				// 插入盈余池数据
@@ -1115,6 +1123,7 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	p.totalDownBet = 0
 	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0
+	p.resultGetMoney = 0
 	p.WinResultMoney = 0
 	p.LoseResultMoney = 0
 	p.blindType = msg.BlindType_No_Blind

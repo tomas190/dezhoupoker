@@ -165,6 +165,7 @@ message PlayerData {
     bool IsLeaveR = 20; // 客户端是否离开房间
     double timerCount = 21; // 玩家行动计时
     double account = 22; // 玩家的总金额(每局更新)
+    double resultGetMoney = 23; // 玩家结算多出的金额
 }
 
 message RoomData {

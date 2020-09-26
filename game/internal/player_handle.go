@@ -48,6 +48,7 @@ func (p *Player) ClearPlayerData() {
 	p.totalDownBet = 0
 	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0
+	p.resultGetMoney = 0
 	p.WinResultMoney = 0
 	p.LoseResultMoney = 0
 	p.blindType = msg.BlindType_No_Blind

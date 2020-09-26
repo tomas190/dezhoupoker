@@ -39,6 +39,7 @@ type Player struct {
 	totalDownBet    float64          // 下注总金额
 	cardData        msg.CardSuitData // 卡牌数据和类型
 	resultMoney     float64          // 结算金额
+	resultGetMoney  float64          // 玩家结算多出的金额
 	WinResultMoney  float64          // 本局赢钱金额
 	LoseResultMoney float64          // 本局输钱金额
 	blindType       msg.BlindType    // 盲注类型
@@ -74,6 +75,7 @@ func (p *Player) Init() {
 	p.totalDownBet = 0
 	p.cardData = msg.CardSuitData{}
 	p.resultMoney = 0
+	p.resultGetMoney = 0
 	p.WinResultMoney = 0
 	p.LoseResultMoney = 0
 	p.blindType = msg.BlindType_No_Blind
@@ -122,6 +124,7 @@ func (p *Player) RespPlayerData() *msg.PlayerData {
 	data.CardSuitData.PublicCardKeys = p.cardData.PublicCardKeys
 	data.CardSuitData.SuitPattern = p.cardData.SuitPattern
 	data.ResultMoney = p.resultMoney
+	data.ResultGetMoney = p.resultGetMoney
 	data.BlindType = p.blindType
 	data.IsButton = p.IsButton
 	data.IsAllIn = p.IsAllIn
