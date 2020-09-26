@@ -819,14 +819,14 @@ func (r *Room) ReadyTimer() {
 	ready.ReadyTime = ReadyTime
 	r.Broadcast(ready)
 
-	// 玩家补充筹码
-	r.PlayerAddChips()
-
 	go func() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 2 {
+				// 玩家补充筹码
+				r.PlayerAddChips()
+
 				// 洗牌
 				r.Cards.Shuffle()
 
