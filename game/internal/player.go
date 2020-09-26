@@ -87,7 +87,7 @@ func (p *Player) Init() {
 	p.timerCount = 0
 	p.IsInGame = false
 	p.IsStandUp = false
-	p.IsLeaveR = true
+	p.IsLeaveR = false
 	p.action = make(chan msg.ActionStatus)
 	p.PreRoomId = ""
 	p.IsRobot = false

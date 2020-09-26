@@ -229,6 +229,7 @@ func (r *Room) KickPlayer() {
 			rd := SetRoomConfig(r.cfgId)
 			if v.chips+v.roomChips < rd.MinTakeIn {
 				//ErrorResp(v.ConnAgent, msg.ErrorMsg_ChipsInsufficient, "玩家筹码不足")
+				v.IsLeaveR = true
 				v.PlayerExitRoom()
 				log.Debug("踢掉玩家筹码和房间小于房间最小带入金额:%v", v)
 			}
@@ -340,7 +341,7 @@ func (r *Room) ClearRoomData() {
 			v.IsWinner = false
 			v.IsButton = false
 			v.IsInGame = false
-			v.IsLeaveR = true
+			v.IsLeaveR = false
 			v.HandValue = 0
 		}
 	}
@@ -698,7 +699,7 @@ func (r *Room) ShowDown() {
 				player.IsWinner = true
 			}
 		}
-		//fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.Id, player.chair, player.cardData.SuitPattern, v, player.chips)
+		fmt.Printf("uid:%s seat:%d result:%s win:%f chips:%f\n", player.NickName, player.chair, player.cardData.SuitPattern, v, player.chips)
 	}
 }
 
@@ -1123,7 +1124,7 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	p.IsTimeOutFold = false
 	p.IsInGame = false
 	p.IsStandUp = false
-	p.IsLeaveR = true
+	p.IsLeaveR = false
 	p.timerCount = 0
 	p.HandValue = 0
 }
