@@ -26,6 +26,8 @@ func init() {
 	handlerReg(&msg.RoomStatus_C2S{}, handleRoomStatus)
 
 	handlerReg(&msg.EmojiChat_C2S{}, handleEmojiChat)
+
+	handlerReg(&msg.WaitPlayerList_C2S{}, handWaitPlayerList)
 }
 
 // 注册消息处理函数
@@ -173,7 +175,7 @@ func handleLogout(args []interface{}) {
 					}
 				}
 				if exist == false {
-					log.Debug("添加离线玩家UserLeave:%v",p.Id)
+					log.Debug("添加离线玩家UserLeave:%v", p.Id)
 					room.UserLeave = append(room.UserLeave, p.Id)
 				}
 				p.IsOnline = false
@@ -341,6 +343,57 @@ func handleEmojiChat(args []interface{}) {
 			data.ActChair = p.chair
 			data.GoalChair = m.GoalChair
 			room.Broadcast(data)
+		}
+	}
+}
+
+func handWaitPlayerList(args []interface{}) {
+	m := args[0].(*msg.WaitPlayerList_C2S)
+	a := args[1].(gate.Agent)
+
+	p, ok := a.UserData().(*Player)
+	if ok {
+		if m.WaitStatus == 1 {
+			if m.CfgId == "0" {
+				p.cfgId = m.CfgId
+				hall.PiPeiList0 = append(hall.PiPeiList0, p)
+			} else if m.CfgId == "1" {
+				p.cfgId = m.CfgId
+				hall.PiPeiList1 = append(hall.PiPeiList1, p)
+			} else if m.CfgId == "2" {
+				p.cfgId = m.CfgId
+				hall.PiPeiList2 = append(hall.PiPeiList2, p)
+			} else if m.CfgId == "3" {
+				p.cfgId = m.CfgId
+				hall.PiPeiList3 = append(hall.PiPeiList3, p)
+			}
+		}
+		if m.WaitStatus == 2 {
+			if p.cfgId == "0" {
+				for k, v := range hall.PiPeiList0 {
+					if v.Id == p.Id {
+						hall.PiPeiList0 = append(hall.PiPeiList0[:k], hall.PiPeiList0[k+1:]...)
+					}
+				}
+			} else if p.cfgId == "1" {
+				for k, v := range hall.PiPeiList1 {
+					if v.Id == p.Id {
+						hall.PiPeiList1 = append(hall.PiPeiList1[:k], hall.PiPeiList1[k+1:]...)
+					}
+				}
+			} else if p.cfgId == "2" {
+				for k, v := range hall.PiPeiList2 {
+					if v.Id == p.Id {
+						hall.PiPeiList2 = append(hall.PiPeiList2[:k], hall.PiPeiList2[k+1:]...)
+					}
+				}
+			} else if p.cfgId == "3" {
+				for k, v := range hall.PiPeiList3 {
+					if v.Id == p.Id {
+						hall.PiPeiList3 = append(hall.PiPeiList3[:k], hall.PiPeiList3[k+1:]...)
+					}
+				}
+			}
 		}
 	}
 }

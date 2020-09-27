@@ -44,4 +44,6 @@ func init() {
 	Processor.Register(&PiPeiData_S2C{})          //--33
 	Processor.Register(&SendActTimer_S2C{})       //--34
 	Processor.Register(&SendRoomData_S2C{})       //--35
+	Processor.Register(&WaitPlayerList_C2S{})     //--36
+	Processor.Register(&WaitPlayerList_S2C{})     //--37
 }

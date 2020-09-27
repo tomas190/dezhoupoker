@@ -59,6 +59,8 @@ type Player struct {
 	HandValue uint32
 	action    chan msg.ActionStatus // 玩家行动命令
 
+	cfgId string // 房间等级
+
 	IsRobot bool // 是否机器人
 }
 
@@ -92,6 +94,7 @@ func (p *Player) Init() {
 	p.IsLeaveR = false
 	p.action = make(chan msg.ActionStatus)
 	p.PreRoomId = ""
+	p.cfgId = ""
 	p.IsRobot = false
 }
 
@@ -147,7 +150,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 	var nowAct = false
 	go func() {
 		for {
-			time.Sleep(time.Millisecond * 100)
+			time.Sleep(time.Millisecond * 50)
 			if nowAct == true {
 				return
 			}

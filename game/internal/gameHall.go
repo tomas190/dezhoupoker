@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
+	"math/rand"
 	"strconv"
 	"sync"
 	"time"
@@ -15,6 +16,10 @@ type GameHall struct {
 	RoomRecord sync.Map          // 房间记录
 	roomList   []*Room           // 房间列表
 	UserRoom   map[string]string // 用户房间
+	PiPeiList0 []*Player         // 匹配列表
+	PiPeiList1 []*Player         // 匹配列表
+	PiPeiList2 []*Player         // 匹配列表
+	PiPeiList3 []*Player         // 匹配列表
 }
 
 func NewHall() *GameHall {
@@ -23,6 +28,10 @@ func NewHall() *GameHall {
 		RoomRecord: sync.Map{},
 		roomList:   make([]*Room, 0),
 		UserRoom:   make(map[string]string),
+		PiPeiList0: make([]*Player, 0),
+		PiPeiList1: make([]*Player, 0),
+		PiPeiList2: make([]*Player, 0),
+		PiPeiList3: make([]*Player, 0),
 	}
 }
 
@@ -149,19 +158,297 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	}
 
-	for _, r := range hall.roomList {
-		if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-			if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-				// 装载房间机器人
-				r.LoadRoomRobots()
+	if cfgId == "0" {
+		if len(hall.PiPeiList0) >= 1 && len(hall.PiPeiList0) <= 3 {
+			for _, r := range hall.roomList {
+				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+						// 装载房间机器人
+						r.LoadRoomRobots()
+					}
+					hall.DeleteWaitList(p)
+					r.PlayerJoinRoom(p)
+					return
+				}
 			}
-			r.PlayerJoinRoom(p)
+			hall.DeleteWaitList(p)
+			hall.PlayerCreateRoom(cfgId, p)
 			return
+		} else if len(hall.PiPeiList0) >= 4 && len(hall.PiPeiList0) <= 6 {
+			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+			rand.Seed(time.Now().UnixNano())
+			randNum := rand.Intn(len(sliceNum))
+			if sliceNum[randNum] >= 9 {
+				room := hall.CreatPiPeiRoom(cfgId)
+				for _, v := range hall.PiPeiList0 {
+					data := &msg.WaitPlayerList_S2C{}
+					data.WaitStatus = 1
+					v.SendMsg(data)
+					room.PlayerJoinRoom(v)
+					time.Sleep(time.Millisecond)
+				}
+				hall.PiPeiList0 = []*Player{}
+				return
+			} else {
+				for _, r := range hall.roomList {
+					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+							// 装载房间机器人
+							r.LoadRoomRobots()
+						}
+						hall.DeleteWaitList(p)
+						r.PlayerJoinRoom(p)
+						return
+					}
+				}
+				hall.DeleteWaitList(p)
+				hall.PlayerCreateRoom(cfgId, p)
+				return
+			}
+		} else if len(hall.PiPeiList0) >= 7 && len(hall.PiPeiList0) <= 9 {
+			room := hall.CreatPiPeiRoom(cfgId)
+			for _, v := range hall.PiPeiList0 {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				v.SendMsg(data)
+				room.PlayerJoinRoom(v)
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList0 = []*Player{}
+			return
+		} else if len(hall.PiPeiList0) >= 10 {
+			room1 := hall.CreatPiPeiRoom(cfgId)
+			for i := 0; i < 9; i++ {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				hall.PiPeiList0[i].SendMsg(data)
+				room1.PlayerJoinRoom(hall.PiPeiList0[i])
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList0 = hall.PiPeiList0[9:]
+		}
+	} else if cfgId == "1" {
+		if len(hall.PiPeiList1) >= 1 && len(hall.PiPeiList1) <= 3 {
+			for _, r := range hall.roomList {
+				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+						// 装载房间机器人
+						r.LoadRoomRobots()
+					}
+					hall.DeleteWaitList(p)
+					r.PlayerJoinRoom(p)
+					return
+				}
+			}
+			hall.DeleteWaitList(p)
+			hall.PlayerCreateRoom(cfgId, p)
+			return
+		} else if len(hall.PiPeiList1) >= 4 && len(hall.PiPeiList1) <= 6 {
+			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+			rand.Seed(time.Now().UnixNano())
+			randNum := rand.Intn(len(sliceNum))
+			if sliceNum[randNum] >= 9 {
+				room := hall.CreatPiPeiRoom(cfgId)
+				for _, v := range hall.PiPeiList1 {
+					data := &msg.WaitPlayerList_S2C{}
+					data.WaitStatus = 1
+					v.SendMsg(data)
+					room.PlayerJoinRoom(v)
+					time.Sleep(time.Millisecond)
+				}
+				hall.PiPeiList1 = []*Player{}
+				return
+			} else {
+				for _, r := range hall.roomList {
+					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+							// 装载房间机器人
+							r.LoadRoomRobots()
+						}
+						hall.DeleteWaitList(p)
+						r.PlayerJoinRoom(p)
+						return
+					}
+				}
+				hall.DeleteWaitList(p)
+				hall.PlayerCreateRoom(cfgId, p)
+				return
+			}
+		} else if len(hall.PiPeiList1) >= 7 && len(hall.PiPeiList1) <= 9 {
+			room := hall.CreatPiPeiRoom(cfgId)
+			for _, v := range hall.PiPeiList1 {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				v.SendMsg(data)
+				room.PlayerJoinRoom(v)
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList1 = []*Player{}
+			return
+		} else if len(hall.PiPeiList1) >= 10 {
+			room1 := hall.CreatPiPeiRoom(cfgId)
+			for i := 0; i < 9; i++ {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				hall.PiPeiList1[i].SendMsg(data)
+				room1.PlayerJoinRoom(hall.PiPeiList1[i])
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList1 = hall.PiPeiList1[9:]
+		}
+	} else if cfgId == "2" {
+		if len(hall.PiPeiList2) >= 1 && len(hall.PiPeiList2) <= 3 {
+			for _, r := range hall.roomList {
+				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+						// 装载房间机器人
+						r.LoadRoomRobots()
+					}
+					hall.DeleteWaitList(p)
+					r.PlayerJoinRoom(p)
+					return
+				}
+			}
+			hall.DeleteWaitList(p)
+			hall.PlayerCreateRoom(cfgId, p)
+			return
+		} else if len(hall.PiPeiList2) >= 4 && len(hall.PiPeiList2) <= 6 {
+			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+			rand.Seed(time.Now().UnixNano())
+			randNum := rand.Intn(len(sliceNum))
+			if sliceNum[randNum] >= 9 {
+				room := hall.CreatPiPeiRoom(cfgId)
+				for _, v := range hall.PiPeiList2 {
+					data := &msg.WaitPlayerList_S2C{}
+					data.WaitStatus = 1
+					v.SendMsg(data)
+					room.PlayerJoinRoom(v)
+					time.Sleep(time.Millisecond)
+				}
+				hall.PiPeiList2 = []*Player{}
+				return
+			} else {
+				for _, r := range hall.roomList {
+					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+							// 装载房间机器人
+							r.LoadRoomRobots()
+						}
+						hall.DeleteWaitList(p)
+						r.PlayerJoinRoom(p)
+						return
+					}
+				}
+				hall.DeleteWaitList(p)
+				hall.PlayerCreateRoom(cfgId, p)
+				return
+			}
+		} else if len(hall.PiPeiList2) >= 7 && len(hall.PiPeiList2) <= 9 {
+			room := hall.CreatPiPeiRoom(cfgId)
+			for _, v := range hall.PiPeiList2 {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				v.SendMsg(data)
+				room.PlayerJoinRoom(v)
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList2 = []*Player{}
+			return
+		} else if len(hall.PiPeiList2) >= 10 {
+			room1 := hall.CreatPiPeiRoom(cfgId)
+			for i := 0; i < 9; i++ {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				hall.PiPeiList2[i].SendMsg(data)
+				room1.PlayerJoinRoom(hall.PiPeiList2[i])
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList2 = hall.PiPeiList2[9:]
+		}
+	} else if cfgId == "3" {
+		if len(hall.PiPeiList3) >= 1 && len(hall.PiPeiList3) <= 3 {
+			for _, r := range hall.roomList {
+				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+						// 装载房间机器人
+						r.LoadRoomRobots()
+					}
+					hall.DeleteWaitList(p)
+					r.PlayerJoinRoom(p)
+					return
+				}
+			}
+			hall.DeleteWaitList(p)
+			hall.PlayerCreateRoom(cfgId, p)
+			return
+		} else if len(hall.PiPeiList3) >= 4 && len(hall.PiPeiList3) <= 6 {
+			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+			rand.Seed(time.Now().UnixNano())
+			randNum := rand.Intn(len(sliceNum))
+			if sliceNum[randNum] >= 9 {
+				room := hall.CreatPiPeiRoom(cfgId)
+				for _, v := range hall.PiPeiList3 {
+					data := &msg.WaitPlayerList_S2C{}
+					data.WaitStatus = 1
+					v.SendMsg(data)
+					room.PlayerJoinRoom(v)
+					time.Sleep(time.Millisecond)
+				}
+				hall.PiPeiList3 = []*Player{}
+				return
+			} else {
+				for _, r := range hall.roomList {
+					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+							// 装载房间机器人
+							r.LoadRoomRobots()
+						}
+						hall.DeleteWaitList(p)
+						r.PlayerJoinRoom(p)
+						return
+					}
+				}
+				hall.DeleteWaitList(p)
+				hall.PlayerCreateRoom(cfgId, p)
+				return
+			}
+		} else if len(hall.PiPeiList3) >= 7 && len(hall.PiPeiList3) <= 9 {
+			room := hall.CreatPiPeiRoom(cfgId)
+			for _, v := range hall.PiPeiList3 {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				v.SendMsg(data)
+				room.PlayerJoinRoom(v)
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList3 = []*Player{}
+			return
+		} else if len(hall.PiPeiList3) >= 10 {
+			room1 := hall.CreatPiPeiRoom(cfgId)
+			for i := 0; i < 9; i++ {
+				data := &msg.WaitPlayerList_S2C{}
+				data.WaitStatus = 1
+				hall.PiPeiList3[i].SendMsg(data)
+				room1.PlayerJoinRoom(hall.PiPeiList3[i])
+				time.Sleep(time.Millisecond)
+			}
+			hall.PiPeiList3 = hall.PiPeiList3[9:]
 		}
 	}
 
-	hall.PlayerCreateRoom(cfgId, p)
-	return
+	//for _, r := range hall.roomList {
+	//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+	//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+	//			// 装载房间机器人
+	//			r.LoadRoomRobots()
+	//		}
+	//		r.PlayerJoinRoom(p)
+	//		return
+	//	}
+	//}
+	//
+	//hall.PlayerCreateRoom(cfgId, p)
+	//return
 }
 
 //PlayerCreateRoom 创建游戏房间
@@ -191,4 +478,41 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 			r.Broadcast(data)
 		}
 	}()
+}
+
+func (hall *GameHall) DeleteWaitList(p *Player) {
+	if p.cfgId == "0" {
+		for k, v := range hall.PiPeiList0 {
+			if v.Id == p.Id {
+				hall.PiPeiList0 = append(hall.PiPeiList0[:k], hall.PiPeiList0[k+1:]...)
+			}
+		}
+	} else if p.cfgId == "1" {
+		for k, v := range hall.PiPeiList1 {
+			if v.Id == p.Id {
+				hall.PiPeiList1 = append(hall.PiPeiList1[:k], hall.PiPeiList1[k+1:]...)
+			}
+		}
+	} else if p.cfgId == "2" {
+		for k, v := range hall.PiPeiList2 {
+			if v.Id == p.Id {
+				hall.PiPeiList2 = append(hall.PiPeiList2[:k], hall.PiPeiList2[k+1:]...)
+			}
+		}
+	} else if p.cfgId == "3" {
+		for k, v := range hall.PiPeiList3 {
+			if v.Id == p.Id {
+				hall.PiPeiList3 = append(hall.PiPeiList3[:k], hall.PiPeiList3[k+1:]...)
+			}
+		}
+	}
+}
+
+func (hall *GameHall) CreatPiPeiRoom(cfgId string) *Room {
+	r := &Room{}
+	r.Init(cfgId)
+
+	hall.roomList = append(hall.roomList, r)
+	hall.RoomRecord.Store(r.roomId, r)
+	return r
 }

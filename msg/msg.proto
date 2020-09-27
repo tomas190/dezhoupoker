@@ -40,6 +40,8 @@ enum MessageID {
     MSG_PiPeiData_S2C = 33;
     MSG_SendActTimer_S2C = 34;
     MSG_SendRoomData_S2C = 35;
+    MSG_WaitPlayerList_C2S = 36;
+    MSG_WaitPlayerList_S2C = 37;
 }
 
 message Ping {
@@ -326,4 +328,13 @@ message SendActTimer_S2C {
 
 message SendRoomData_S2C {
     RoomData roomData = 1;
+}
+
+message WaitPlayerList_C2S {
+    int32 WaitStatus = 1;
+    string cfgId = 2;
+}
+
+message WaitPlayerList_S2C {
+    int32 WaitStatus = 1;
 }
