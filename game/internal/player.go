@@ -154,7 +154,7 @@ func (p *Player) GetAction(r *Room, timeout time.Duration) bool {
 			if nowAct == true {
 				return
 			}
-			p.timerCount += 0.1
+			p.timerCount += 0.05
 			data := &msg.SendActTimer_S2C{}
 			data.ActChair = p.chair
 			data.Timer = p.timerCount
