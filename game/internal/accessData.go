@@ -59,6 +59,7 @@ type GetSurPool struct {
 	PlayerTotalLoseWin             float64 `json:"player_total_lose_win" bson:"player_total_lose_win" `
 	SurplusPool                    float64 `json:"surplus_pool" bson:"surplus_pool"`
 	PlayerLoseRateAfterSurplusPool float64 `json:"player_lose_rate_after_surplus_pool" bson:"player_lose_rate_after_surplus_pool"`
+	DataCorrection                 float64 `json:"data_correction" bson:"data_correction"`
 }
 
 type UpSurPool struct {
@@ -66,6 +67,7 @@ type UpSurPool struct {
 	PercentageToTotalWin           float64 `json:"percentage_to_total_win" bson:"percentage_to_total_win"`
 	CoefficientToTotalPlayer       int32   `json:"coefficient_to_total_player" bson:"coefficient_to_total_player"`
 	FinalPercentage                float64 `json:"final_percentage" bson:"final_percentage"`
+	DataCorrection                 float64 `json:"data_correction" bson:"data_correction"`
 }
 
 const (
@@ -221,6 +223,7 @@ func getSurplusOne(w http.ResponseWriter, r *http.Request) {
 	getSur.PlayerTotalLoseWin = result.PlayerTotalLoseWin
 	getSur.SurplusPool = result.SurplusPool
 	getSur.PlayerLoseRateAfterSurplusPool = result.PlayerLoseRateAfterSurplusPool
+	getSur.DataCorrection = result.DataCorrection
 
 	js, err := json.Marshal(NewResp(SuccCode, "", getSur))
 	if err != nil {
@@ -237,7 +240,7 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 	percentage := r.PostFormValue("percentage_to_total_win")
 	coefficient := r.PostFormValue("coefficient_to_total_player")
 	final := r.PostFormValue("final_percentage")
-	log.Debug("uptSurplusOne~ :%v", final)
+	correction := r.PostFormValue("data_correction")
 
 	var req GameDataReq
 	req.GameId = r.FormValue("game_id")
@@ -257,6 +260,7 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 	upt.PercentageToTotalWin = sur.PercentageToTotalWin
 	upt.CoefficientToTotalPlayer = sur.CoefficientToTotalPlayer
 	upt.FinalPercentage = sur.FinalPercentage
+	upt.DataCorrection = sur.DataCorrection
 
 	if rateSur != "" {
 		upt.PlayerLoseRateAfterSurplusPool, _ = strconv.ParseFloat(rateSur, 64)
@@ -275,8 +279,12 @@ func uptSurplusOne(w http.ResponseWriter, r *http.Request) {
 		upt.FinalPercentage, _ = strconv.ParseFloat(final, 64)
 		sur.FinalPercentage = upt.FinalPercentage
 	}
+	if correction != "" {
+		upt.DataCorrection, _ = strconv.ParseFloat(correction, 64)
+		sur.DataCorrection = upt.DataCorrection
+	}
 
-	sur.SurplusPool = Decimal((sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin) - float64(sur.TotalPlayer*sur.CoefficientToTotalPlayer)) * sur.FinalPercentage)
+	sur.SurplusPool = Decimal((sur.PlayerTotalLose - (sur.PlayerTotalWin * sur.PercentageToTotalWin) - float64(sur.TotalPlayer*sur.CoefficientToTotalPlayer) + sur.DataCorrection) * sur.FinalPercentage)
 	// 更新盈余池数据
 	UpdateSurPool(&sur)
 

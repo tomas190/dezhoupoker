@@ -171,6 +171,7 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	SurPool.PercentageToTotalWin = 1
 	SurPool.CoefficientToTotalPlayer = sur.PlayerNum * 0
 	SurPool.PlayerLoseRateAfterSurplusPool = 0.7
+	SurPool.DataCorrection = 0
 	FindSurPool(SurPool)
 }
 
@@ -185,11 +186,12 @@ func FindSurPool(SurP *SurPool) {
 	if err != nil {
 		InsertSurPool(SurP)
 	} else {
-		SurP.SurplusPool = (SurP.PlayerTotalLose - (SurP.PlayerTotalWin * sur.PercentageToTotalWin) - float64(SurP.TotalPlayer*sur.CoefficientToTotalPlayer)) * sur.FinalPercentage
+		SurP.SurplusPool = (SurP.PlayerTotalLose - (SurP.PlayerTotalWin * sur.PercentageToTotalWin) - float64(SurP.TotalPlayer*sur.CoefficientToTotalPlayer) + sur.DataCorrection) * sur.FinalPercentage
 		SurP.FinalPercentage = sur.FinalPercentage
 		SurP.PercentageToTotalWin = sur.PercentageToTotalWin
 		SurP.CoefficientToTotalPlayer = sur.CoefficientToTotalPlayer
 		SurP.PlayerLoseRateAfterSurplusPool = sur.PlayerLoseRateAfterSurplusPool
+		SurP.DataCorrection = sur.DataCorrection
 		UpdateSurPool(SurP)
 	}
 }
@@ -290,6 +292,7 @@ type SurPool struct {
 	PlayerTotalLoseWin             float64 `json:"player_total_lose_win" bson:"player_total_lose_win" `
 	SurplusPool                    float64 `json:"surplus_pool" bson:"surplus_pool"`
 	PlayerLoseRateAfterSurplusPool float64 `json:"player_lose_rate_after_surplus_pool" bson:"player_lose_rate_after_surplus_pool"`
+	DataCorrection                 float64 `json:"data_correction" bson:"data_correction"`
 }
 
 //GetDownRecodeList 获取盈余池数据
