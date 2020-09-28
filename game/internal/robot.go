@@ -85,8 +85,8 @@ func (p *Player) RobotDownBet(r *Room) {
 	callMoney := r.preChips - p.lunDownBets
 	if callMoney > 0 {
 		// 当跟注金额 大于筹码时
-		if callMoney > p.chips {
-			callBets := []int32{1, 2, 1, 1, 1} // 1为弃牌,2 全压
+		if callMoney >= p.chips {
+			callBets := []int32{1, 2, 1, 1, 1, 1} // 1为弃牌,2 全压
 			rand.Seed(time.Now().UnixNano())
 			callNum := rand.Intn(len(callBets))
 			if callBets[callNum] == 1 {
@@ -205,7 +205,7 @@ func (r *Room) AdjustRobot() {
 				break
 			}
 		}
-	}else {
+	} else {
 		if r.PlayerLength() <= 3 {
 			robot := gRobotCenter.CreateRobot()
 			r.PlayerJoinRoom(robot)
@@ -219,4 +219,3 @@ func (r *Room) AdjustRobot() {
 		}
 	}
 }
-
