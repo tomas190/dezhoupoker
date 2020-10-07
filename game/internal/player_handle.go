@@ -61,6 +61,7 @@ func (p *Player) ClearPlayerData() {
 	p.IsLeaveR = false
 	p.timerCount = 0
 	p.HandValue = 0
+	p.IsMaxCard = false
 }
 
 //SitDownTable 玩家坐下座位

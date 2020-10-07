@@ -61,7 +61,8 @@ type Player struct {
 
 	cfgId string // 房间等级
 
-	IsRobot bool // 是否机器人
+	IsRobot   bool // 是否机器人
+	IsMaxCard bool // 是否最大牌型
 }
 
 func (p *Player) Init() {
@@ -96,6 +97,7 @@ func (p *Player) Init() {
 	p.PreRoomId = ""
 	p.cfgId = ""
 	p.IsRobot = false
+	p.IsMaxCard = false
 }
 
 //SendMsg 玩家向客户端发送消息

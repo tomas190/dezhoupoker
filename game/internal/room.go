@@ -33,6 +33,7 @@ type Room struct {
 	Status      msg.GameStep // 房间当前阶段  就直接判断是否在等待状态
 
 	Cards      algorithm.Cards
+	tableCards algorithm.Cards
 	preChips   float64   // 当前回合, 上个玩家下注金额
 	IsShowDown int32     // 0 为摊牌, 1 为不摊牌
 	remain     int32     // 记录每个阶段玩家的下注的数量
@@ -344,6 +345,7 @@ func (r *Room) ClearRoomData() {
 			v.IsInGame = false
 			v.IsLeaveR = false
 			v.HandValue = 0
+			v.IsMaxCard = false
 		}
 	}
 
@@ -445,6 +447,16 @@ func (r *Room) SetPlayerStatus() {
 			//log.Debug("设置玩家状态:%v,%v", v.Id, v.gameStep)
 		}
 	}
+}
+
+func (r *Room) GetRobotsNum() int {
+	var num int
+	for _, v := range r.PlayerList {
+		if v != nil && v.IsRobot == true {
+			num++
+		}
+	}
+	return num
 }
 
 func (r *Room) CalBet() {
@@ -836,9 +848,6 @@ func (r *Room) ReadyTimer() {
 				// 玩家补充筹码
 				r.PlayerAddChips()
 
-				// 洗牌
-				r.Cards.Shuffle()
-
 				// 设置玩家状态
 				r.SetPlayerStatus()
 
@@ -863,20 +872,78 @@ func (r *Room) ReadyTimer() {
 				r.readyPlay()
 				r.Status = msg.GameStep_PreFlop
 				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
-				r.Each(0, func(p *Player) bool {
-					// 生成玩家手牌,获取的是对应牌型生成二进制的数
-					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-					p.cardData.HandCardKeys = p.cards.HexInt()
 
-					kind, _ := algorithm.De(p.cards.GetType())
-					p.cardData.SuitPattern = msg.CardSuit(kind)
-					//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
+				if r.GetRobotsNum() <= 0 {
+					r.Each(0, func(p *Player) bool {
+						// 生成玩家手牌,获取的是对应牌型生成二进制的数
+						p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+						p.cardData.HandCardKeys = p.cards.HexInt()
 
-					game := &msg.GameStepChange_S2C{}
-					game.RoomData = r.RespRoomData()
-					p.SendMsg(game)
-					return true
-				})
+						kind, _ := algorithm.De(p.cards.GetType())
+						p.cardData.SuitPattern = msg.CardSuit(kind)
+						//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
+						return true
+					})
+				}else {
+					surPlus := GetSurPlus()
+					resultGold := surPlus * 0.5
+					if resultGold > 100 {
+						// 洗牌
+						r.Cards.Shuffle()
+						r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+						r.Each(0, func(p *Player) bool {
+							// 生成玩家手牌,获取的是对应牌型生成二进制的数
+							p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+							p.cardData.HandCardKeys = p.cards.HexInt()
+
+							kind, _ := algorithm.De(p.cards.GetType())
+							p.cardData.SuitPattern = msg.CardSuit(kind)
+							//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
+							return true
+						})
+					} else {
+						for {
+							// 洗牌
+							r.Cards.Shuffle()
+							r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+							r.Each(0, func(p *Player) bool {
+								// 生成玩家手牌,获取的是对应牌型生成二进制的数
+								p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+								p.cardData.HandCardKeys = p.cards.HexInt()
+
+								kind, _ := algorithm.De(p.cards.GetType())
+								p.cardData.SuitPattern = msg.CardSuit(kind)
+
+								// 用于来判断玩家手牌大小
+								cs := r.tableCards.Append(p.cards...)
+								p.HandValue = cs.GetType()
+								return true
+							})
+
+							var maxPlayer *Player
+							for _, v := range r.PlayerList {
+								if v != nil && v.gameStep == emInGaming {
+									if maxPlayer == nil {
+										maxPlayer = v
+										continue
+									}
+									if v.HandValue > maxPlayer.HandValue {
+										maxPlayer = v
+									}
+								}
+							}
+							if maxPlayer.IsRobot == true {
+								maxPlayer.IsMaxCard = true
+								log.Debug("机器人设为最大牌值~")
+								break
+							}
+						}
+					}
+				}
+
+				game := &msg.GameStepChange_S2C{}
+				game.RoomData = r.RespRoomData()
+				r.Broadcast(game)
 			}
 			if r.counter == 4 {
 				push := &msg.PushCardTime_S2C{}
@@ -1172,17 +1239,6 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	data.RoomData = r.RespRoomData()
 	p.SendMsg(data)
 
-	go func() {
-		for {
-			if r.IsCloseSend == true {
-				return
-			}
-			time.Sleep(time.Millisecond * 300)
-			data := &msg.SendRoomData_S2C{}
-			data.RoomData = r.RespRoomData()
-			r.Broadcast(data)
-		}
-	}()
 }
 
 func (p *Player) PiPeiQuickRoom(r *Room) {
@@ -1264,15 +1320,4 @@ func (p *Player) PiPeiStandUp(r *Room) {
 	data.RoomData = rm.RespRoomData()
 	p.SendMsg(data)
 
-	go func() {
-		for {
-			if r.IsCloseSend == true {
-				return
-			}
-			time.Sleep(time.Millisecond * 300)
-			data := &msg.SendRoomData_S2C{}
-			data.RoomData = r.RespRoomData()
-			r.Broadcast(data)
-		}
-	}()
 }

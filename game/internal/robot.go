@@ -86,7 +86,12 @@ func (p *Player) RobotDownBet(r *Room) {
 	if callMoney > 0 {
 		// 当跟注金额 大于筹码时
 		if callMoney >= p.chips {
-			callBets := []int32{1, 2, 1, 1, 1, 1} // 1为弃牌,2 全压
+			var callBets []int32
+			if p.IsMaxCard == true {
+				callBets = []int32{2, 2} // 1为弃牌,2 全压
+			} else {
+				callBets = []int32{1, 2, 1, 1, 1, 1} // 1为弃牌,2 全压
+			}
 			rand.Seed(time.Now().UnixNano())
 			callNum := rand.Intn(len(callBets))
 			if callBets[callNum] == 1 {
@@ -99,7 +104,12 @@ func (p *Player) RobotDownBet(r *Room) {
 				p.totalDownBet += p.chips
 			}
 		} else {
-			callBets := []int32{1, 1, 3, 1, 1,} // 1跟注,2加注,3弃牌,4全压
+			var callBets []int32
+			if p.IsMaxCard == true {
+				callBets = []int32{1, 1}
+			} else {
+				callBets = []int32{1, 1, 3, 1, 1} // 1跟注,2加注,3弃牌,4全压
+			}
 			rand.Seed(time.Now().UnixNano())
 			callNum := rand.Intn(len(callBets))
 			if r.Status == msg.GameStep_PreFlop {

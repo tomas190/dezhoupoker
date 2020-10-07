@@ -196,6 +196,21 @@ func FindSurPool(SurP *SurPool) {
 	}
 }
 
+func GetSurPlus() float64 {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	//c.RemoveAll(nil) // todo
+
+	sur := &SurPool{}
+	err := c.Find(nil).One(sur)
+	if err != nil {
+		log.Debug("获取GetSurP数据失败:%v", err)
+		return 0
+	}
+	return sur.SurplusPool
+}
+
 //插入盈余池统一字段
 func InsertSurPool(sur *SurPool) {
 	s, c := connect(dbName, surPool)
