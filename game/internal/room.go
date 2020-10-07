@@ -884,8 +884,9 @@ func (r *Room) ReadyTimer() {
 						//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
 						return true
 					})
-				}else {
+				} else {
 					surPlus := GetSurPlus()
+					log.Debug("当前盈余池金额为:%v", surPlus)
 					resultGold := surPlus * 0.5
 					if resultGold > 100 {
 						// 洗牌
