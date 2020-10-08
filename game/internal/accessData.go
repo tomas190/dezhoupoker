@@ -28,20 +28,24 @@ type ApiResp struct {
 }
 
 type GameData struct {
-	Time        int64         `json:"time"`
-	TimeFmt     string        `json:"time_fmt"`
-	RoundId     string        `json:"round_id"`
-	RoomId      string        `json:"room_id"`
-	CfgID       string        `json:"cfg_id"`
-	SmallBlind  string        `json:"small_blind"`
-	BigBlind    string        `json:"big_blind"`
-	SmallMoney  float64       `json:"small_money"`
-	BigMoney    float64       `json:"big_money"`
-	PublicCard  []int32       `json:"public_card"`
-	ResultInfo  []*ResultData `json:"result_info"`
-	DownBetTime int64         `json:"down_bet_time"`
-	PotMoney    float64       `json:"pot_money"`
-	TaxRate     float64       `json:"tax_rate"`
+	Time            int64         `json:"time"`
+	TimeFmt         string        `json:"time_fmt"`
+	RoundId         string        `json:"round_id"`
+	RoomId          string        `json:"room_id"`
+	CfgID           string        `json:"cfg_id"`
+	SmallBlind      string        `json:"small_blind"`
+	BigBlind        string        `json:"big_blind"`
+	SmallMoney      float64       `json:"small_money"`
+	BigMoney        float64       `json:"big_money"`
+	PublicCard      []int32       `json:"public_card"`
+	ResultInfo      []*ResultData `json:"result_info"`
+	DownBetTime     int64         `json:"down_bet_time"`
+	PotMoney        float64       `json:"pot_money"`
+	TaxRate         float64       `json:"tax_rate"`
+	PlayerId        string        `json:"player_id"`
+	SettlementFunds interface{}   `json:"settlement_funds"` // 结算信息 输赢结果
+	SpareCash       interface{}   `json:"spare_cash"`       // 剩余金额
+	CreatedAt       int64         `json:"created_at"`
 }
 
 type pageData struct {
@@ -142,11 +146,11 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 	}
 
 	limits, _ := strconv.Atoi(limit)
-	if limits != 0 {
-		selector["limit"] = limits
-	}
+	//if limits != 0 {
+	//	selector["limit"] = limits
+	//}
 
-	recodes, count, err := GetDownRecodeList(skips, limits, selector, "down_bet_time")
+	recodes, count, err := GetDownRecodeList(skips, limits, selector, "-down_bet_time")
 	if err != nil {
 		return
 	}
@@ -155,7 +159,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 	for i := 0; i < len(recodes); i++ {
 		var gd GameData
 		pr := recodes[i]
-		gd.Time = pr.DownBetTime * 1000
+		gd.Time = pr.DownBetTime
 		gd.TimeFmt = FormatTime(pr.DownBetTime, "2006-01-02 15:04:05")
 		gd.RoundId = pr.RoundId
 		gd.RoomId = pr.RoomId
@@ -169,6 +173,10 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 		gd.DownBetTime = pr.DownBetTime
 		gd.PotMoney = pr.PotMoney
 		gd.TaxRate = pr.TaxRate
+		gd.PlayerId = pr.Id
+		gd.SettlementFunds = pr.SettlementFunds
+		gd.SpareCash = pr.SpareCash
+		gd.CreatedAt = pr.DownBetTime
 		gameData = append(gameData, gd)
 	}
 

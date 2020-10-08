@@ -804,6 +804,8 @@ func (r *Room) ResultMoney() {
 					data.DownBetTime = nowTime
 					data.PotMoney = r.potMoney
 					data.TaxRate = taxRate
+					data.SettlementFunds = p.resultMoney
+					data.SpareCash = p.Account + p.chips + p.roomChips
 					InsertAccessData(data)
 				}
 			} else {
