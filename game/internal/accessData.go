@@ -15,6 +15,7 @@ type GameDataReq struct {
 	Id        string `form:"id" json:"id"`
 	GameId    string `form:"game_id" json:"game_id"`
 	RoundId   string `form:"round_id" json:"round_id"`
+	RoomId    string `form:"room_id" json:"room_id"`
 	StartTime int64  `form:"start_time" json:"start_time"`
 	EndTime   int64  `form:"end_time" json:"end_time"`
 	Skip      int    `form:"skip" json:"skip"`
@@ -106,6 +107,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 
 	req.Id = r.FormValue("id")
 	req.GameId = r.FormValue("game_id")
+	req.RoomId = r.FormValue("room_id")
 	req.RoundId = r.FormValue("round_id")
 	startTime := r.FormValue("start_time")
 	endTime := r.FormValue("end_time")
@@ -120,6 +122,10 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 
 	if req.GameId != "" {
 		selector["game_id"] = req.GameId
+	}
+
+	if req.RoomId != "" {
+		selector["room_id"] = req.RoomId
 	}
 
 	if req.RoundId != "" {
