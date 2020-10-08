@@ -258,6 +258,8 @@ showdown:
 	log.Debug("开始摊牌，开牌比大小 ~")
 	r.ShowDown()
 
+	r.EndTime = time.Now().Unix()
+
 	r.ResultMoney()
 
 	time.Sleep(time.Millisecond * 1000)

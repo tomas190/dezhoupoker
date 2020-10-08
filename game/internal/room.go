@@ -54,6 +54,9 @@ type Room struct {
 	IsPiPeiNow  bool // 是否正在匹配中
 	IsCloseSend bool // 是否关闭发送roomData
 
+	StartTime int64
+	EndTime   int64
+
 	ReadyTimeChan  chan bool // 准备时间chan
 	ActionTimeChan chan bool // 行动时间chan
 }
@@ -106,6 +109,9 @@ func (r *Room) Init(cfgId string) {
 
 	r.IsPiPeiNow = false
 	r.IsCloseSend = false
+
+	r.StartTime = 0
+	r.EndTime = 0
 
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
@@ -806,6 +812,8 @@ func (r *Room) ResultMoney() {
 					data.TaxRate = taxRate
 					data.SettlementFunds = p.resultMoney
 					data.SpareCash = p.Account + p.chips + p.roomChips
+					data.StartTime = r.StartTime
+					data.EndTime = r.EndTime
 					InsertAccessData(data)
 				}
 			} else {
@@ -847,6 +855,7 @@ func (r *Room) ReadyTimer() {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 2 {
+				r.StartTime = time.Now().Unix()
 				// 玩家补充筹码
 				r.PlayerAddChips()
 

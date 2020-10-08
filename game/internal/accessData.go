@@ -46,6 +46,8 @@ type GameData struct {
 	SettlementFunds interface{}   `json:"settlement_funds"` // 结算信息 输赢结果
 	SpareCash       interface{}   `json:"spare_cash"`       // 剩余金额
 	CreatedAt       int64         `json:"created_at"`
+	StartTime       int64         `json:"start_time"`
+	EndTime         int64         `json:"end_time"`
 }
 
 type pageData struct {
@@ -177,6 +179,8 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 		gd.SettlementFunds = pr.SettlementFunds
 		gd.SpareCash = pr.SpareCash
 		gd.CreatedAt = pr.DownBetTime
+		gd.StartTime = pr.StartTime
+		gd.EndTime = pr.EndTime
 		gameData = append(gameData, gd)
 	}
 
