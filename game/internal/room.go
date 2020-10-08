@@ -888,7 +888,7 @@ func (r *Room) ReadyTimer() {
 					surPlus := GetSurPlus()
 					log.Debug("当前盈余池金额为:%v", surPlus)
 					resultGold := surPlus * 0.5
-					if resultGold > 100 {
+					if resultGold > 0 {
 						// 洗牌
 						r.Cards.Shuffle()
 						r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
@@ -903,7 +903,8 @@ func (r *Room) ReadyTimer() {
 							return true
 						})
 					} else {
-						for {
+						num := RandInRange(0, 100)
+						if num > 40 {
 							// 洗牌
 							r.Cards.Shuffle()
 							r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
@@ -914,29 +915,45 @@ func (r *Room) ReadyTimer() {
 
 								kind, _ := algorithm.De(p.cards.GetType())
 								p.cardData.SuitPattern = msg.CardSuit(kind)
-
-								// 用于来判断玩家手牌大小
-								cs := r.tableCards.Append(p.cards...)
-								p.HandValue = cs.GetType()
+								//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
 								return true
 							})
+						} else {
+							for {
+								// 洗牌
+								r.Cards.Shuffle()
+								r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+								r.Each(0, func(p *Player) bool {
+									// 生成玩家手牌,获取的是对应牌型生成二进制的数
+									p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+									p.cardData.HandCardKeys = p.cards.HexInt()
 
-							var maxPlayer *Player
-							for _, v := range r.PlayerList {
-								if v != nil && v.gameStep == emInGaming {
-									if maxPlayer == nil {
-										maxPlayer = v
-										continue
-									}
-									if v.HandValue > maxPlayer.HandValue {
-										maxPlayer = v
+									kind, _ := algorithm.De(p.cards.GetType())
+									p.cardData.SuitPattern = msg.CardSuit(kind)
+
+									// 用于来判断玩家手牌大小
+									cs := r.tableCards.Append(p.cards...)
+									p.HandValue = cs.GetType()
+									return true
+								})
+
+								var maxPlayer *Player
+								for _, v := range r.PlayerList {
+									if v != nil && v.gameStep == emInGaming {
+										if maxPlayer == nil {
+											maxPlayer = v
+											continue
+										}
+										if v.HandValue > maxPlayer.HandValue {
+											maxPlayer = v
+										}
 									}
 								}
-							}
-							if maxPlayer.IsRobot == true {
-								maxPlayer.IsMaxCard = true
-								log.Debug("机器人设为最大牌值~")
-								break
+								if maxPlayer.IsRobot == true {
+									maxPlayer.IsMaxCard = true
+									log.Debug("机器人设为最大牌值~")
+									break
+								}
 							}
 						}
 					}
