@@ -783,39 +783,6 @@ func (r *Room) ResultMoney() {
 				if p.resultMoney > PaoMaDeng {
 					c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
 				}
-				// 插入运营数据
-				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
-					data := &PlayerDownBetRecode{}
-					data.GameId = conf.Server.GameID
-					data.RoundId = p.RoundId
-					data.Id = p.Id
-					data.RoomId = r.roomId
-					data.CfgID = r.cfgId
-					data.SmallBlind = r.SBId
-					data.BigBlind = r.BBId
-					data.SmallMoney = r.SB
-					data.BigMoney = r.BB
-					data.PublicCard = r.publicCards
-					for _, v := range r.PlayerList {
-						if v != nil {
-							res := &ResultData{}
-							res.Id = v.Id
-							res.Chair = v.chair
-							res.HandCard = v.cardData.HandCardKeys
-							res.DownBet = v.totalDownBet
-							res.ResultMoney = v.resultMoney
-							data.ResultInfo = append(data.ResultInfo, res)
-						}
-					}
-					data.DownBetTime = nowTime
-					data.PotMoney = r.potMoney
-					data.TaxRate = taxRate
-					data.SettlementFunds = p.resultMoney
-					data.SpareCash = p.Account + p.chips + p.roomChips
-					data.StartTime = r.StartTime
-					data.EndTime = r.EndTime
-					InsertAccessData(data)
-				}
 			} else {
 				p.resultMoney -= p.totalDownBet
 				var taxMoney float64
@@ -835,6 +802,44 @@ func (r *Room) ResultMoney() {
 					p.chips += p.resultMoney
 				}
 			}
+		}
+	}
+	for i := 0; i < len(r.PlayerList); i++ {
+		if r.PlayerList[i] != nil && r.PlayerList[i].IsRobot == false && r.PlayerList[i].totalDownBet > 0 {
+			p := r.PlayerList[i]
+			nowTime := time.Now().Unix()
+			// 插入运营数据
+			data := &PlayerDownBetRecode{}
+			data.GameId = conf.Server.GameID
+			data.RoundId = p.RoundId
+			data.Id = p.Id
+			data.RoomId = r.roomId
+			data.CfgID = r.cfgId
+			data.SmallBlind = r.SBId
+			data.BigBlind = r.BBId
+			data.SmallMoney = r.SB
+			data.BigMoney = r.BB
+			data.PublicCard = r.publicCards
+			for _, v := range r.PlayerList {
+				if v != nil {
+					res := &ResultData{}
+					res.PlayerId = v.Id
+					res.Chair = v.chair
+					res.HandCard = v.cardData.HandCardKeys
+					res.DownBet = v.totalDownBet
+					res.SettlementFunds = v.resultMoney
+					res.SpareCash = p.Account + p.chips + p.roomChips
+					data.ResultInfo = append(data.ResultInfo, res)
+				}
+			}
+			data.DownBetTime = nowTime
+			data.PotMoney = r.potMoney
+			data.TaxRate = taxRate
+			data.SettlementFunds = p.resultMoney
+			data.SpareCash = p.Account + p.chips + p.roomChips
+			data.StartTime = r.StartTime
+			data.EndTime = r.EndTime
+			InsertAccessData(data)
 		}
 	}
 }

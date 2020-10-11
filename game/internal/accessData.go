@@ -39,7 +39,7 @@ type GameData struct {
 	SmallMoney      float64       `json:"small_money"`
 	BigMoney        float64       `json:"big_money"`
 	PublicCard      []int32       `json:"public_card"`
-	ResultInfo      []*ResultData `json:"result_info"`
+	PlayerInfo      []*ResultData `json:"player_info"`
 	DownBetTime     int64         `json:"down_bet_time"`
 	PotMoney        float64       `json:"pot_money"`
 	TaxRate         float64       `json:"tax_rate"`
@@ -177,7 +177,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 		gd.SmallMoney = pr.SmallMoney
 		gd.BigMoney = pr.BigMoney
 		gd.PublicCard = pr.PublicCard
-		gd.ResultInfo = pr.ResultInfo
+		gd.PlayerInfo = pr.ResultInfo
 		gd.DownBetTime = pr.DownBetTime
 		gd.PotMoney = pr.PotMoney
 		gd.TaxRate = pr.TaxRate

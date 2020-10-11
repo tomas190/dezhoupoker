@@ -261,11 +261,12 @@ type PlayerDownBetRecode struct {
 }
 
 type ResultData struct {
-	Id          string  `json:"id" bson:"id"`                     // 玩家ID
-	Chair       int32   `json:"chair" bson:"chair"`               // 玩家座位
-	HandCard    []int32 `json:"hand_card" bson:"hand_card"`       // 玩家手牌
-	DownBet     float64 `json:"down_bet" bson:"down_bet"`         // 下注金币
-	ResultMoney float64 `json:"result_money" bson:"result_money"` // 结算金币(未税)
+	PlayerId        string  `json:"player_id" bson:"player_id"`               // 玩家ID
+	Chair           int32   `json:"chair" bson:"chair"`                       // 玩家座位
+	HandCard        []int32 `json:"hand_card" bson:"hand_card"`               // 玩家手牌
+	DownBet         float64 `json:"down_bet" bson:"down_bet"`                 // 下注金币
+	SettlementFunds float64 `json:"settlement_funds" bson:"settlement_funds"` // 结算金币(未税)
+	SpareCash       float64 `json:"spare_cash" bson:"spare_cash"`             // 剩余金额
 }
 
 //InsertAccessData 插入运营数据接入
