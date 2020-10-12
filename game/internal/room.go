@@ -892,6 +892,9 @@ func (r *Room) ReadyTimer() {
 				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 
 				if r.GetRobotsNum() <= 0 {
+					// 洗牌
+					r.Cards.Shuffle()
+					r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
 					r.Each(0, func(p *Player) bool {
 						// 生成玩家手牌,获取的是对应牌型生成二进制的数
 						p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
