@@ -1184,7 +1184,7 @@ func (r *Room) PiPeiHandle() bool {
 		for _, v := range r.PlayerList {
 			if v != nil && v.IsRobot == false {
 				r.ClearPiPeiData(v)
-				v.PiPeiQuickRoom(r)
+				v.PiPeiCreatRoom(r.cfgId)
 			}
 		}
 	}
