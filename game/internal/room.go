@@ -1143,6 +1143,11 @@ func (r *Room) PiPeiHandle() bool {
 			IsReStart = true
 		}
 	}
+
+	if r.ListRealPlayerLen() >= 7 && r.ListRealPlayerLen() <= 9 {
+		IsReStart = true
+	}
+
 	if IsReStart == true {
 		return IsReStart
 	} else {
