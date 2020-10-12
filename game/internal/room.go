@@ -804,15 +804,14 @@ func (r *Room) ResultMoney() {
 			}
 		}
 	}
-	for i := 0; i < len(r.PlayerList); i++ {
-		if r.PlayerList[i] != nil && r.PlayerList[i].IsRobot == false && r.PlayerList[i].totalDownBet > 0 {
-			p := r.PlayerList[i]
+	for _, v := range r.PlayerList {
+		if v != nil && v.IsRobot == false && v.totalDownBet > 0 {
 			nowTime := time.Now().Unix()
 			// 插入运营数据
 			data := &PlayerDownBetRecode{}
 			data.GameId = conf.Server.GameID
-			data.RoundId = p.RoundId
-			data.Id = p.Id
+			data.RoundId = v.RoundId
+			data.Id = v.Id
 			data.RoomId = r.roomId
 			data.CfgID = r.cfgId
 			data.SmallBlind = r.SBId
@@ -828,15 +827,18 @@ func (r *Room) ResultMoney() {
 					res.HandCard = v.cardData.HandCardKeys
 					res.DownBet = v.totalDownBet
 					res.SettlementFunds = v.resultMoney
-					res.SpareCash = p.Account + p.chips + p.roomChips
+					res.SpareCash = v.Account + v.chips + v.roomChips
+					if v.IsRobot == true {
+						res.IsRobot = true
+					}
 					data.ResultInfo = append(data.ResultInfo, res)
 				}
 			}
 			data.DownBetTime = nowTime
 			data.PotMoney = r.potMoney
 			data.TaxRate = taxRate
-			data.SettlementFunds = p.resultMoney
-			data.SpareCash = p.Account + p.chips + p.roomChips
+			data.SettlementFunds = v.resultMoney
+			data.SpareCash = v.Account + v.chips + v.roomChips
 			data.StartTime = r.StartTime
 			data.EndTime = r.EndTime
 			InsertAccessData(data)

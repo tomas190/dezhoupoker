@@ -267,6 +267,7 @@ type ResultData struct {
 	DownBet         float64 `json:"down_bet" bson:"down_bet"`                 // 下注金币
 	SettlementFunds float64 `json:"settlement_funds" bson:"settlement_funds"` // 结算金币(未税)
 	SpareCash       float64 `json:"spare_cash" bson:"spare_cash"`             // 剩余金额
+	IsRobot         bool    `json:"is_robot" bson:"is_robot"`                 // 是否机器人
 }
 
 //InsertAccessData 插入运营数据接入
