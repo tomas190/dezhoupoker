@@ -42,6 +42,9 @@ enum MessageID {
     MSG_SendRoomData_S2C = 35;
     MSG_WaitPlayerList_C2S = 36;
     MSG_WaitPlayerList_S2C = 37;
+    MSG_ShowRoomInfo_C2S = 38;
+    MSG_ShowRoomInfo_S2C = 39;
+
 }
 
 message Ping {
@@ -337,4 +340,11 @@ message WaitPlayerList_C2S {
 
 message WaitPlayerList_S2C {
     int32 WaitStatus = 1;
+}
+
+message ShowRoomInfo_C2S {
+}
+
+message ShowRoomInfo_S2C {
+    RoomData roomData = 1;
 }

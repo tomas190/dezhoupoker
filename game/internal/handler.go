@@ -28,6 +28,7 @@ func init() {
 	handlerReg(&msg.EmojiChat_C2S{}, handleEmojiChat)
 
 	handlerReg(&msg.WaitPlayerList_C2S{}, handWaitPlayerList)
+	handlerReg(&msg.ShowRoomInfo_C2S{}, handShowRoomInfo)
 }
 
 // 注册消息处理函数
@@ -394,6 +395,22 @@ func handWaitPlayerList(args []interface{}) {
 					}
 				}
 			}
+		}
+	}
+}
+
+func handShowRoomInfo(args []interface{}) {
+	a := args[1].(gate.Agent)
+
+	p, ok := a.UserData().(*Player)
+	if ok {
+		roomId := hall.UserRoom[p.Id]
+		r, _ := hall.RoomRecord.Load(roomId)
+		if r != nil {
+			room := r.(*Room)
+			data := &msg.ShowRoomInfo_S2C{}
+			data.RoomData = room.RespRoomData()
+			p.SendMsg(data)
 		}
 	}
 }

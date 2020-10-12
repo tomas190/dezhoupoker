@@ -46,4 +46,6 @@ func init() {
 	Processor.Register(&SendRoomData_S2C{})       //--35
 	Processor.Register(&WaitPlayerList_C2S{})     //--36
 	Processor.Register(&WaitPlayerList_S2C{})     //--37
+	Processor.Register(&ShowRoomInfo_C2S{})       //--38
+	Processor.Register(&ShowRoomInfo_S2C{})       //--39
 }
