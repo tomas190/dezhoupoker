@@ -148,17 +148,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 
 	if cfgId == "0" {
 		if len(hall.PiPeiList0) >= 1 && len(hall.PiPeiList0) <= 3 {
-			for _, r := range hall.roomList {
-				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-						// 装载房间机器人
-						r.LoadRoomRobots()
-					}
-					hall.DeleteWaitList(p)
-					r.PlayerJoinRoom(p)
-					return
-				}
-			}
+			//for _, r := range hall.roomList {
+			//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+			//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+			//			// 装载房间机器人
+			//			r.LoadRoomRobots()
+			//		}
+			//		hall.DeleteWaitList(p)
+			//		r.PlayerJoinRoom(p)
+			//		return
+			//	}
+			//}
 			hall.DeleteWaitList(p)
 			hall.PlayerCreateRoom(cfgId, p)
 			return
@@ -178,17 +178,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 				hall.PiPeiList0 = []*Player{}
 				return
 			} else {
-				for _, r := range hall.roomList {
-					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-							// 装载房间机器人
-							r.LoadRoomRobots()
-						}
-						hall.DeleteWaitList(p)
-						r.PlayerJoinRoom(p)
-						return
-					}
-				}
+				//for _, r := range hall.roomList {
+				//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+				//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+				//			// 装载房间机器人
+				//			r.LoadRoomRobots()
+				//		}
+				//		hall.DeleteWaitList(p)
+				//		r.PlayerJoinRoom(p)
+				//		return
+				//	}
+				//}
 				hall.DeleteWaitList(p)
 				hall.PlayerCreateRoom(cfgId, p)
 				return
