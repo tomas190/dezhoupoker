@@ -1218,11 +1218,11 @@ func (r *Room) ClearPiPeiData(p *Player) {
 		r.PlayerList[p.chair] = nil
 	}
 
-	for k, v := range r.AllPlayer {
-		if v != nil && v.Id == p.Id {
-			r.AllPlayer = append(r.AllPlayer[:k], r.AllPlayer[k+1:]...)
-		}
-	}
+	//for k, v := range r.AllPlayer {
+	//	if v != nil && v.Id == p.Id {
+	//		r.AllPlayer = append(r.AllPlayer[:k], r.AllPlayer[k+1:]...)
+	//	}
+	//}
 
 	p.Account += p.chips
 	p.Account += p.roomChips
