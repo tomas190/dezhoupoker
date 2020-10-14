@@ -99,7 +99,7 @@ func (hall *GameHall) PlayerChangeTable(r *Room, p *Player) {
 				// 装载房间机器人
 				room.LoadRoomRobots()
 			}
-			r.PlayerJoinRoom(p)
+			room.PlayerJoinRoom(p)
 			return
 		}
 	}

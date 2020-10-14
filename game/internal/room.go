@@ -1206,7 +1206,7 @@ func (r *Room) PiPeiHandle() bool {
 			r.IsCloseSend = true
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
-			log.Debug("Quick PiPei Room，so Delete this Room~,目前数量为:%v", len(hall.roomList))
+			log.Debug("Quick PiPei Room，so Delete this Room~,房间id:%v,目前数量为:%v", r.roomId, len(hall.roomList))
 		}
 	}
 
@@ -1224,8 +1224,8 @@ func (r *Room) ClearPiPeiData(p *Player) {
 		}
 	}
 
-	//p.Account += p.chips
-	//p.Account += p.roomChips
+	p.Account += p.chips
+	p.Account += p.roomChips
 
 	delete(hall.UserRoom, p.Id)
 
@@ -1271,7 +1271,7 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	hall.UserRoom[p.Id] = r.roomId
 
 	// 玩家带入筹码
-	//r.TakeInRoomChips(p)
+	r.TakeInRoomChips(p)
 
 	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
