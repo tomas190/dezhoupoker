@@ -1330,6 +1330,11 @@ func (p *Player) PiPeiStandUp(r *Room) {
 			// 房间总人数
 			room.AllPlayer = append(room.AllPlayer, p)
 
+			if room.PlayerLength() <= 1 {
+				// 装载机器人
+				room.LoadRoomRobots()
+			}
+
 			data := &msg.PiPeiData_S2C{}
 			data.RoomData = room.RespRoomData()
 			p.SendMsg(data)
