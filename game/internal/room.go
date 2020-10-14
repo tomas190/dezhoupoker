@@ -1247,6 +1247,7 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	p.IsLeaveR = false
 	p.timerCount = 0
 	p.HandValue = 0
+	p.IsMaxCard = false
 }
 
 func (p *Player) PiPeiCreatRoom(cfgId string) {
@@ -1321,16 +1322,16 @@ func (p *Player) PiPeiStandUp(r *Room) {
 				p.FindPlayerInfo()
 			}
 
-			hall.UserRoom[p.Id] = r.roomId
+			hall.UserRoom[p.Id] = room.roomId
 
 			// 玩家带入筹码
 			//r.TakeInRoomChips(p)
 
 			// 房间总人数
-			r.AllPlayer = append(r.AllPlayer, p)
+			room.AllPlayer = append(room.AllPlayer, p)
 
 			data := &msg.PiPeiData_S2C{}
-			data.RoomData = r.RespRoomData()
+			data.RoomData = room.RespRoomData()
 			p.SendMsg(data)
 			return
 		}

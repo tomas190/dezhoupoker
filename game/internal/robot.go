@@ -108,7 +108,7 @@ func (p *Player) RobotDownBet(r *Room) {
 			if p.IsMaxCard == true {
 				callBets = []int32{1, 1}
 			} else {
-				callBets = []int32{1, 1, 3, 1, 1} // 1跟注,2加注,3弃牌,4全压
+				callBets = []int32{1, 3, 1, 3, 1, 3} // 1跟注,2加注,3弃牌,4全压
 			}
 			rand.Seed(time.Now().UnixNano())
 			callNum := rand.Intn(len(callBets))
