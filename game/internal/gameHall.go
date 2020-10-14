@@ -166,7 +166,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 			rand.Seed(time.Now().UnixNano())
 			randNum := rand.Intn(len(sliceNum))
-			if sliceNum[randNum] >= 9 {
+			if sliceNum[randNum] >= 2 {
 				room := hall.CreatPiPeiRoom(cfgId)
 				for _, v := range hall.PiPeiList0 {
 					data := &msg.WaitPlayerList_S2C{}
@@ -235,7 +235,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 			rand.Seed(time.Now().UnixNano())
 			randNum := rand.Intn(len(sliceNum))
-			if sliceNum[randNum] >= 9 {
+			if sliceNum[randNum] >= 2 {
 				room := hall.CreatPiPeiRoom(cfgId)
 				for _, v := range hall.PiPeiList1 {
 					data := &msg.WaitPlayerList_S2C{}
@@ -304,7 +304,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 			rand.Seed(time.Now().UnixNano())
 			randNum := rand.Intn(len(sliceNum))
-			if sliceNum[randNum] >= 9 {
+			if sliceNum[randNum] >= 2 {
 				room := hall.CreatPiPeiRoom(cfgId)
 				for _, v := range hall.PiPeiList2 {
 					data := &msg.WaitPlayerList_S2C{}
@@ -373,7 +373,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 			rand.Seed(time.Now().UnixNano())
 			randNum := rand.Intn(len(sliceNum))
-			if sliceNum[randNum] >= 9 {
+			if sliceNum[randNum] >= 2 {
 				room := hall.CreatPiPeiRoom(cfgId)
 				for _, v := range hall.PiPeiList3 {
 					data := &msg.WaitPlayerList_S2C{}

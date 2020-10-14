@@ -1134,7 +1134,7 @@ func (r *Room) PiPeiHandle() bool {
 		sliceNum := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 		rand.Seed(time.Now().UnixNano())
 		randNum := rand.Intn(len(sliceNum))
-		if sliceNum[randNum] >= 9 {
+		if sliceNum[randNum] <= 2 {
 			for _, v := range r.AllPlayer {
 				if v != nil && v.IsRobot == false {
 					data := &msg.PiPeiPlayer_S2C{}
@@ -1165,9 +1165,11 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					r.ClearPiPeiData(v)
-					v.chair = -1
-					v.IsStandUp = true
-					v.PiPeiStandUp(r)
+					//v.chair = -1
+					//v.IsStandUp = true
+					//v.PiPeiStandUp(r)
+					v.PiPeiCreatRoom(r.cfgId)
+					v.StandUpTable()
 				}
 			}
 		}
@@ -1183,9 +1185,11 @@ func (r *Room) PiPeiHandle() bool {
 			if v != nil && v.IsRobot == false {
 				if v.chair == -1 {
 					r.ClearPiPeiData(v)
-					v.chair = -1
-					v.IsStandUp = true
-					v.PiPeiStandUp(r)
+					//v.chair = -1
+					//v.IsStandUp = true
+					//v.PiPeiStandUp(r)
+					v.PiPeiCreatRoom(r.cfgId)
+					v.StandUpTable()
 				}
 			}
 		}
