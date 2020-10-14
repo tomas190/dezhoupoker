@@ -2354,8 +2354,9 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/accessData.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/accessData.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/gameHall.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/gameHall.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/cards_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/algorithm/tostring.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/chanrpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/chanrpc.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3196,7 +3197,7 @@
       <recent name="C:\Users\tomas\go\src\dezhoupoker\msg" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)">
+  <component name="RunManager" selected="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)">
     <configuration name="TestCards_FLUSH in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="server" />
       <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
@@ -3241,7 +3242,7 @@
       <pattern value="^TestCards_Straight$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="server" />
       <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
       <framework value="gotest" />
@@ -3276,19 +3277,19 @@
     </configuration>
     <list>
       <item itemvalue="Go Test.dezhoupoker" />
-      <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (1)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)" />
       <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
+      <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)" />
         <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (1)" />
-        <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
       </list>
     </recent_temporary>
   </component>
@@ -3300,22 +3301,22 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1237" height="206" key="GridCell.Tab.0.bottom" timestamp="1601017796545">
+    <state width="1237" height="206" key="GridCell.Tab.0.bottom" timestamp="1602646977113">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="206" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1601017796545" />
-    <state width="1237" height="206" key="GridCell.Tab.0.center" timestamp="1601017796538">
+    <state width="1237" height="206" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1602646977113" />
+    <state width="1237" height="206" key="GridCell.Tab.0.center" timestamp="1602646977113">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="206" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1601017796538" />
-    <state width="1237" height="206" key="GridCell.Tab.0.left" timestamp="1601017796529">
+    <state width="1237" height="206" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1602646977113" />
+    <state width="1237" height="206" key="GridCell.Tab.0.left" timestamp="1602646977113">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="206" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1601017796529" />
-    <state width="1237" height="206" key="GridCell.Tab.0.right" timestamp="1601017796539">
+    <state width="1237" height="206" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1602646977113" />
+    <state width="1237" height="206" key="GridCell.Tab.0.right" timestamp="1602646977113">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="206" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1601017796539" />
+    <state width="1237" height="206" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1602646977113" />
     <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1599029526826">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

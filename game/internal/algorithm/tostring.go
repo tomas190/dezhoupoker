@@ -263,7 +263,7 @@ func CardString(cards []int32) []string {
 	for _, num := range cards {
 		switch num {
 		case 1:
-			str = append(str, "♠1")
+			str = append(str, "♠E")
 		case 2:
 			str = append(str, "♠2")
 		case 3:
@@ -289,7 +289,7 @@ func CardString(cards []int32) []string {
 		case 13:
 			str = append(str, "♠D")
 		case 14:
-			str = append(str, "♣1")
+			str = append(str, "♣E")
 		case 15:
 			str = append(str, "♣2")
 		case 16:
@@ -315,7 +315,7 @@ func CardString(cards []int32) []string {
 		case 26:
 			str = append(str, "♣D")
 		case 27:
-			str = append(str, "♥1")
+			str = append(str, "♥E")
 		case 28:
 			str = append(str, "♥2")
 		case 29:
@@ -341,7 +341,7 @@ func CardString(cards []int32) []string {
 		case 39:
 			str = append(str, "♥D")
 		case 40:
-			str = append(str, "♦1")
+			str = append(str, "♦E")
 		case 41:
 			str = append(str, "♦2")
 		case 42:
@@ -544,6 +544,13 @@ func GetStraight(cards []string) []string {
 	cards = RemoveRepByLoop(cards)
 	fmt.Println("c4:", cards)
 
+	if cards[0] == "E" {
+		if cards[1] == "D" {
+			if cards[2] == "C" {
+				return cards
+			}
+		}
+	}
 	if cards[0] == "D" {
 		if cards[1] == "C" {
 			if cards[2] == "B" {
@@ -604,6 +611,15 @@ func GetStraight(cards []string) []string {
 		if cards[1] == "4" {
 			if cards[2] == "3" {
 				return cards
+			}
+		}
+	}
+	if cards[1] == "E" {
+		if cards[2] == "D" {
+			if cards[3] == "C" {
+				str := cards[1:]
+				str = append(str, cards[:1]...)
+				return str
 			}
 		}
 	}
@@ -684,6 +700,15 @@ func GetStraight(cards []string) []string {
 			if cards[3] == "3" {
 				str := cards[1:]
 				str = append(str, cards[:1]...)
+				return str
+			}
+		}
+	}
+	if cards[2] == "E" {
+		if cards[3] == "D" {
+			if cards[4] == "C" {
+				str := cards[2:]
+				str = append(str, cards[:2]...)
 				return str
 			}
 		}
@@ -867,7 +892,7 @@ func GetCards(pai, str []string) []string {
 	var flag bool
 	for k, v := range pai {
 		s := NewString(v)
-		if s == "1" {
+		if s == "E" {
 			flag = true
 			pai = append(pai[:k], pai[k+1:]...)
 			data = append(data, v)
@@ -892,7 +917,7 @@ func NewString(str string) string {
 	return str
 }
 func NewNumber(str string) string {
-	str = strings.TrimRight(str, "1")
+	str = strings.TrimRight(str, "E")
 	str = strings.TrimRight(str, "2")
 	str = strings.TrimRight(str, "3")
 	str = strings.TrimRight(str, "4")

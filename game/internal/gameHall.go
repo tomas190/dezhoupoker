@@ -217,17 +217,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	} else if cfgId == "1" {
 		if len(hall.PiPeiList1) >= 1 && len(hall.PiPeiList1) <= 3 {
-			for _, r := range hall.roomList {
-				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-						// 装载房间机器人
-						r.LoadRoomRobots()
-					}
-					hall.DeleteWaitList(p)
-					r.PlayerJoinRoom(p)
-					return
-				}
-			}
+			//for _, r := range hall.roomList {
+			//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+			//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+			//			// 装载房间机器人
+			//			r.LoadRoomRobots()
+			//		}
+			//		hall.DeleteWaitList(p)
+			//		r.PlayerJoinRoom(p)
+			//		return
+			//	}
+			//}
 			hall.DeleteWaitList(p)
 			hall.PlayerCreateRoom(cfgId, p)
 			return
@@ -247,17 +247,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 				hall.PiPeiList1 = []*Player{}
 				return
 			} else {
-				for _, r := range hall.roomList {
-					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-							// 装载房间机器人
-							r.LoadRoomRobots()
-						}
-						hall.DeleteWaitList(p)
-						r.PlayerJoinRoom(p)
-						return
-					}
-				}
+				//for _, r := range hall.roomList {
+				//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+				//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+				//			// 装载房间机器人
+				//			r.LoadRoomRobots()
+				//		}
+				//		hall.DeleteWaitList(p)
+				//		r.PlayerJoinRoom(p)
+				//		return
+				//	}
+				//}
 				hall.DeleteWaitList(p)
 				hall.PlayerCreateRoom(cfgId, p)
 				return
@@ -286,17 +286,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	} else if cfgId == "2" {
 		if len(hall.PiPeiList2) >= 1 && len(hall.PiPeiList2) <= 3 {
-			for _, r := range hall.roomList {
-				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-						// 装载房间机器人
-						r.LoadRoomRobots()
-					}
-					hall.DeleteWaitList(p)
-					r.PlayerJoinRoom(p)
-					return
-				}
-			}
+			//for _, r := range hall.roomList {
+			//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+			//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+			//			// 装载房间机器人
+			//			r.LoadRoomRobots()
+			//		}
+			//		hall.DeleteWaitList(p)
+			//		r.PlayerJoinRoom(p)
+			//		return
+			//	}
+			//}
 			hall.DeleteWaitList(p)
 			hall.PlayerCreateRoom(cfgId, p)
 			return
@@ -316,17 +316,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 				hall.PiPeiList2 = []*Player{}
 				return
 			} else {
-				for _, r := range hall.roomList {
-					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-							// 装载房间机器人
-							r.LoadRoomRobots()
-						}
-						hall.DeleteWaitList(p)
-						r.PlayerJoinRoom(p)
-						return
-					}
-				}
+				//for _, r := range hall.roomList {
+				//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+				//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+				//			// 装载房间机器人
+				//			r.LoadRoomRobots()
+				//		}
+				//		hall.DeleteWaitList(p)
+				//		r.PlayerJoinRoom(p)
+				//		return
+				//	}
+				//}
 				hall.DeleteWaitList(p)
 				hall.PlayerCreateRoom(cfgId, p)
 				return
@@ -355,17 +355,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 		}
 	} else if cfgId == "3" {
 		if len(hall.PiPeiList3) >= 1 && len(hall.PiPeiList3) <= 3 {
-			for _, r := range hall.roomList {
-				if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-					if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-						// 装载房间机器人
-						r.LoadRoomRobots()
-					}
-					hall.DeleteWaitList(p)
-					r.PlayerJoinRoom(p)
-					return
-				}
-			}
+			//for _, r := range hall.roomList {
+			//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+			//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+			//			// 装载房间机器人
+			//			r.LoadRoomRobots()
+			//		}
+			//		hall.DeleteWaitList(p)
+			//		r.PlayerJoinRoom(p)
+			//		return
+			//	}
+			//}
 			hall.DeleteWaitList(p)
 			hall.PlayerCreateRoom(cfgId, p)
 			return
@@ -385,17 +385,17 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 				hall.PiPeiList3 = []*Player{}
 				return
 			} else {
-				for _, r := range hall.roomList {
-					if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
-						if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
-							// 装载房间机器人
-							r.LoadRoomRobots()
-						}
-						hall.DeleteWaitList(p)
-						r.PlayerJoinRoom(p)
-						return
-					}
-				}
+				//for _, r := range hall.roomList {
+				//	if r.cfgId == cfgId && r.IsCanJoin() && p.PreRoomId != r.roomId {
+				//		if r.RealPlayerLength() <= 1 && r.RobotsLength() < 1 {
+				//			// 装载房间机器人
+				//			r.LoadRoomRobots()
+				//		}
+				//		hall.DeleteWaitList(p)
+				//		r.PlayerJoinRoom(p)
+				//		return
+				//	}
+				//}
 				hall.DeleteWaitList(p)
 				hall.PlayerCreateRoom(cfgId, p)
 				return

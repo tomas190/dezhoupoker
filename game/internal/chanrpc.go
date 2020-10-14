@@ -43,6 +43,8 @@ func rpcCloseAgent(args []interface{}) {
 					log.Debug("添加离线玩家UserLeave:%v",p.Id)
 					room.UserLeave = append(room.UserLeave, p.Id)
 				}
+				leaveHall := &msg.Logout_S2C{}
+				a.WriteMsg(leaveHall)
 			}
 		} else {
 			hall.UserRecord.Delete(p.Id)
