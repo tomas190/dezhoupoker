@@ -11,7 +11,7 @@ func (p *Player) PlayerExitRoom() {
 	v, _ := hall.RoomRecord.Load(rId)
 	if v != nil {
 		room := v.(*Room)
-		if p.IsInGame == true{
+		if p.IsInGame == true {
 			var exist bool
 			for _, v := range room.UserLeave {
 				if v == p.Id {
@@ -19,7 +19,7 @@ func (p *Player) PlayerExitRoom() {
 				}
 			}
 			if exist == false {
-				log.Debug("添加离线玩家UserLeave:%v",p.Id)
+				log.Debug("添加离线玩家UserLeave:%v", p.Id)
 				room.UserLeave = append(room.UserLeave, p.Id)
 			}
 
@@ -79,6 +79,13 @@ func (p *Player) SitDownTable() {
 		if r.IsPiPeiNow == true {
 			return
 		}
+
+		for _, v := range r.PlayerList {  // 防止客户端重复点击
+			if v != nil && v.Id == p.Id {
+				return
+			}
+		}
+
 		// 玩家坐下筹码重置为房间最少带入金额
 		data := SetRoomConfig(r.cfgId)
 		p.roomChips += p.chips

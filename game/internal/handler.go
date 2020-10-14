@@ -355,6 +355,26 @@ func handWaitPlayerList(args []interface{}) {
 	p, ok := a.UserData().(*Player)
 	if ok {
 		if m.WaitStatus == 1 {
+			for _, v := range hall.PiPeiList0 {
+				if v.Id == p.Id {
+					return
+				}
+			}
+			for _, v := range hall.PiPeiList1 {
+				if v.Id == p.Id {
+					return
+				}
+			}
+			for _, v := range hall.PiPeiList2 {
+				if v.Id == p.Id {
+					return
+				}
+			}
+			for _, v := range hall.PiPeiList3 {
+				if v.Id == p.Id {
+					return
+				}
+			}
 			if m.CfgId == "0" {
 				p.cfgId = m.CfgId
 				hall.PiPeiList0 = append(hall.PiPeiList0, p)
