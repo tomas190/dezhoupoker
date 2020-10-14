@@ -234,7 +234,7 @@ func (r *Room) GameRunning() {
 			p.cardData.SuitPattern = msg.CardSuit(kind)
 
 			cardSlice := cs.HexInt()
-			if kind == 5 || kind == 6 {
+			if kind == 5 || kind == 6 || kind == 9 {
 				cardSlice = algorithm.ShowCards(kind, cardSlice)
 				p.cardData.PublicCardKeys = cardSlice[:5]
 				log.Debug("当前卡牌类型:%v,%v", kind, p.cardData.PublicCardKeys)

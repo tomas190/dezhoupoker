@@ -391,6 +391,9 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	case 7: // 葫芦
 	case 8: // 四条
 	case 9: // 同花顺
+		cardShow := ShowStraightFl(cards)
+		fmt.Println("同花:", cardShow)
+		return cardShow
 	case 10: // 皇家同花顺
 	}
 	return cards
@@ -885,23 +888,97 @@ func ShowFlush(cards []int32) []int32 {
 	return data
 }
 
+func ShowStraightFl(cards []int32) []int32 {
+	str := CardString(cards)
+	fmt.Println("str:", str)
+	num0 := str[0]
+	num1 := str[1]
+	num2 := str[2]
+	num3 := str[3]
+	num4 := str[4]
+	num5 := str[5]
+	num6 := str[6]
+	n0 := NewNumber(num0)
+	n1 := NewNumber(num1)
+	n2 := NewNumber(num2)
+	n3 := NewNumber(num3)
+	n4 := NewNumber(num4)
+	n5 := NewNumber(num5)
+	n6 := NewNumber(num6)
+	ns := []string{n0, n1, n2, n3, n4, n5, n6}
+	var hei []string
+	var hong []string
+	var fang []string
+	var ying []string
+	for i := 0; i < len(ns); i++ {
+		if ns[i] == "♠" {
+			hei = append(hei, str[i])
+		}
+		if ns[i] == "♥" {
+			hong = append(hong, str[i])
+		}
+		if ns[i] == "♦" {
+			fang = append(fang, str[i])
+		}
+		if ns[i] == "♣" {
+			ying = append(ying, str[i])
+		}
+	}
+	var cs2 []string
+
+	if len(hei) >= 5 {
+		cs2 = GetCards(hei, str)
+	}
+	if len(hong) >= 5 {
+		cs2 = GetCards(hong, str)
+	}
+	if len(fang) >= 5 {
+		cs2 = GetCards(fang, str)
+	}
+	if len(ying) >= 5 {
+		cs2 = GetCards(ying, str)
+	}
+
+	var data []int32
+	for _, v := range cs2 {
+		if v == num0 {
+			data = append(data, cards[0])
+			continue
+		}
+		if v == num1 {
+			data = append(data, cards[1])
+			continue
+		}
+		if v == num2 {
+			data = append(data, cards[2])
+			continue
+		}
+		if v == num3 {
+			data = append(data, cards[3])
+			continue
+		}
+		if v == num4 {
+			data = append(data, cards[4])
+			continue
+		}
+		if v == num5 {
+			data = append(data, cards[5])
+			continue
+		}
+		if v == num6 {
+			data = append(data, cards[6])
+			continue
+		}
+	}
+
+	return data
+}
+
 func GetCards(pai, str []string) []string {
 	sort.Sort(sort.Reverse(sort.StringSlice(pai)))
 	fmt.Println("pai:", pai)
 	var data []string
-	var flag bool
-	for k, v := range pai {
-		s := NewString(v)
-		if s == "E" {
-			flag = true
-			pai = append(pai[:k], pai[k+1:]...)
-			data = append(data, v)
-			data = append(data, pai...)
-		}
-	}
-	if flag == false {
-		data = pai
-	}
+	data = pai
 
 	_, sk := checkSliceBInA(data, str)
 
