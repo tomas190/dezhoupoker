@@ -392,7 +392,7 @@ func ShowCards(kind uint8, cards []int32) []int32 {
 	case 8: // 四条
 	case 9: // 同花顺
 		cardShow := ShowStraightFl(cards)
-		fmt.Println("同花:", cardShow)
+		fmt.Println("同花顺:", cardShow)
 		return cardShow
 	case 10: // 皇家同花顺
 	}
