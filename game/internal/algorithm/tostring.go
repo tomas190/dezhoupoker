@@ -610,13 +610,13 @@ func GetStraight(cards []string) []string {
 			}
 		}
 	}
-	if cards[0] == "5" {
-		if cards[1] == "4" {
-			if cards[2] == "3" {
-				return cards
-			}
-		}
-	}
+	//if cards[0] == "5" {
+	//	if cards[1] == "4" {
+	//		if cards[2] == "3" {
+	//			return cards
+	//		}
+	//	}
+	//}
 	if cards[1] == "E" {
 		if cards[2] == "D" {
 			if cards[3] == "C" {
@@ -698,15 +698,15 @@ func GetStraight(cards []string) []string {
 			}
 		}
 	}
-	if cards[1] == "5" {
-		if cards[2] == "4" {
-			if cards[3] == "3" {
-				str := cards[1:]
-				str = append(str, cards[:1]...)
-				return str
-			}
-		}
-	}
+	//if cards[1] == "5" {
+	//	if cards[2] == "4" {
+	//		if cards[3] == "3" {
+	//			str := cards[1:]
+	//			str = append(str, cards[:1]...)
+	//			return str
+	//		}
+	//	}
+	//}
 	if cards[2] == "E" {
 		if cards[3] == "D" {
 			if cards[4] == "C" {
@@ -788,18 +788,31 @@ func GetStraight(cards []string) []string {
 			}
 		}
 	}
-	if cards[2] == "5" {
-		if cards[3] == "4" {
-			if cards[4] == "3" {
-				str := cards[2:]
-				str = append(str, cards[:2]...)
-				return str
-			}
+	//if cards[2] == "5" {
+	//	if cards[3] == "4" {
+	//		if cards[4] == "3" {
+	//			str := cards[2:]
+	//			str = append(str, cards[:2]...)
+	//			return str
+	//		}
+	//	}
+	//}
+	//str2 := cards[2:]
+	//str2 = append(str2, cards[:2]...)
+	//return str2
+
+	cards = SortDown(cards)
+	cards = RemoveRepByLoop(cards)
+	var data []string
+	for k, v := range cards {
+		if v == "E" {
+			data = append(data, v)
+			cards = append(cards[:k], cards[k+1:]...)
+			break
 		}
 	}
-	str2 := cards[2:]
-	str2 = append(str2, cards[:2]...)
-	return str2
+	data = append(data, cards...)
+	return data
 }
 
 func ShowFlush(cards []int32) []int32 {
@@ -1060,5 +1073,10 @@ func checkSliceBInA(a []string, b []string) (isIn bool, diffSlice []string) {
 
 func SortString(cs []string) []string {
 	sort.Sort(sort.Reverse(sort.StringSlice(cs)))
+	return cs
+}
+
+func SortDown(cs []string) []string {
+	sort.Strings(cs)
 	return cs
 }

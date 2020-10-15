@@ -4,6 +4,7 @@
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
       <change afterPath="$PROJECT_DIR$/../doudizhu-cocos/.idea/doudizhu-cocos.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../临时文件夹/.idea/临时文件夹.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../德州闪屏问题.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../assets/common.meta" beforeDir="false" />
@@ -3160,13 +3161,16 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="ProjectId" id="1YN8wzBcxVdDbyku1vF7Z70tO45" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -3196,7 +3200,7 @@
       <recent name="C:\Users\tomas\go\src\dezhoupoker\msg" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)">
+  <component name="RunManager" selected="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm">
     <configuration name="TestCards_FLUSH in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
       <module name="server" />
       <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
@@ -3206,17 +3210,6 @@
       <directory value="$PROJECT_DIR$/" />
       <filePath value="$PROJECT_DIR$/" />
       <pattern value="^TestCards_FLUSH$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm (1)" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
-      <module name="server" />
-      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
-      <framework value="gotest" />
-      <kind value="PACKAGE" />
-      <package value="dezhoupoker/game/internal/algorithm" />
-      <directory value="$PROJECT_DIR$/" />
-      <filePath value="$PROJECT_DIR$/" />
-      <pattern value="^TestCards_Straight$" />
       <method v="2" />
     </configuration>
     <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
@@ -3252,6 +3245,17 @@
       <pattern value="^TestCards_Straight$" />
       <method v="2" />
     </configuration>
+    <configuration name="TestCards_Straight in dezhoupoker/game/internal/algorithm" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false" temporary="true" nameIsGenerated="true">
+      <module name="server" />
+      <working_directory value="$PROJECT_DIR$/game/internal/algorithm" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="dezhoupoker/game/internal/algorithm" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestCards_Straight$" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="GoTestRunConfiguration" factoryName="Go Test" singleton="false">
       <module name="server" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -3276,46 +3280,49 @@
     </configuration>
     <list>
       <item itemvalue="Go Test.dezhoupoker" />
-      <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (1)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)" />
       <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" />
+      <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)" />
         <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
         <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" />
-        <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (1)" />
       </list>
     </recent_temporary>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1237" height="203" key="GridCell.Tab.0.bottom" timestamp="1602735705899">
+    <state width="1237" height="203" key="GridCell.Tab.0.bottom" timestamp="1602756510438">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1602735705899" />
-    <state width="1237" height="203" key="GridCell.Tab.0.center" timestamp="1602735705899">
+    <state width="1237" height="203" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
+    <state width="1237" height="203" key="GridCell.Tab.0.center" timestamp="1602756510438">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1602735705899" />
-    <state width="1237" height="203" key="GridCell.Tab.0.left" timestamp="1602735705899">
+    <state width="1237" height="203" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
+    <state width="1237" height="203" key="GridCell.Tab.0.left" timestamp="1602756510438">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1602735705899" />
-    <state width="1237" height="203" key="GridCell.Tab.0.right" timestamp="1602735705899">
+    <state width="1237" height="203" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
+    <state width="1237" height="203" key="GridCell.Tab.0.right" timestamp="1602756510438">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1602735705899" />
+    <state width="1237" height="203" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
     <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1599029526826">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -3332,10 +3339,10 @@
       <screen x="0" y="0" width="1280" height="680" />
     </state>
     <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1602735740204">
+    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1602749537251">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1602735740204" />
+    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1602749537251" />
     <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1598948182005">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
