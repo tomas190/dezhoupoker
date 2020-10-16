@@ -354,6 +354,8 @@ func handWaitPlayerList(args []interface{}) {
 	a := args[1].(gate.Agent)
 
 	p, ok := a.UserData().(*Player)
+	log.Debug("handWaitPlayerList 玩家进入匹配状态~ :%v , 匹配状态:%v", p.Id, m.WaitStatus)
+
 	if ok {
 		if m.WaitStatus == 1 {
 			for _, v := range hall.PiPeiList0 {
