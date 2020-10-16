@@ -857,17 +857,21 @@ func (r *Room) ReadyTimer() {
 	ready.ReadyTime = ReadyTime
 	r.Broadcast(ready)
 
+	// 玩家补充筹码
+	r.PlayerAddChips()
+	// 设置玩家状态
+	r.SetPlayerStatus()
+
+	game := &msg.GameStepChange_S2C{}
+	game.RoomData = r.RespRoomData()
+	r.Broadcast(game)
+
 	go func() {
 		for range r.clock.C {
 			r.counter++
 			//log.Debug("readyTime clock : %v ", r.counter)
 			if r.counter == 2 {
 				r.StartTime = time.Now().Unix()
-				// 玩家补充筹码
-				r.PlayerAddChips()
-
-				// 设置玩家状态
-				r.SetPlayerStatus()
 
 				// 产生庄家
 				var dealer *Player
@@ -979,7 +983,6 @@ func (r *Room) ReadyTimer() {
 						}
 					}
 				}
-
 				game := &msg.GameStepChange_S2C{}
 				game.RoomData = r.RespRoomData()
 				r.Broadcast(game)
