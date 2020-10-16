@@ -310,6 +310,7 @@ func handleRoomStatus(args []interface{}) {
 	a := args[1].(gate.Agent)
 
 	p, ok := a.UserData().(*Player)
+	log.Debug("handleRoomStatus 玩家进入房间状态~ :%v", p.Id)
 	if ok {
 		var roomCfg = "-1"
 		for _, r := range hall.roomList {
