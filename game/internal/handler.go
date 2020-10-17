@@ -199,7 +199,7 @@ func handleQuickStart(args []interface{}) {
 	a := args[1].(gate.Agent)
 
 	p, ok := a.UserData().(*Player)
-	log.Debug("handleQuickStart 快速匹配房间~ :%v", p.Id)
+	log.Debug("handleQuickStart 快速匹配房间~ :%v, 状态: %v", p.Id, m.CfgId)
 
 	if ok {
 		hall.PlayerQuickStart(m.CfgId, p)
