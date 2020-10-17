@@ -113,7 +113,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 	req.RoundId = r.FormValue("round_id")
 	startTime := r.FormValue("start_time")
 	endTime := r.FormValue("end_time")
-	skip := r.FormValue("page")
+	skip := r.FormValue("skip")
 	limit := r.FormValue("limit")
 
 	selector := bson.M{}
@@ -156,7 +156,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 
 	skips, _ := strconv.Atoi(skip)
 	if skips != 0 {
-		selector["page"] = skips
+		selector["skip"] = skips
 	}
 
 	limits, _ := strconv.Atoi(limit)
