@@ -87,10 +87,15 @@ func (p *Player) SitDownTable() {
 		}
 
 		// 玩家坐下筹码重置为房间最少带入金额
-		data := SetRoomConfig(r.cfgId)
-		p.roomChips += p.chips
-		p.chips = data.MinTakeIn
-		p.roomChips -= p.chips
+		//data := SetRoomConfig(r.cfgId)
+		//p.roomChips += p.chips
+		//p.chips = data.MinTakeIn
+		//p.roomChips -= p.chips
+
+		p.Account += p.chips
+		p.Account += p.roomChips
+		// 设定玩家带入金额
+		r.TakeInRoomChips(p)
 
 		p.chair = r.FindAbleChair()
 		r.PlayerList[p.chair] = p

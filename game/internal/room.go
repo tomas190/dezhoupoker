@@ -1223,8 +1223,8 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	//	}
 	//}
 
-	p.Account += p.chips
-	p.Account += p.roomChips
+	//p.Account += p.chips
+	//p.Account += p.roomChips
 
 	delete(hall.UserRoom, p.Id)
 
@@ -1270,7 +1270,7 @@ func (p *Player) PiPeiCreatRoom(cfgId string) {
 	hall.UserRoom[p.Id] = r.roomId
 
 	// 玩家带入筹码
-	r.TakeInRoomChips(p)
+	//r.TakeInRoomChips(p)
 
 	p.chair = r.FindAbleChair()
 	r.PlayerList[p.chair] = p
