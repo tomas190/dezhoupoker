@@ -348,6 +348,7 @@ func (r *Room) ClearRoomData() {
 			v.IsAllIn = false
 			v.IsWinner = false
 			v.IsButton = false
+			v.IsStandUp = false
 			v.IsInGame = false
 			v.IsLeaveR = false
 			v.HandValue = 0
