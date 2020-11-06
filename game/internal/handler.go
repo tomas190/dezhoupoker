@@ -116,16 +116,16 @@ func handleLogin(args []interface{}) {
 			}
 
 			// 处理重连
-			for _, r := range hall.roomList {
-				for _, v := range r.PlayerList {
-					if v != nil && v.Id == p.Id {
-						roomData := r.RespRoomData()
-						enter := &msg.EnterRoom_S2C{}
-						enter.RoomData = roomData
-						p.SendMsg(enter)
-					}
-				}
-			}
+			//for _, r := range hall.roomList {
+			//	for _, v := range r.PlayerList {
+			//		if v != nil && v.Id == p.Id {
+			//			roomData := r.RespRoomData()
+			//			enter := &msg.EnterRoom_S2C{}
+			//			enter.RoomData = roomData
+			//			p.SendMsg(enter)
+			//		}
+			//	}
+			//}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
 		c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {
