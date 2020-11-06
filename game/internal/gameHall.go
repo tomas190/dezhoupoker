@@ -58,6 +58,7 @@ func (hall *GameHall) ReplacePlayerAgent(Id string, agent gate.Agent) error {
 	if v, ok := hall.UserRecord.Load(Id); ok {
 		//ErrorResp(agent, msg.ErrorMsg_UserRemoteLogin, "异地登录")
 		user := v.(*Player)
+		user.ConnAgent.Close()
 		user.ConnAgent = agent
 		user.ConnAgent.SetUserData(v)
 		return nil

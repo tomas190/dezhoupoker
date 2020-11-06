@@ -104,17 +104,6 @@ func handleLogin(args []interface{}) {
 				log.Debug("用户重连或顶替，发送登陆信息~")
 			}
 
-			roomId := hall.UserRoom[p.Id]
-			v2, _ := hall.RoomRecord.Load(roomId)
-			if v2 != nil {
-				// 玩家如果已在游戏中，则返回房间数据
-				room := v2.(*Room)
-				roomData := room.RespRoomData()
-				enter := &msg.EnterRoom_S2C{}
-				enter.RoomData = roomData
-				p.SendMsg(enter)
-			}
-
 			// 处理重连
 			for _, r := range hall.roomList {
 				for _, v := range r.PlayerList {
