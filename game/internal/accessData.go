@@ -113,7 +113,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 	req.RoundId = r.FormValue("round_id")
 	startTime := r.FormValue("start_time")
 	endTime := r.FormValue("end_time")
-	skip := r.FormValue("skip")
+	page := r.FormValue("page")
 	limit := r.FormValue("limit")
 
 	selector := bson.M{}
@@ -154,17 +154,14 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 		selector["down_bet_time"] = bson.M{"$lt": eTime}
 	}
 
-	skips, _ := strconv.Atoi(skip)
-	if skips != 0 {
-		selector["skip"] = skips
-	}
+	pages, _ := strconv.Atoi(page)
 
 	limits, _ := strconv.Atoi(limit)
 	//if limits != 0 {
 	//	selector["limit"] = limits
 	//}
 
-	recodes, count, err := GetDownRecodeList(skips, limits, selector, "-down_bet_time")
+	recodes, count, err := GetDownRecodeList(pages, limits, selector, "-down_bet_time")
 	if err != nil {
 		return
 	}

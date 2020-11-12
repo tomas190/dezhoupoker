@@ -285,7 +285,7 @@ func InsertAccessData(data *PlayerDownBetRecode) {
 }
 
 //GetDownRecodeList 获取运营数据接入
-func GetDownRecodeList(skip, limit int, selector bson.M, sortBy string) ([]PlayerDownBetRecode, int, error) {
+func GetDownRecodeList(page, limit int, selector bson.M, sortBy string) ([]PlayerDownBetRecode, int, error) {
 	s, c := connect(dbName, accessDB)
 	defer s.Close()
 
@@ -295,6 +295,8 @@ func GetDownRecodeList(skip, limit int, selector bson.M, sortBy string) ([]Playe
 	if err != nil {
 		return nil, 0, err
 	}
+	log.Debug("获取 %v 条数据,limit:%v", n, limit)
+	skip := (page - 1) * limit
 	err = c.Find(selector).Sort(sortBy).Skip(skip).Limit(limit).All(&wts)
 	if err != nil {
 		return nil, 0, err
