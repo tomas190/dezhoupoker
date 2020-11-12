@@ -104,28 +104,17 @@ func handleLogin(args []interface{}) {
 				log.Debug("用户重连或顶替，发送登陆信息~,房间数据:v%", login.Backroom)
 			}
 
-			roomId := hall.UserRoom[p.Id]
-			v2, _ := hall.RoomRecord.Load(roomId)
-			if v2 != nil {
-				// 玩家如果已在游戏中，则返回房间数据
-				room := v2.(*Room)
-				roomData := room.RespRoomData()
-				enter := &msg.EnterRoom_S2C{}
-				enter.RoomData = roomData
-				p.SendMsg(enter)
-			}
-
 			// 处理重连
-			//for _, r := range hall.roomList {
-			//	for _, v := range r.PlayerList {
-			//		if v != nil && v.Id == p.Id {
-			//			roomData := r.RespRoomData()
-			//			enter := &msg.EnterRoom_S2C{}
-			//			enter.RoomData = roomData
-			//			p.SendMsg(enter)
-			//		}
-			//	}
-			//}
+			for _, r := range hall.roomList {
+				for _, v := range r.PlayerList {
+					if v != nil && v.Id == p.Id {
+						roomData := r.RespRoomData()
+						enter := &msg.EnterRoom_S2C{}
+						enter.RoomData = roomData
+						p.SendMsg(enter)
+					}
+				}
+			}
 		}
 	} else if !hall.agentExist(a) { // 玩家首次登入
 		c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {
