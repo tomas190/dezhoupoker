@@ -148,7 +148,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 
 	log.Debug("开始匹配配置房间~")
 	if cfgId == "0" {
-		log.Debug("匹配 0 房间配置~")
+		log.Debug("匹配 0 房间配置:%v", hall.PiPeiList0)
 		if len(hall.PiPeiList0) >= 1 && len(hall.PiPeiList0) <= 3 {
 			log.Debug("单个玩家开始匹配 0 配置房间~")
 			//for _, r := range hall.roomList {
@@ -219,7 +219,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			hall.PiPeiList0 = hall.PiPeiList0[9:]
 		}
 	} else if cfgId == "1" {
-		log.Debug("匹配 1 房间配置~")
+		log.Debug("匹配 1 房间配置:%v", hall.PiPeiList1)
 		if len(hall.PiPeiList1) >= 1 && len(hall.PiPeiList1) <= 3 {
 			log.Debug("单个玩家开始匹配 1 配置房间~")
 			//for _, r := range hall.roomList {
@@ -290,7 +290,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			hall.PiPeiList1 = hall.PiPeiList1[9:]
 		}
 	} else if cfgId == "2" {
-		log.Debug("匹配 2 房间配置~")
+		log.Debug("匹配 2 房间配置:%v", hall.PiPeiList2)
 		if len(hall.PiPeiList2) >= 1 && len(hall.PiPeiList2) <= 3 {
 			log.Debug("单个玩家开始匹配 2 配置房间~")
 			//for _, r := range hall.roomList {
@@ -361,7 +361,7 @@ func (hall *GameHall) PlayerQuickStart(cfgId string, p *Player) {
 			hall.PiPeiList2 = hall.PiPeiList2[9:]
 		}
 	} else if cfgId == "3" {
-		log.Debug("匹配 3 房间配置~")
+		log.Debug("匹配 3 房间配置:%v", hall.PiPeiList3)
 		if len(hall.PiPeiList3) >= 1 && len(hall.PiPeiList3) <= 3 {
 			log.Debug("单个玩家开始匹配 3 配置房间~")
 			//for _, r := range hall.roomList {

@@ -360,21 +360,25 @@ func handWaitPlayerList(args []interface{}) {
 		if m.WaitStatus == 1 {
 			for _, v := range hall.PiPeiList0 {
 				if v.Id == p.Id {
+					log.Debug("当前匹配列表存在该玩家,退出 PiPeiList0")
 					return
 				}
 			}
 			for _, v := range hall.PiPeiList1 {
 				if v.Id == p.Id {
+					log.Debug("当前匹配列表存在该玩家,退出 PiPeiList1")
 					return
 				}
 			}
 			for _, v := range hall.PiPeiList2 {
 				if v.Id == p.Id {
+					log.Debug("当前匹配列表存在该玩家,退出 PiPeiList2")
 					return
 				}
 			}
 			for _, v := range hall.PiPeiList3 {
 				if v.Id == p.Id {
+					log.Debug("当前匹配列表存在该玩家,退出 PiPeiList3")
 					return
 				}
 			}
