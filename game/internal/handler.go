@@ -101,7 +101,14 @@ func handleLogin(args []interface{}) {
 				p.ConnAgent = a
 				p.ConnAgent.SetUserData(u) //p
 				p.IsOnline = true
-				log.Debug("用户重连或顶替，发送登陆信息~,房间数据:v%", login.Backroom)
+				log.Debug("用户重连或顶替，发送登陆信息~,房间数据:%v", login.Backroom)
+				if login.Backroom == true {
+					room := rm.(*Room)
+					roomData := room.RespRoomData()
+					enter := &msg.EnterRoom_S2C{}
+					enter.RoomData = roomData
+					p.SendMsg(enter)
+				}
 			}
 
 			// 处理重连
