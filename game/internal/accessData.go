@@ -119,7 +119,7 @@ func getAccessData(w http.ResponseWriter, r *http.Request) {
 	selector := bson.M{}
 
 	if req.Id != "" {
-		selector["id"] = req.Id
+		selector["result_info.player_id"] = req.Id
 	}
 
 	if req.GameId != "" {

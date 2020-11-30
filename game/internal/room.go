@@ -805,46 +805,40 @@ func (r *Room) ResultMoney() {
 			}
 		}
 	}
+
+	nowTime := time.Now().Unix()
+	// 插入运营数据
+	data := &PlayerDownBetRecode{}
+	data.GameId = conf.Server.GameID
+	data.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
+	data.RoomId = r.roomId
+	data.CfgID = r.cfgId
+	data.SmallBlind = r.SBId
+	data.BigBlind = r.BBId
+	data.SmallMoney = r.SB
+	data.BigMoney = r.BB
+	data.PublicCard = r.publicCards
 	for _, v := range r.PlayerList {
-		if v != nil && v.IsRobot == false && v.totalDownBet > 0 {
-			nowTime := time.Now().Unix()
-			// 插入运营数据
-			data := &PlayerDownBetRecode{}
-			data.GameId = conf.Server.GameID
-			data.RoundId = v.RoundId
-			data.Id = v.Id
-			data.RoomId = r.roomId
-			data.CfgID = r.cfgId
-			data.SmallBlind = r.SBId
-			data.BigBlind = r.BBId
-			data.SmallMoney = r.SB
-			data.BigMoney = r.BB
-			data.PublicCard = r.publicCards
-			for _, v := range r.PlayerList {
-				if v != nil {
-					res := &ResultData{}
-					res.PlayerId = v.Id
-					res.Chair = v.chair
-					res.HandCard = v.cardData.HandCardKeys
-					res.DownBet = v.totalDownBet
-					res.SettlementFunds = v.resultMoney
-					res.SpareCash = v.Account + v.chips + v.roomChips
-					if v.IsRobot == true {
-						res.IsRobot = true
-					}
-					data.ResultInfo = append(data.ResultInfo, res)
-				}
+		if v != nil {
+			res := &ResultData{}
+			res.PlayerId = v.Id
+			res.Chair = v.chair
+			res.HandCard = v.cardData.HandCardKeys
+			res.DownBet = v.totalDownBet
+			res.SettlementFunds = v.resultMoney
+			res.SpareCash = v.Account + v.chips + v.roomChips
+			if v.IsRobot == true {
+				res.IsRobot = true
 			}
-			data.DownBetTime = nowTime
-			data.PotMoney = r.potMoney
-			data.TaxRate = taxRate
-			data.SettlementFunds = v.resultMoney
-			data.SpareCash = v.Account + v.chips + v.roomChips
-			data.StartTime = r.StartTime
-			data.EndTime = r.EndTime
-			InsertAccessData(data)
+			data.ResultInfo = append(data.ResultInfo, res)
 		}
 	}
+	data.DownBetTime = nowTime
+	data.PotMoney = r.potMoney
+	data.TaxRate = taxRate
+	data.StartTime = r.StartTime
+	data.EndTime = r.EndTime
+	InsertAccessData(data)
 }
 
 //TimerTask 游戏准备阶段定时器任务
