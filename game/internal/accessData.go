@@ -357,7 +357,7 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	selector := bson.M{}
 
 	if id != "" {
-		selector["id"] = id
+		selector["result_info.player_id"] = id
 	}
 
 	if roomType != "" || roomType != "0" {
