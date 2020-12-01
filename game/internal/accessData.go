@@ -78,6 +78,14 @@ type UpSurPool struct {
 	DataCorrection                 float64 `json:"data_correction" bson:"data_correction"`
 }
 
+type PlayerInfoData struct {
+	GameFlow float64 `json:"game_flow" bson:"game_flow"` // 流水
+	WinNum   int64   `json:"win_num" bson:"win_num"`     // 总赢局数
+	WinGold  float64 `json:"win_gold" bson:"win_gold"`   // 总赢金币
+	LoseNum  int64   `json:"lose_num" bson:"lose_num"`   // 总输局数
+	LoseGold float64 `json:"lose_gold" bson:"lose_gold"` // 总输金币
+}
+
 const (
 	SuccCode = 0
 	ErrCode  = -1
@@ -95,6 +103,8 @@ func StartHttpServer() {
 	http.HandleFunc("/api/uptSurplusConf", uptSurplusOne)
 	// 请求玩家退出
 	http.HandleFunc("/api/reqPlayerLeave", reqPlayerLeave)
+	// 获取玩家信息
+	http.HandleFunc("/api/getPlayInfo", getPlayInfo)
 
 	err := http.ListenAndServe(":"+conf.Server.HTTPPort, nil)
 	if err != nil {
@@ -333,4 +343,82 @@ func reqPlayerLeave(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write(js)
 	}
+}
+
+func getPlayInfo(w http.ResponseWriter, r *http.Request) {
+
+	id := r.FormValue("id")
+	startTime := r.FormValue("start_time")
+	endTime := r.FormValue("end_time")
+	roomType := r.FormValue("room_type")
+
+	selector := bson.M{}
+
+	if id != "" {
+		selector["id"] = id
+	}
+
+	if roomType != "" || roomType != "0" {
+		if roomType == "1" {
+			roomType = "0"
+		} else if roomType == "2" {
+			roomType = "1"
+		} else if roomType == "3" {
+			roomType = "2"
+		} else if roomType == "4" {
+			roomType = "3"
+		}
+		selector["cfg_id"] = roomType
+	}
+
+	sTime, _ := strconv.Atoi(startTime)
+
+	eTime, _ := strconv.Atoi(endTime)
+
+	if sTime != 0 && eTime != 0 {
+		selector["down_bet_time"] = bson.M{"$gte": sTime, "$lte": eTime}
+	}
+
+	if sTime != 0 && eTime == 0 {
+		selector["down_bet_time"] = bson.M{"$gt": sTime}
+	}
+
+	if eTime != 0 && sTime == 0 {
+		selector["down_bet_time"] = bson.M{"$lt": eTime}
+	}
+
+	recodes, count, err := GetPlayerInfoData(selector, "-down_bet_time")
+	if err != nil {
+		return
+	}
+
+	var playerInfo PlayerInfoData
+	for i := 0; i < len(recodes); i++ {
+		pr := recodes[i]
+		for _, v := range pr.ResultInfo {
+			if v != nil && v.PlayerId == id {
+				if v.SettlementFunds > 0 {
+					playerInfo.GameFlow += v.SettlementFunds
+					playerInfo.WinNum += 1
+					playerInfo.WinGold += v.SettlementFunds
+				} else if v.SettlementFunds < 0 {
+					playerInfo.GameFlow -= v.SettlementFunds
+					playerInfo.LoseNum += 1
+					playerInfo.LoseGold -= v.SettlementFunds
+				}
+			}
+		}
+	}
+
+	var result pageData
+	result.Total = count
+	result.List = playerInfo
+
+	js, err := json.Marshal(NewResp(SuccCode, "ok", result))
+	if err != nil {
+		fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "ok", Data: nil})
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 }

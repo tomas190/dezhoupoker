@@ -331,3 +331,21 @@ func GetSurPoolData(selector bson.M) (SurPool, error) {
 	}
 	return wts, nil
 }
+
+//GetPlayerInfoData 获取玩家信息
+func GetPlayerInfoData(selector bson.M, sortBy string) ([]PlayerDownBetRecode, int, error) {
+	s, c := connect(dbName, accessDB)
+	defer s.Close()
+
+	var wts []PlayerDownBetRecode
+
+	n, err := c.Find(selector).Count()
+	if err != nil {
+		return nil, 0, err
+	}
+	err = c.Find(selector).Sort(sortBy).All(&wts)
+	if err != nil {
+		return nil, 0, err
+	}
+	return wts, n, nil
+}
