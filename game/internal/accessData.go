@@ -351,6 +351,8 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	startTime := r.FormValue("start_time")
 	endTime := r.FormValue("end_time")
 	roomType := r.FormValue("room_type")
+	log.Debug("id为:%v", id)
+	log.Debug("roomType为:%v", roomType)
 
 	selector := bson.M{}
 
@@ -391,6 +393,7 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	log.Debug("当前获取的数量为:%v", count)
 
 	var playerInfo PlayerInfoData
 	for i := 0; i < len(recodes); i++ {
