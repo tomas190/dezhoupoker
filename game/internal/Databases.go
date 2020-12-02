@@ -23,6 +23,7 @@ const (
 	accessDB        = "accessData"
 	surPlusDB       = "surPlusDB"
 	surPool         = "surplus-pool"
+	playerGameData  = "playerGameData"
 )
 
 // 连接数据库集合的函数 传入集合 默认连接IM数据库
@@ -332,12 +333,32 @@ func GetSurPoolData(selector bson.M) (SurPool, error) {
 	return wts, nil
 }
 
-//GetPlayerInfoData 获取玩家信息
-func GetPlayerInfoData(selector bson.M, sortBy string) ([]PlayerDownBetRecode, int, error) {
-	s, c := connect(dbName, accessDB)
+type PlayerGameData struct {
+	Id          string  `json:"id" bson:"id"`                       // 玩家ID
+	RoomType    string  `json:"room_type" bson:"room_type"`         // 房间类型
+	ResultMoney float64 `json:"result_money" bson:"result_money"`   // 税前结算
+	DownBetTime int64   `json:"down_bet_time" bson:"down_bet_time"` // 下注时间
+}
+
+//InsertPlayerInfoData 插入玩家信息数据
+func InsertPlayerGameData(data *PlayerGameData) {
+	s, c := connect(dbName, playerGameData)
 	defer s.Close()
 
-	var wts []PlayerDownBetRecode
+	err := c.Insert(data)
+	if err != nil {
+		log.Error("<----- 玩家信息数据插入失败 ~ ----->: %v", err)
+		return
+	}
+	log.Debug("<----- 玩家信息数据插入成功 ~ ----->")
+}
+
+//GetPlayerInfoData 获取玩家信息
+func GetPlayerGameData(selector bson.M, sortBy string) ([]PlayerGameData, int, error) {
+	s, c := connect(dbName, playerGameData)
+	defer s.Close()
+
+	var wts []PlayerGameData
 
 	n, err := c.Find(selector).Count()
 	if err != nil {

@@ -739,6 +739,8 @@ func (r *Room) ResultMoney() {
 		sur.HistoryLose = surPool.HistoryLose
 	}
 
+	nowTime := time.Now().Unix()
+
 	for i := 0; i < len(r.PlayerList); i++ {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
@@ -763,6 +765,21 @@ func (r *Room) ResultMoney() {
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
 				}
+
+				gameData := &PlayerGameData{}
+				gameData.Id = p.Id
+				if r.cfgId == "0" {
+					gameData.RoomType = "1"
+				} else if r.cfgId == "1" {
+					gameData.RoomType = "2"
+				} else if r.cfgId == "2" {
+					gameData.RoomType = "3"
+				} else if r.cfgId == "3" {
+					gameData.RoomType = "4"
+				}
+				gameData.DownBetTime = nowTime
+				gameData.ResultMoney = p.resultMoney
+				InsertPlayerGameData(gameData)
 
 				// 这里是玩家金额扣税
 				p.resultMoney -= taxMoney
@@ -806,7 +823,6 @@ func (r *Room) ResultMoney() {
 		}
 	}
 
-	nowTime := time.Now().Unix()
 	// 插入运营数据
 	data := &PlayerDownBetRecode{}
 	data.GameId = conf.Server.GameID

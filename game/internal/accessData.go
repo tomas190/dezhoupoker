@@ -357,20 +357,11 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	selector := bson.M{}
 
 	if id != "" {
-		selector["result_info.player_id"] = id
+		selector["id"] = id
 	}
 
-	if roomType != "" || roomType != "0" {
-		if roomType == "1" {
-			roomType = "0"
-		} else if roomType == "2" {
-			roomType = "1"
-		} else if roomType == "3" {
-			roomType = "2"
-		} else if roomType == "4" {
-			roomType = "3"
-		}
-		selector["cfg_id"] = roomType
+	if roomType != "" {
+		selector["room_type"] = roomType
 	}
 
 	sTime, _ := strconv.Atoi(startTime)
@@ -389,7 +380,7 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 		selector["down_bet_time"] = bson.M{"$lt": eTime}
 	}
 
-	recodes, count, err := GetPlayerInfoData(selector, "-down_bet_time")
+	recodes, count, err := GetPlayerGameData(selector, "-down_bet_time")
 	if err != nil {
 		return
 	}
@@ -398,26 +389,18 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	var playerInfo PlayerInfoData
 	for i := 0; i < len(recodes); i++ {
 		pr := recodes[i]
-		for _, v := range pr.ResultInfo {
-			if v != nil && v.PlayerId == id {
-				if v.SettlementFunds > 0 {
-					playerInfo.GameFlow += v.SettlementFunds
-					playerInfo.WinNum += 1
-					playerInfo.WinGold += v.SettlementFunds
-				} else if v.SettlementFunds < 0 {
-					playerInfo.GameFlow -= v.SettlementFunds
-					playerInfo.LoseNum += 1
-					playerInfo.LoseGold -= v.SettlementFunds
-				}
-			}
+		if pr.ResultMoney > 0 {
+			playerInfo.GameFlow += pr.ResultMoney
+			playerInfo.WinNum += 1
+			playerInfo.WinGold += pr.ResultMoney
+		} else if pr.ResultMoney < 0 {
+			playerInfo.GameFlow -= pr.ResultMoney
+			playerInfo.LoseNum += 1
+			playerInfo.LoseGold -= pr.ResultMoney
 		}
 	}
 
-	var result pageData
-	result.Total = count
-	result.List = playerInfo
-
-	js, err := json.Marshal(NewResp(SuccCode, "ok", result))
+	js, err := json.Marshal(NewResp(SuccCode, "ok", playerInfo))
 	if err != nil {
 		fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "ok", Data: nil})
 		return
