@@ -399,6 +399,9 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 			playerInfo.LoseGold -= pr.ResultMoney
 		}
 	}
+	playerInfo.GameFlow = Decimal(playerInfo.GameFlow)
+	playerInfo.WinGold = Decimal(playerInfo.WinGold)
+	playerInfo.LoseGold = Decimal(playerInfo.LoseGold)
 
 	js, err := json.Marshal(NewResp(SuccCode, "ok", playerInfo))
 	if err != nil {
