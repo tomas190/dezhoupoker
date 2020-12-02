@@ -360,7 +360,7 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 		selector["id"] = id
 	}
 
-	if roomType != "" {
+	if roomType != "" && roomType != "0" {
 		selector["room_type"] = roomType
 	}
 
