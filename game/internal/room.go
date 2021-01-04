@@ -917,9 +917,8 @@ func (r *Room) ReadyTimer() {
 						return true
 					})
 				} else {
-					surPlus := GetSurPlus()
-					log.Debug("当前盈余池金额为:%v", surPlus)
-					resultGold := surPlus * 0.5
+					resultGold := GetSurPlus()
+					log.Debug("当前盈余池金额为:%v", resultGold)
 					if resultGold > 0 {
 						// 洗牌
 						r.Cards.Shuffle()
@@ -936,7 +935,7 @@ func (r *Room) ReadyTimer() {
 						})
 					} else {
 						num := RandInRange(0, 100)
-						if num > 40 {
+						if num > 60 {
 							// 洗牌
 							r.Cards.Shuffle()
 							r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
