@@ -197,6 +197,19 @@ func FindSurPool(SurP *SurPool) {
 	}
 }
 
+func GetFindSurPool() *SurPool {
+	s, c := connect(dbName, surPool)
+	defer s.Close()
+
+	sur := &SurPool{}
+	err := c.Find(nil).One(sur)
+	if err != nil {
+		log.Debug("获取GetFindSurPool数据错误:%v", err)
+		return nil
+	}
+	return sur
+}
+
 func GetSurPlus() float64 {
 	s, c := connect(dbName, surPool)
 	defer s.Close()

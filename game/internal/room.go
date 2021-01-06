@@ -902,6 +902,9 @@ func (r *Room) ReadyTimer() {
 				r.Status = msg.GameStep_PreFlop
 				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 
+				sur := GetFindSurPool()
+				loseRate := sur.PlayerLoseRateAfterSurplusPool * 100
+
 				if r.GetRobotsNum() <= 0 {
 					// 洗牌
 					r.Cards.Shuffle()
@@ -935,7 +938,7 @@ func (r *Room) ReadyTimer() {
 						})
 					} else {
 						num := RandInRange(0, 100)
-						if num > 60 {
+						if num > int(loseRate) {
 							// 洗牌
 							r.Cards.Shuffle()
 							r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
