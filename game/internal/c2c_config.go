@@ -91,14 +91,14 @@ type mylog struct {
 //centerLog 中心服日志
 type logmsg struct {
 	Type     string `json:"type"`      // :"LOG"|"ERR"|"DEG",
-	From     string `json:"from"`      // : "game-server",
+	From     string `json:"from"`      // :"game-server",
 	GameName string `json:"game_name"` // :游戏名称
 	Id       string `json:"id"`        // :用户ID
-	Host     string `json:"host"`      // : 服务IP地址,
-	File     string `json:"file"`      // : 文件名,
-	Line     int    `json:"line"`      // : 行号,
-	Msg      string `json:"msg"`       // :  日志信息,
-	Time     int64  `json:"time"`      // : 时间(YYYY-MM-DD HH:II:SS),
+	Host     string `json:"host"`      // :服务IP地址,
+	File     string `json:"file"`      // :文件名,
+	Line     int    `json:"line"`      // :行号,
+	Msg      string `json:"msg"`       // :日志信息,
+	Time     int64  `json:"time"`      // :时间(YYYY-MM-DD HH:II:SS),
 }
 
 type Notice struct {

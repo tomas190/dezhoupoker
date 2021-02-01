@@ -105,7 +105,6 @@ func (c4c *Conn4Center) CreatConnect() {
 	c4c.centerUrl = conf.Server.CenterUrl
 	//c4c.centerUrl = "ws://172.16.1.41:9502/" //Pre
 	//c4c.centerUrl = "ws://172.16.100.2:9502/" //上线
-	//c4c.centerUrl = "ws" + strings.TrimPrefix(conf.Server.CenterServer, "http") //域名生成使用
 
 	log.Debug("--- dial: --- : %v", c4c.centerUrl)
 	conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
@@ -127,7 +126,7 @@ func (c4c *Conn4Center) ReConnect() {
 			if c4c.LoginStat == true {
 				return
 			}
-			time.Sleep(time.Second * 5)
+			time.Sleep(time.Second * 6)
 			c4c.CreatConnect()
 		}
 	}()

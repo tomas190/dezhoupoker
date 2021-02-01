@@ -2,6 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_18T08_39_04_033Z.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_19T03_43_20_290Z.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_19T03_44_31_528Z.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/单纯背景图.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/开奖.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/彩源猜大小.rar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../caidaxiao" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../茅台清单/茅台清单01.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../茅台清单/茅台清单02.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../assets/common.meta" beforeDir="false" />
@@ -2351,8 +2363,9 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/Databases.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/Databases.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/c2c.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/c2c.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/c2c_config.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/c2c_config.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3156,6 +3169,12 @@
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
+  <component name="JsFlowSettings">
+    <service-enabled>true</service-enabled>
+    <exe-path />
+    <other-services-enabled>true</other-services-enabled>
+    <auto-save>true</auto-save>
+  </component>
   <component name="ProjectId" id="1YN8wzBcxVdDbyku1vF7Z70tO45" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
@@ -3174,7 +3193,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../caidaxiao" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -3303,50 +3322,14 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state width="1237" height="203" key="GridCell.Tab.0.bottom" timestamp="1602756510438">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1611988928236">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.bottom/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
-    <state width="1237" height="203" key="GridCell.Tab.0.center" timestamp="1602756510438">
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1611988928236" />
+    <state x="36" y="71" width="720" height="539" key="find.popup" timestamp="1612169008144">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.center/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
-    <state width="1237" height="203" key="GridCell.Tab.0.left" timestamp="1602756510438">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.left/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
-    <state width="1237" height="203" key="GridCell.Tab.0.right" timestamp="1602756510438">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="203" key="GridCell.Tab.0.right/0.0.1280.680@0.0.1280.680" timestamp="1602756510438" />
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom" timestamp="1599029526826">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.bottom/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state width="1237" height="249" key="GridCell.Tab.1.center" timestamp="1599029526826">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.center/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state width="1237" height="249" key="GridCell.Tab.1.left" timestamp="1599029526826">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.left/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state width="1237" height="249" key="GridCell.Tab.1.right" timestamp="1599029526826">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state width="1237" height="249" key="GridCell.Tab.1.right/0.0.1280.680@0.0.1280.680" timestamp="1599029526826" />
-    <state x="321" y="73" width="773" height="600" key="find.popup" timestamp="1602845954174">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="321" y="73" width="773" height="600" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1602845954174" />
-    <state x="383" y="0" key="refactoring.ChangeSignatureDialog" timestamp="1598948182005">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="383" y="0" key="refactoring.ChangeSignatureDialog/0.0.1280.680@0.0.1280.680" timestamp="1598948182005" />
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup" timestamp="1602911190397">
-      <screen x="0" y="0" width="1280" height="680" />
-    </state>
-    <state x="303" y="1" width="672" height="678" key="search.everywhere.popup/0.0.1280.680@0.0.1280.680" timestamp="1602911190397" />
+    <state x="36" y="71" width="720" height="539" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1612169008144" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
