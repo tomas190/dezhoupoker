@@ -18,6 +18,7 @@ const (
 	RoomStatusOver RoomStatus = 3 // 房间结束状态
 )
 
+
 type Room struct {
 	roomId     string
 	cfgId      string    // 房间配置ID
@@ -72,6 +73,8 @@ const (
 	ActionWaitTime = 2  // 行动等待时间
 )
 
+var packageTax map[uint16]uint8
+
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
 	r.roomId = roomId
@@ -115,6 +118,8 @@ func (r *Room) Init(cfgId string) {
 
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
+
+	packageTax = make(map[uint16]uint8)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播

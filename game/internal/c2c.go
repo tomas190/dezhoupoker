@@ -243,6 +243,40 @@ func (c4c *Conn4Center) onServerLogin(msgBody interface{}) {
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- serverLogin SUCCESS~!!! -------->")
 		c4c.LoginStat = true
+
+		msginfo := data["msg"].(map[string]interface{})
+		fmt.Println("globals:", msginfo["globals"], reflect.TypeOf(msginfo["globals"]))
+
+		globals := msginfo["globals"].([]interface{})
+		fmt.Println("allList", globals)
+		for k, v := range globals {
+			fmt.Println(k, v)
+			info := v.(map[string]interface{})
+			fmt.Println("package_id", info["package_id"])
+
+			var nPackage uint16
+			var nTax uint8
+
+			jsonPackageId, err := info["package_id"].(json.Number).Int64()
+			if err != nil {
+				log.Fatal(err.Error())
+			} else {
+				fmt.Println("nPackage", uint16(jsonPackageId))
+				nPackage = uint16(jsonPackageId)
+			}
+			jsonTax, err := info["platform_tax_percent"].(json.Number).Int64()
+
+			if err != nil {
+				log.Fatal(err.Error())
+			} else {
+				fmt.Println("tax", uint8(jsonTax))
+				nTax = uint8(jsonTax)
+			}
+
+			SetPackageTaxM(nPackage, nTax)
+
+			log.Debug("packageId:%v,tax:%v", nPackage, nTax)
+		}
 	}
 
 }

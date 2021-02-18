@@ -22,3 +22,7 @@ const (
 
 //盈余池
 var SurplusPool float64 = 0
+
+func SetPackageTaxM(packageT uint16, tax uint8) {
+	packageTax[packageT] = tax
+}

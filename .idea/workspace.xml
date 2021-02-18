@@ -2,15 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_18T08_39_04_033Z.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_19T03_43_20_290Z.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/image_2021_01_19T03_44_31_528Z.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/单纯背景图.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/开奖.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/彩源猜大小.rar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则2.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../CDX临时文件/规则3.jpg" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../caidaxiao" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../茅台清单/茅台清单01.xlsx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../茅台清单/茅台清单02.xlsx" afterDir="false" />
@@ -2365,7 +2356,8 @@
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/c2c.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/c2c.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/c2c_config.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/c2c_config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/surplus_pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/surplus_pool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3193,7 +3185,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../caidaxiao" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../proj_bcbm" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -3322,10 +3314,10 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1611988928236">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1612423935234">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1611988928236" />
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1612423935234" />
     <state x="36" y="71" width="720" height="539" key="find.popup" timestamp="1612169008144">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
@@ -3336,12 +3328,12 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/game/internal/room.go</url>
-          <line>127</line>
+          <line>132</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/game/internal/room.go</url>
-          <line>32</line>
+          <line>33</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
