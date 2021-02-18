@@ -310,6 +310,7 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 				nick := gameUser["game_nick"]
 				headImg := gameUser["game_img"]
 				userId := gameUser["id"]
+				packageId := gameUser["package_id"]
 
 				intID, err := userId.(json.Number).Int64()
 				if err != nil {
@@ -322,6 +323,7 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 				if ok {
 					userData.Data.HeadImg = headImg.(string)
 					userData.Data.NickName = nick.(string)
+					userData.Data.PackageId = packageId.(uint16)
 				}
 			}
 			gameAccount, okA := userInfo["game_account"].(map[string]interface{})

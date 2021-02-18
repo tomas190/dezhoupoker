@@ -18,7 +18,6 @@ const (
 	RoomStatusOver RoomStatus = 3 // 房间结束状态
 )
 
-
 type Room struct {
 	roomId     string
 	cfgId      string    // 房间配置ID
@@ -746,6 +745,7 @@ func (r *Room) ResultMoney() {
 
 	nowTime := time.Now().Unix()
 
+	var TaxRate float64
 	for i := 0; i < len(r.PlayerList); i++ {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
@@ -756,7 +756,10 @@ func (r *Room) ResultMoney() {
 				p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), r.roomId)
 				var taxMoney float64
 				if p.resultMoney > 0 {
-					taxMoney = p.resultMoney * taxRate
+					pac := packageTax[p.PackageId]
+					taxR := float64(pac) / 100
+					TaxRate = taxR
+					taxMoney = p.resultMoney * taxR
 					p.WinResultMoney = p.resultMoney
 					winReason := "德州扑克赢钱"
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
@@ -811,6 +814,7 @@ func (r *Room) ResultMoney() {
 				var taxMoney float64
 				if p.resultMoney > 0 {
 					taxMoney = p.resultMoney * taxRate
+					TaxRate = taxRate
 					p.WinResultMoney = p.resultMoney
 				}
 				if p.resultMoney < 0 {
@@ -856,7 +860,7 @@ func (r *Room) ResultMoney() {
 	}
 	data.DownBetTime = nowTime
 	data.PotMoney = r.potMoney
-	data.TaxRate = taxRate
+	data.TaxRate = TaxRate
 	data.StartTime = r.StartTime
 	data.EndTime = r.EndTime
 	InsertAccessData(data)
