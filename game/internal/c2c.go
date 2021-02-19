@@ -318,12 +318,17 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 				}
 				strId = strconv.Itoa(int(intID))
 
+				pckId, err2 := packageId.(json.Number).Int64()
+				if err2 != nil {
+					log.Fatal(err2.Error())
+				}
+
 				//找到等待登录玩家
 				userData, ok = c4c.waitUser[strId]
 				if ok {
 					userData.Data.HeadImg = headImg.(string)
 					userData.Data.NickName = nick.(string)
-					userData.Data.PackageId = packageId.(uint16)
+					userData.Data.PackageId = uint16(pckId)
 				}
 			}
 			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
