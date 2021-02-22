@@ -2354,8 +2354,8 @@
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../assets/subgame/readme.txt.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/module.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/module.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/surplus_pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/surplus_pool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../node_modules/moment/CHANGELOG.md" beforeDir="false" />
@@ -3326,7 +3326,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/game/internal/room.go</url>
-          <line>131</line>
+          <line>130</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">

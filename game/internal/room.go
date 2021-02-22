@@ -118,7 +118,6 @@ func (r *Room) Init(cfgId string) {
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
 
-	packageTax = make(map[uint16]uint8)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
