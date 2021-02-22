@@ -757,6 +757,8 @@ func (r *Room) ResultMoney() {
 				var taxMoney float64
 				if p.resultMoney > 0 {
 					pac := packageTax[p.PackageId]
+					log.Debug("package :%v", p.PackageId)
+					log.Debug("tax:%v", packageTax[p.PackageId])
 					taxR := float64(pac) / 100
 					TaxRate = taxR
 					taxMoney = p.resultMoney * taxR
