@@ -760,6 +760,8 @@ func (r *Room) ResultMoney() {
 					taxR := float64(pac) / 100
 					TaxRate = taxR
 					taxMoney = p.resultMoney * taxR
+					log.Debug("结算金额为:%v", p.resultMoney)
+					log.Debug("税收率为:%v,税收金额:%v", taxR, taxMoney)
 					p.WinResultMoney = p.resultMoney
 					winReason := "德州扑克赢钱"
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
@@ -791,6 +793,7 @@ func (r *Room) ResultMoney() {
 
 				// 这里是玩家金额扣税
 				p.resultMoney -= taxMoney
+				log.Debug("税后结算金额:%v", p.resultMoney)
 
 				if p.resultGetMoney > 0 {
 					if p.resultMoney > 0 {
