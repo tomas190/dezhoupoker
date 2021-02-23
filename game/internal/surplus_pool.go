@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"github.com/name5566/leaf/log"
 	"time"
 )
 
