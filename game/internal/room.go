@@ -768,14 +768,6 @@ func (r *Room) ResultMoney() {
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 					sur.HistoryWin += Decimal(p.WinResultMoney)
 					sur.TotalWinMoney += Decimal(p.WinResultMoney)
-					settle := &SettleDB{}
-					settle.Id = p.Id
-					settle.NickName = p.NickName
-					settle.Account = p.Account
-					settle.RoundID = p.RoundId
-					settle.WinResultMoney = p.WinResultMoney
-					settle.BetMoney = p.totalDownBet
-					InsertWinMoney(settle)
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
@@ -783,14 +775,6 @@ func (r *Room) ResultMoney() {
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
-					settle := &SettleDB{}
-					settle.Id = p.Id
-					settle.NickName = p.NickName
-					settle.Account = p.Account
-					settle.RoundID = p.RoundId
-					settle.LoseResultMoney = p.LoseResultMoney
-					settle.BetMoney = p.totalDownBet
-					InsertLoseMoney(settle)
 				}
 
 				gameData := &PlayerGameData{}

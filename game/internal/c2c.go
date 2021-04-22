@@ -410,7 +410,7 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 		log.Debug("<-------- UserWinScore SUCCESS~ -------->")
 
 		//将Win数据插入数据
-		//InsertWinMoney(msgBody)
+		InsertWinMoney(msgBody)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {
@@ -446,7 +446,7 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 		log.Debug("<-------- UserLoseScore SUCCESS~ -------->")
 
 		//将Lose数据插入数据
-		//InsertLoseMoney(msgBody)
+		InsertLoseMoney(msgBody)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {
@@ -612,6 +612,7 @@ func (c4c *Conn4Center) UserSyncWinScore(p *Player, timeUnix int64, roundId, rea
 	userWin.Info.ID = id
 	userWin.Info.LockMoney = 0
 	userWin.Info.Money = p.WinResultMoney
+	userWin.Info.BetMoney = p.totalDownBet
 	userWin.Info.Order = bson.NewObjectId().Hex()
 
 	userWin.Info.PayReason = reason
@@ -634,6 +635,7 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 	userLose.Info.ID = id
 	userLose.Info.LockMoney = 0
 	userLose.Info.Money = p.LoseResultMoney
+	userLose.Info.BetMoney = p.totalDownBet
 	userLose.Info.Order = bson.NewObjectId().Hex()
 	userLose.Info.PayReason = reason
 	userLose.Info.PreMoney = 0

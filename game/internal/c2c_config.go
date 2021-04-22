@@ -58,6 +58,7 @@ type UserScoreSync struct {
 	CreateTime int64   `json:"create_time"`
 	PayReason  string  `json:"pay_reason"`
 	Money      float64 `json:"money"`
+	BetMoney   float64 `json:"bet_money"`
 	LockMoney  float64 `json:"lock_money"`
 	PreMoney   float64 `json:"pre_money"`
 	Order      string  `json:"order"` //唯一ID,方便之后查询
