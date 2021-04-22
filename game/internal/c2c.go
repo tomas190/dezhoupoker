@@ -410,7 +410,7 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 		log.Debug("<-------- UserWinScore SUCCESS~ -------->")
 
 		//将Win数据插入数据
-		InsertWinMoney(msgBody)
+		//InsertWinMoney(msgBody)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {
@@ -446,7 +446,7 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 		log.Debug("<-------- UserLoseScore SUCCESS~ -------->")
 
 		//将Lose数据插入数据
-		InsertLoseMoney(msgBody)
+		//InsertLoseMoney(msgBody)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {

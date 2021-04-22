@@ -104,6 +104,16 @@ func (r *Room) InsertRoomData() error {
 	return err
 }
 
+type SettleDB struct {
+	Id              string  `json:"id" bson:"id"`
+	NickName        string  `json:"nick_name" bson:"nick_name"`
+	Account         float64 `json:"account" bson:"account"`
+	RoundID         string  `json:"round_id" bson:"RoundID"`
+	WinResultMoney  float64 `json:"win_result_money" bson:"win_result_money"`
+	LoseResultMoney float64 `json:"lose_result_money" bson:"lose_result_money"`
+	BetMoney        float64 `json:"bet_money" bson:"bet_money"`
+}
+
 //InsertWinMoney 插入房间数据
 func InsertWinMoney(base interface{}) {
 	s, c := connect(dbName, settleWinMoney)
@@ -119,7 +129,7 @@ func InsertWinMoney(base interface{}) {
 }
 
 //InsertLoseMoney 插入房间数据
-func InsertLoseMoney(base interface{}) {
+func InsertLoseMoney(base *SettleDB) {
 	s, c := connect(dbName, settleLoseMoney)
 	defer s.Close()
 
