@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/切图/dataBox/PotBoxEff2.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/切图/dataBox/cdx_potBoxEff.atlas" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/切图/dataBox/cdx_potBoxEff.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../CDX临时文件/切图/dataBox/cdx_potBoxEff.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.~lock.TOMAS技术测试模块 (3).xlsx#" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.~lock.TOMAS技术测试模块 (4).xlsx#" beforeDir="false" />
@@ -3722,7 +3726,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/game/internal/Databases.go</url>
-          <line>254</line>
+          <line>245</line>
           <option name="timeStamp" value="24" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
