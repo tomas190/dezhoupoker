@@ -72,7 +72,7 @@ const (
 	ActionWaitTime = 2  // 行动等待时间
 )
 
-var packageTax map[uint16]uint8
+var packageTax map[uint16]float64
 
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))

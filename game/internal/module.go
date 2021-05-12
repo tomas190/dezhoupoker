@@ -21,7 +21,7 @@ type Module struct {
 func (m *Module) OnInit() {
 	m.Skeleton = skeleton
 
-	packageTax = make(map[uint16]uint8)
+	packageTax = make(map[uint16]float64)
 
 	// 初始连接数据库
 	InitMongoDB()
