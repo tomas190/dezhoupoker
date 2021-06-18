@@ -2,6 +2,44 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
+      <change afterPath="$PROJECT_DIR$/../fctbj/.idea/fctbj.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/base/skeleton.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/conf/conf.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/conf/json.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/conf/server.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/external.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/c2c.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/c2c_config.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/chanrpc.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/configData.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/gameHall.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/handler.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/module.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/player.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/player_handle.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/room.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/game/internal/room_handle.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/gate/external.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/gate/internal/module.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/gate/router.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/go.mod" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/go.sum" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/main.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/msg/gen_msg_go.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/msg/msg.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/msg/msg.pb.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../fctbj/msg/msg.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/.idea/newFile.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/caidaxiao" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../推币机.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.~lock.TOMAS技术测试模块 (3).xlsx#" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.~lock.TOMAS技术测试模块 (4).xlsx#" beforeDir="false" />
@@ -1626,9 +1664,9 @@
       <change beforePath="$PROJECT_DIR$/../creator.d.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/c2c.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/c2c.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/module.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/module.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/chanrpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/chanrpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game/internal/handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/game/internal/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/room.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/game/internal/surplus_pool.go" beforeDir="false" afterPath="$PROJECT_DIR$/game/internal/surplus_pool.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../doudizhu-cocos/.idea/doudizhu-cocos.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../jsconfig.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../packages/ccc-png-auto-compress/CHANGELOG.md" beforeDir="false" />
@@ -3516,9 +3554,10 @@
       <change beforePath="$PROJECT_DIR$/../versiontemp.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../临时文件夹/.idea/临时文件夹.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../多语言资源.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../彩源龍虎鬥API文件.pdf" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../德州闪屏问题.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../测试.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../猜大小api文档.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../猜大小api文档.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../猜大小api文档.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../茅台清单/茅台清单01.xlsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../茅台清单/茅台清单02.xlsx" beforeDir="false" />
     </list>

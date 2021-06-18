@@ -28,7 +28,7 @@ func rpcCloseAgent(args []interface{}) {
 		log.Debug("<-------------%v 主动断开链接--------------->", p.Id)
 
 		p.IsOnline = false
-		if p.IsInGame == true {  //  p.gameStep == emInGaming || p.totalDownBet > 0
+		if p.IsInGame == true { //  p.gameStep == emInGaming || p.totalDownBet > 0
 			rid := hall.UserRoom[p.Id]
 			v, _ := hall.RoomRecord.Load(rid)
 			if v != nil {
@@ -40,7 +40,7 @@ func rpcCloseAgent(args []interface{}) {
 					}
 				}
 				if exist == false {
-					log.Debug("添加离线玩家UserLeave:%v",p.Id)
+					log.Debug("添加离线玩家UserLeave:%v", p.Id)
 					room.UserLeave = append(room.UserLeave, p.Id)
 				}
 				leaveHall := &msg.Logout_S2C{}
@@ -52,6 +52,8 @@ func rpcCloseAgent(args []interface{}) {
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			leaveHall := &msg.Logout_S2C{}
 			a.WriteMsg(leaveHall)
+			// 解锁
+			c4c.UnlockSettlement(p, p.Account)
 			a.Close()
 		}
 	}

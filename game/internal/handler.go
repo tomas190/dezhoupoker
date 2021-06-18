@@ -144,6 +144,9 @@ func handleLogin(args []interface{}) {
 
 			hall.UserRecord.Store(u.Id, u)
 
+			// 锁钱
+			c4c.LockSettlement(u, u.Account)
+
 			rId := hall.UserRoom[u.Id]
 			v, _ := hall.RoomRecord.Load(rId)
 			if v != nil {
@@ -196,6 +199,8 @@ func handleLogout(args []interface{}) {
 			hall.UserRecord.Delete(p.Id)
 			leaveHall := &msg.Logout_S2C{}
 			a.WriteMsg(leaveHall)
+			// 解锁
+			c4c.UnlockSettlement(p, p.Account)
 			p.ConnAgent.Close()
 		}
 	}

@@ -226,6 +226,8 @@ func (r *Room) KickPlayer() {
 					c4c.UserLogoutCenter(v.Id, v.Password, v.Token)
 					leaveHall := &msg.Logout_S2C{}
 					v.ConnAgent.WriteMsg(leaveHall)
+					// 解锁
+					c4c.UnlockSettlement(v, v.Account)
 					v.IsOnline = false
 					log.Debug("踢出房间断线玩家 : %v", v.Id)
 				}
@@ -766,6 +768,8 @@ func (r *Room) ResultMoney() {
 					p.WinResultMoney = p.resultMoney
 					winReason := "德州扑克赢钱"
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
+					// 锁钱
+					c4c.LockSettlement(p, p.resultMoney-taxMoney)
 					sur.HistoryWin += Decimal(p.WinResultMoney)
 					sur.TotalWinMoney += Decimal(p.WinResultMoney)
 				}
@@ -773,6 +777,8 @@ func (r *Room) ResultMoney() {
 					p.LoseResultMoney = p.resultMoney
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
+					// 解锁
+					c4c.UnlockSettlement(p, p.LoseResultMoney)
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
 				}
