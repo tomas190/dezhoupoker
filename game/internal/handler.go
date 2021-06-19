@@ -285,6 +285,8 @@ func handleAction(args []interface{}) {
 				p.downBets = m.BetAmount
 				p.lunDownBets += m.BetAmount
 				p.totalDownBet += m.BetAmount
+
+				c4c.LockSettlement(p, m.BetAmount)
 			}
 		}
 	}

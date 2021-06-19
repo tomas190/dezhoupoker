@@ -347,6 +347,7 @@ func (r *Room) ClearRoomData() {
 			v.resultGetMoney = 0
 			v.WinResultMoney = 0
 			v.LoseResultMoney = 0
+			v.LockMoney = 0
 			v.blindType = msg.BlindType_No_Blind
 			v.IsAllIn = false
 			v.IsWinner = false
@@ -749,6 +750,9 @@ func (r *Room) ResultMoney() {
 		if r.PlayerList[i] != nil && r.PlayerList[i].totalDownBet > 0 {
 			p := r.PlayerList[i]
 			if r.PlayerList[i].IsRobot == false {
+
+				c4c.UnlockSettlement(p)
+
 				p.resultMoney -= p.totalDownBet
 
 				nowTime := time.Now().Unix()

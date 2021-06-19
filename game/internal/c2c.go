@@ -347,8 +347,6 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 					userData.Callback(&userData.Data)
 				}
 			}
-			// 锁钱
-			c4c.LockSettlement(strId, floatBalance)
 		}
 	}
 }
@@ -366,10 +364,10 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- UserLogout SUCCESS~ -------->")
+		log.Debug("玩家退出信息:%v", data)
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		var strId string
-		var floatBalance float64
 		var userData *UserCallback
 		if ok {
 			gameUser, uok := userInfo["game_user"].(map[string]interface{})
@@ -390,16 +388,6 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 					userData.Data.NickName = nick.(string)
 				}
 			}
-			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
-			if okA {
-				balance := gameAccount["balance"]
-				floatBalance, err = balance.(json.Number).Float64()
-				if err != nil {
-					log.Error(err.Error())
-				}
-			}
-			// 解锁
-			c4c.UnlockSettlement(strId, floatBalance)
 		}
 	}
 }
@@ -432,21 +420,9 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 
 			log.Debug("同步中心服赢钱成功:%v", score)
 
-			gameUser, uok := userInfo["game_user"].(map[string]interface{})
-			if uok {
-				userId := gameUser["id"]
-				intID, err2 := userId.(json.Number).Int64()
-				if err2 != nil {
-					log.Fatal(err2.Error())
-				}
-				strId := strconv.Itoa(int(intID))
-				// 锁钱
-				c4c.LockSettlement(strId, score)
-
-				if err != nil {
-					log.Error(err.Error())
-					return
-				}
+			if err != nil {
+				log.Error(err.Error())
+				return
 			}
 		}
 	}
@@ -480,17 +456,6 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 
 			log.Debug("同步中心服输钱成功:%v", score)
 
-			gameUser, uok := userInfo["game_user"].(map[string]interface{})
-			if uok {
-				userId := gameUser["id"]
-				intID, err2 := userId.(json.Number).Int64()
-				if err2 != nil {
-					log.Fatal(err2.Error())
-				}
-				strId := strconv.Itoa(int(intID))
-				// 解锁
-				c4c.UnlockSettlement(strId, -score)
-			}
 			if err != nil {
 				log.Error(err.Error())
 				return
@@ -689,9 +654,10 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 }
 
 //锁钱
-func (c4c *Conn4Center) LockSettlement(userId string, account float64) {
-	id, _ := strconv.Atoi(userId)
-	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), userId)
+func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
+	p.LockMoney += lockAccount
+	id, _ := strconv.Atoi(p.Id)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
 	baseData := &BaseMessage{}
 	baseData.Event = msgLockSettlement
 	lockMoney := &UserChangeScore{}
@@ -700,10 +666,10 @@ func (c4c *Conn4Center) LockSettlement(userId string, account float64) {
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
 	lockMoney.Info.ID = id
-	lockMoney.Info.LockMoney = account
+	lockMoney.Info.LockMoney = lockAccount
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = bson.NewObjectId().Hex()
-	lockMoney.Info.PayReason = "lockMoney"
+	lockMoney.Info.PayReason = "加锁投注资金"
 	lockMoney.Info.PreMoney = 0
 	lockMoney.Info.RoundId = roundId
 	baseData.Data = lockMoney
@@ -711,9 +677,9 @@ func (c4c *Conn4Center) LockSettlement(userId string, account float64) {
 }
 
 //解锁
-func (c4c *Conn4Center) UnlockSettlement(userId string, account float64) {
-	id, _ := strconv.Atoi(userId)
-	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), userId)
+func (c4c *Conn4Center) UnlockSettlement(p *Player) {
+	id, _ := strconv.Atoi(p.Id)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(),p.Id)
 	baseData := &BaseMessage{}
 	baseData.Event = msgUnlockSettlement
 	lockMoney := &UserChangeScore{}
@@ -722,10 +688,10 @@ func (c4c *Conn4Center) UnlockSettlement(userId string, account float64) {
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
 	lockMoney.Info.ID = id
-	lockMoney.Info.LockMoney = account
+	lockMoney.Info.LockMoney = p.LockMoney
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = bson.NewObjectId().Hex()
-	lockMoney.Info.PayReason = "UnlockMoney"
+	lockMoney.Info.PayReason = "解锁投注资金"
 	lockMoney.Info.PreMoney = 0
 	lockMoney.Info.RoundId = roundId
 	baseData.Data = lockMoney
