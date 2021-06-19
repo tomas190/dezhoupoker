@@ -3,6 +3,7 @@ package internal
 import (
 	"dezhoupoker/game/internal/algorithm"
 	"dezhoupoker/msg"
+	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"time"
@@ -67,7 +68,7 @@ type Player struct {
 }
 
 func (p *Player) Init() {
-	p.RoundId = ""
+	p.RoundId = fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
 	p.chips = 0
 	p.roomChips = 0
 	p.chair = 0

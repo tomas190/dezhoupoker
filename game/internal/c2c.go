@@ -472,7 +472,11 @@ func (c4c *Conn4Center) onLockSettlement(msgBody interface{}) {
 			log.Fatal(err.Error())
 		}
 
-		fmt.Println(code, reflect.TypeOf(code))
+		if code != 200 {
+			log.Error("同步中心服加锁金额失败:%v", data)
+			return
+		}
+
 		if data["status"] == "SUCCESS" && code == 200 {
 			log.Debug("<-------- onLockSettlement SUCCESS~!!! -------->")
 		}
@@ -488,7 +492,11 @@ func (c4c *Conn4Center) onUnlockSettlement(msgBody interface{}) {
 			log.Fatal(err.Error())
 		}
 
-		fmt.Println(code, reflect.TypeOf(code))
+		if code != 200 {
+			log.Error("同步中心服解锁金额失败:%v", data)
+			return
+		}
+
 		if data["status"] == "SUCCESS" && code == 200 {
 			log.Debug("<-------- onUnlockSettlement SUCCESS~!!! -------->")
 		}
@@ -635,7 +643,7 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 	userLose.Info.ID = id
 	userLose.Info.LockMoney = 0
 	userLose.Info.Money = p.LoseResultMoney
-	userLose.Info.BetMoney = p.totalDownBet
+	userLose.Info.BetMoney = 0
 	userLose.Info.Order = bson.NewObjectId().Hex()
 	userLose.Info.PayReason = reason
 	userLose.Info.PreMoney = 0

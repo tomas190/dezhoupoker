@@ -778,7 +778,7 @@ func (r *Room) ResultMoney() {
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 					// 解锁
-					c4c.UnlockSettlement(p, p.LoseResultMoney)
+					c4c.UnlockSettlement(p, -p.LoseResultMoney)
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
 				}
