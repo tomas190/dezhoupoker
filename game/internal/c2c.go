@@ -303,6 +303,7 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		var strId string
+		var floatBalance float64
 		var userData *UserCallback
 		if ok {
 			gameUser, uok := userInfo["game_user"].(map[string]interface{})
@@ -332,10 +333,9 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 				}
 			}
 			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
-
 			if okA {
 				balance := gameAccount["balance"]
-				floatBalance, err := balance.(json.Number).Float64()
+				floatBalance, err = balance.(json.Number).Float64()
 				if err != nil {
 					log.Error(err.Error())
 				}
@@ -347,6 +347,8 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 					userData.Callback(&userData.Data)
 				}
 			}
+			// 锁钱
+			c4c.LockSettlement(strId, floatBalance)
 		}
 	}
 }
@@ -367,6 +369,7 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 
 		userInfo, ok := data["msg"].(map[string]interface{})
 		var strId string
+		var floatBalance float64
 		var userData *UserCallback
 		if ok {
 			gameUser, uok := userInfo["game_user"].(map[string]interface{})
@@ -387,6 +390,16 @@ func (c4c *Conn4Center) onUserLogout(msgBody interface{}) {
 					userData.Data.NickName = nick.(string)
 				}
 			}
+			gameAccount, okA := userInfo["game_account"].(map[string]interface{})
+			if okA {
+				balance := gameAccount["balance"]
+				floatBalance, err = balance.(json.Number).Float64()
+				if err != nil {
+					log.Error(err.Error())
+				}
+			}
+			// 解锁
+			c4c.UnlockSettlement(strId, floatBalance)
 		}
 	}
 }
@@ -419,9 +432,21 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 
 			log.Debug("同步中心服赢钱成功:%v", score)
 
-			if err != nil {
-				log.Error(err.Error())
-				return
+			gameUser, uok := userInfo["game_user"].(map[string]interface{})
+			if uok {
+				userId := gameUser["id"]
+				intID, err2 := userId.(json.Number).Int64()
+				if err2 != nil {
+					log.Fatal(err2.Error())
+				}
+				strId := strconv.Itoa(int(intID))
+				// 锁钱
+				c4c.LockSettlement(strId, score)
+
+				if err != nil {
+					log.Error(err.Error())
+					return
+				}
 			}
 		}
 	}
@@ -455,6 +480,17 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 
 			log.Debug("同步中心服输钱成功:%v", score)
 
+			gameUser, uok := userInfo["game_user"].(map[string]interface{})
+			if uok {
+				userId := gameUser["id"]
+				intID, err2 := userId.(json.Number).Int64()
+				if err2 != nil {
+					log.Fatal(err2.Error())
+				}
+				strId := strconv.Itoa(int(intID))
+				// 解锁
+				c4c.UnlockSettlement(strId, -score)
+			}
 			if err != nil {
 				log.Error(err.Error())
 				return
@@ -653,13 +689,11 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 }
 
 //锁钱
-func (c4c *Conn4Center) LockSettlement(p *Player, account float64) {
-	timeStr := time.Now().Format("2006-01-02_15:04:05")
-	loseOrder := p.Id + "_" + timeStr + "_LockMoney"
-
+func (c4c *Conn4Center) LockSettlement(userId string, account float64) {
+	id, _ := strconv.Atoi(userId)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), userId)
 	baseData := &BaseMessage{}
 	baseData.Event = msgLockSettlement
-	id, _ := strconv.Atoi(p.Id)
 	lockMoney := &UserChangeScore{}
 	lockMoney.Auth.DevName = conf.Server.DevName
 	lockMoney.Auth.DevKey = c4c.DevKey
@@ -668,22 +702,20 @@ func (c4c *Conn4Center) LockSettlement(p *Player, account float64) {
 	lockMoney.Info.ID = id
 	lockMoney.Info.LockMoney = account
 	lockMoney.Info.Money = 0
-	lockMoney.Info.Order = loseOrder
+	lockMoney.Info.Order = bson.NewObjectId().Hex()
 	lockMoney.Info.PayReason = "lockMoney"
 	lockMoney.Info.PreMoney = 0
-	lockMoney.Info.RoundId = p.RoundId
+	lockMoney.Info.RoundId = roundId
 	baseData.Data = lockMoney
 	c4c.SendMsg2Center(baseData)
 }
 
 //解锁
-func (c4c *Conn4Center) UnlockSettlement(p *Player, account float64) {
-	timeStr := time.Now().Format("2006-01-02_15:04:05")
-	loseOrder := p.Id + "_" + timeStr + "_UnlockMoney"
-
+func (c4c *Conn4Center) UnlockSettlement(userId string, account float64) {
+	id, _ := strconv.Atoi(userId)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), userId)
 	baseData := &BaseMessage{}
 	baseData.Event = msgUnlockSettlement
-	id, _ := strconv.Atoi(p.Id)
 	lockMoney := &UserChangeScore{}
 	lockMoney.Auth.DevName = conf.Server.DevName
 	lockMoney.Auth.DevKey = c4c.DevKey
@@ -692,22 +724,12 @@ func (c4c *Conn4Center) UnlockSettlement(p *Player, account float64) {
 	lockMoney.Info.ID = id
 	lockMoney.Info.LockMoney = account
 	lockMoney.Info.Money = 0
-	lockMoney.Info.Order = loseOrder
+	lockMoney.Info.Order = bson.NewObjectId().Hex()
 	lockMoney.Info.PayReason = "UnlockMoney"
 	lockMoney.Info.PreMoney = 0
-	lockMoney.Info.RoundId = p.RoundId
+	lockMoney.Info.RoundId = roundId
 	baseData.Data = lockMoney
 	c4c.SendMsg2Center(baseData)
-}
-
-//UserSyncScoreChange 同步尚未同步过的输赢分
-func (c4c *Conn4Center) UserSyncScoreChange(p *Player, reason string) {
-	timeStr := time.Now().Format("2006-01-02_15:04:05")
-	nowTime := time.Now().Unix()
-
-	//同时同步赢分和输分
-	c4c.UserSyncWinScore(p, nowTime, timeStr, reason)
-	c4c.UserSyncLoseScore(p, nowTime, timeStr, reason)
 }
 
 func (c4c *Conn4Center) NoticeWinMoreThan(playerId, playerName string, winGold float64) {
