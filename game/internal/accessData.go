@@ -2,6 +2,7 @@ package internal
 
 import (
 	"dezhoupoker/conf"
+	"dezhoupoker/msg"
 	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/log"
@@ -105,6 +106,8 @@ func StartHttpServer() {
 	http.HandleFunc("/api/reqPlayerLeave", reqPlayerLeave)
 	// 获取玩家信息
 	http.HandleFunc("/api/getPlayInfo", getPlayInfo)
+	// 解锁玩家资金
+	http.HandleFunc("/api/unLockUserMoney", unLockUserMoney)
 
 	err := http.ListenAndServe(":"+conf.Server.HTTPPort, nil)
 	if err != nil {
@@ -410,4 +413,34 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
+}
+
+func unLockUserMoney(w http.ResponseWriter, r *http.Request) {
+	id := r.FormValue("id")
+	lockMoney := r.FormValue("lock_money")
+
+	user, _ := hall.UserRecord.Load(id)
+	if user != nil {
+		u := user.(*Player)
+		money, _ := strconv.ParseFloat(lockMoney, 64)
+		u.LockMoney = money
+		c4c.UnlockSettlement(u, 0)
+
+		time.Sleep(time.Second)
+
+		c4c.UserLogoutCenter(u.Id, u.Password, u.Token)
+		u.IsOnline = false
+		hall.UserRecord.Delete(u.Id)
+		leaveHall := &msg.Logout_S2C{}
+		u.SendMsg(leaveHall)
+		u.ConnAgent.Close()
+
+		js, err := json.Marshal(NewResp(SuccCode, "ok", "解锁成功！"))
+		if err != nil {
+			fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "ok", Data: nil})
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
+	}
 }

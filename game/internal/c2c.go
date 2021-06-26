@@ -677,9 +677,10 @@ func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
 }
 
 //解锁
-func (c4c *Conn4Center) UnlockSettlement(p *Player) {
+func (c4c *Conn4Center) UnlockSettlement(p *Player, account float64) {
+	p.LockMoney -= account
 	id, _ := strconv.Atoi(p.Id)
-	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(),p.Id)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
 	baseData := &BaseMessage{}
 	baseData.Event = msgUnlockSettlement
 	lockMoney := &UserChangeScore{}

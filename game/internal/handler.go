@@ -193,7 +193,7 @@ func handleLogout(args []interface{}) {
 				a.WriteMsg(leaveHall)
 			}
 		} else {
-			c4c.UnlockSettlement(p)
+			c4c.UnlockSettlement(p,0)
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			p.IsOnline = false
 			hall.UserRecord.Delete(p.Id)
