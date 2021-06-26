@@ -775,11 +775,12 @@ func (r *Room) ResultMoney() {
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
+					c4c.UnlockSettlement(p, p.LoseResultMoney)
+
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
-					c4c.UnlockSettlement(p, p.LoseResultMoney)
 				}
 
 				gameData := &PlayerGameData{}
@@ -818,10 +819,6 @@ func (r *Room) ResultMoney() {
 				if p.resultMoney > PaoMaDeng {
 					c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
 				}
-
-				// 锁资金
-				c4c.LockSettlement(p, p.Account)
-
 			} else {
 				p.resultMoney -= p.totalDownBet
 				var taxMoney float64
