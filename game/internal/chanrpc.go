@@ -49,6 +49,7 @@ func rpcCloseAgent(args []interface{}) {
 		} else {
 			hall.UserRecord.Delete(p.Id)
 			p.PlayerExitRoom()
+			c4c.UnlockSettlement(p)
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			leaveHall := &msg.Logout_S2C{}
 			a.WriteMsg(leaveHall)

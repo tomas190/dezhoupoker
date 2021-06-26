@@ -223,6 +223,7 @@ func (r *Room) KickPlayer() {
 				} else {
 					v.PlayerExitRoom()
 					hall.UserRecord.Delete(v.Id)
+					c4c.UnlockSettlement(v)
 					c4c.UserLogoutCenter(v.Id, v.Password, v.Token)
 					leaveHall := &msg.Logout_S2C{}
 					v.ConnAgent.WriteMsg(leaveHall)
@@ -817,6 +818,10 @@ func (r *Room) ResultMoney() {
 				if p.resultMoney > PaoMaDeng {
 					c4c.NoticeWinMoreThan(p.Id, p.NickName, p.resultMoney)
 				}
+
+				// 锁资金
+				c4c.LockSettlement(p, p.Account)
+
 			} else {
 				p.resultMoney -= p.totalDownBet
 				var taxMoney float64
