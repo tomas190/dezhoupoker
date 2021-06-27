@@ -63,7 +63,6 @@ func (c4c *Conn4Center) Init() {
 //onDestroy 销毁用户
 func (c4c *Conn4Center) onDestroy() {
 	log.Debug("Conn4Center onDestroy ~")
-	//c4c.UserLogoutCenter("991738698","123456") //测试用户 和 密码
 }
 
 //ReqCenterToken 向中心服务器请求token
