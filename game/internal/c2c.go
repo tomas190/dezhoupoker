@@ -47,6 +47,9 @@ type Conn4Center struct {
 	waitUser map[string]*UserCallback
 }
 
+var winChan chan bool
+var loseChan chan bool
+
 //Init 初始化
 func (c4c *Conn4Center) Init() {
 	c4c.GameId = conf.Server.GameID
@@ -413,6 +416,8 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 		//将Win数据插入数据
 		InsertWinMoney(msgBody)
 
+		winChan <- true
+
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {
 			jsonScore := userInfo["final_pay"]
@@ -449,6 +454,8 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 		//将Lose数据插入数据
 		InsertLoseMoney(msgBody)
 
+		loseChan <- true
+		
 		userInfo, ok := data["msg"].(map[string]interface{})
 		if ok {
 			jsonScore := userInfo["final_pay"]

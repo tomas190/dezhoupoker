@@ -118,6 +118,8 @@ func (r *Room) Init(cfgId string) {
 	r.ReadyTimeChan = make(chan bool)
 	r.ActionTimeChan = make(chan bool)
 
+	winChan = make(chan bool)
+	loseChan = make(chan bool)
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
@@ -772,6 +774,12 @@ func (r *Room) ResultMoney() {
 					sur.HistoryWin += Decimal(p.WinResultMoney)
 					sur.TotalWinMoney += Decimal(p.WinResultMoney)
 					c4c.LockSettlement(p, p.WinResultMoney-taxMoney)
+					select {
+					case t := <-winChan:
+						if t == true {
+							break
+						}
+					}
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
@@ -781,6 +789,12 @@ func (r *Room) ResultMoney() {
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
 					sur.HistoryLose -= Decimal(p.LoseResultMoney) // -- = +
 					sur.TotalLoseMoney -= Decimal(p.LoseResultMoney)
+					select {
+					case t := <-loseChan:
+						if t == true {
+							break
+						}
+					}
 				}
 
 				gameData := &PlayerGameData{}
