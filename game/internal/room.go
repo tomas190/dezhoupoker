@@ -225,7 +225,7 @@ func (r *Room) KickPlayer() {
 				} else {
 					v.PlayerExitRoom()
 					hall.UserRecord.Delete(v.Id)
-					c4c.UnlockSettlement(v, 0)
+					//c4c.UnlockSettlement(v, 0)
 					c4c.UserLogoutCenter(v.Id, v.Password, v.Token)
 					leaveHall := &msg.Logout_S2C{}
 					v.ConnAgent.WriteMsg(leaveHall)
@@ -754,6 +754,8 @@ func (r *Room) ResultMoney() {
 			p := r.PlayerList[i]
 			if r.PlayerList[i].IsRobot == false {
 
+				c4c.UnlockSettlement(p, 0)
+
 				p.resultMoney -= p.totalDownBet
 
 				nowTime := time.Now().Unix()
@@ -773,12 +775,12 @@ func (r *Room) ResultMoney() {
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 					sur.HistoryWin += Decimal(p.WinResultMoney)
 					sur.TotalWinMoney += Decimal(p.WinResultMoney)
-					c4c.LockSettlement(p, p.WinResultMoney-taxMoney)
+					//c4c.LockSettlement(p, p.WinResultMoney-taxMoney)
 
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
-					c4c.UnlockSettlement(p, p.LoseResultMoney)
+					//c4c.UnlockSettlement(p, p.LoseResultMoney)
 
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)

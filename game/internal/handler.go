@@ -144,7 +144,7 @@ func handleLogin(args []interface{}) {
 
 			hall.UserRecord.Store(u.Id, u)
 
-			c4c.LockSettlement(u, u.Account)
+			//c4c.LockSettlement(u, u.Account)
 
 			rId := hall.UserRoom[u.Id]
 			v, _ := hall.RoomRecord.Load(rId)
@@ -193,7 +193,7 @@ func handleLogout(args []interface{}) {
 				a.WriteMsg(leaveHall)
 			}
 		} else {
-			c4c.UnlockSettlement(p,0)
+			//c4c.UnlockSettlement(p,0)
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			p.IsOnline = false
 			hall.UserRecord.Delete(p.Id)
@@ -288,6 +288,7 @@ func handleAction(args []interface{}) {
 				p.downBets = m.BetAmount
 				p.lunDownBets += m.BetAmount
 				p.totalDownBet += m.BetAmount
+				c4c.LockSettlement(p, m.BetAmount)
 			}
 		}
 	}

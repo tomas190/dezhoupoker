@@ -424,7 +424,7 @@ func unLockUserMoney(w http.ResponseWriter, r *http.Request) {
 		u := user.(*Player)
 		money, _ := strconv.ParseFloat(lockMoney, 64)
 		u.LockMoney = money
-		c4c.UnlockSettlement(u, 0)
+		//c4c.UnlockSettlement(u, 0)
 
 		time.Sleep(time.Second)
 
