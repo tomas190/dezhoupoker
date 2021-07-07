@@ -819,6 +819,20 @@ func (r *Room) ResultMoney() {
 				// 插入盈余池数据
 				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
 					InsertSurplusPool(sur)
+
+					// 插入游戏统计数据
+					sd := &StatementData{}
+					sd.Id = p.Id
+					sd.GameId = conf.Server.GameID
+					sd.GameName = "德州扑克"
+					sd.StartTime = r.StartTime
+					sd.EndTime = r.EndTime
+					sd.DownBetTime = nowTime
+					sd.PackageId = p.PackageId
+					sd.WinStatementTotal = p.WinResultMoney
+					sd.LoseStatementTotal = p.LoseResultMoney
+					sd.BetMoney = p.totalDownBet
+					InsertStatementDB(sd)
 				}
 				// 跑马灯
 				if p.resultMoney > PaoMaDeng {
