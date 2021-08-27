@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8b79f1e-14e6-4d2e-bcba-0431b68f5b19" name="默认更改列表" comment="默认更改列表">
+      <change afterPath="$PROJECT_DIR$/../RedBlack-War/game/internal/tgMessage.go" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../fctbj/.idea/fctbj.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../fctbj/.idea/misc.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../fctbj/.idea/modules.xml" afterDir="false" />
@@ -6276,6 +6277,7 @@
       <change afterPath="$PROJECT_DIR$/../newFile/HQQ_log/新建文件夹/redblack_0723.tar" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../newFile/HQQ_log/新建文件夹/redblack_0723.tar.gz" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../newFile/caidaxiao" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../newFile/fctbj.7z" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../newFile/tbj5" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../推币机.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
@@ -9855,7 +9857,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RedBlack-War" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -9984,10 +9986,10 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1628004746750">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1630066483443">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1628004746750" />
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1630066483443" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
