@@ -360,9 +360,9 @@ func (r *Room) ClearRoomData() {
 			v.IsLeaveR = false
 			v.HandValue = 0
 			v.IsMaxCard = false
+			v.action = make(chan msg.ActionStatus)
 		}
 	}
-
 }
 
 //RespRoomData 返回房间数据

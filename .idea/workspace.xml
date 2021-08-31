@@ -6279,6 +6279,7 @@
       <change afterPath="$PROJECT_DIR$/../newFile/caidaxiao" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../newFile/fctbj.7z" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../newFile/tbj5" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../proj_bcbm/src/server/game/internal/tgMessage.go" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/../推币机.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.~lock.TOMAS技术测试模块 (3).xlsx#" beforeDir="false" />
@@ -9857,7 +9858,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../RedBlack-War" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../caidaxiao" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -9986,10 +9987,14 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1630066483443">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1630324742373">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1630066483443" />
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1630324742373" />
+    <state x="321" y="73" width="638" height="534" key="find.popup" timestamp="1630318524307">
+      <screen x="0" y="0" width="1280" height="680" />
+    </state>
+    <state x="321" y="73" width="638" height="534" key="find.popup/0.0.1280.680@0.0.1280.680" timestamp="1630318524307" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

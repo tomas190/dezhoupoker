@@ -3,6 +3,7 @@ package internal
 import (
 	"bytes"
 	"dezhoupoker/conf"
+	"dezhoupoker/msg"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -434,35 +435,53 @@ func (c4c *Conn4Center) onUserWinScore(msgBody interface{}) {
 func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 	data, ok := msgBody.(map[string]interface{})
 	if !ok {
-		log.Debug("onUserLoseScore Error")
+		log.Debug("onUserLoseScore Error:%v", data)
 	}
 
 	code, err := data["code"].(json.Number).Int64()
 	if err != nil {
 		log.Error(err.Error())
 	}
-	if code != 200 {
-		log.Error("同步中心服输钱失败:%v", data)
-		SendTgMessage("玩家输钱失败")
-		return
-	}
+	msgData, ok := data["msg"].(map[string]interface{})
+	if ok {
+		order := msgData["order"]
+		if code != 200 {
+			log.Debug("同步中心服输钱失败:%v", data)
+			SendTgMessage("玩家输钱失败并登出")
+			v, ok := hall.OrderIDRecord.Load(order)
+			if ok {
+				p := v.(*Player)
+				c4c.UserLogoutCenter(p.Id, p.Password, p.Token) //, p.PassWord
+				p.IsOnline = false
+				p.IsInGame = false
+				p.PlayerExitRoom()
+				hall.UserRecord.Delete(p.Id)
+				leaveHall := &msg.Logout_S2C{}
+				p.SendMsg(leaveHall)
+				p.ConnAgent.Close()
+				hall.OrderIDRecord.Delete(order)
+			}
+			return
+		}
+		if data["status"] == "SUCCESS" && code == 200 {
+			log.Debug("<-------- UserLoseScore SUCCESS~ -------->")
 
-	if data["status"] == "SUCCESS" && code == 200 {
-		log.Debug("<-------- UserLoseScore SUCCESS~ -------->")
+			hall.OrderIDRecord.Delete(order)
 
-		//将Lose数据插入数据
-		InsertLoseMoney(msgBody)
+			//将Lose数据插入数据
+			InsertLoseMoney(msgBody)
 
-		userInfo, ok := data["msg"].(map[string]interface{})
-		if ok {
-			jsonScore := userInfo["final_pay"]
-			score, err := jsonScore.(json.Number).Float64()
+			userInfo, ok := data["msg"].(map[string]interface{})
+			if ok {
+				jsonScore := userInfo["final_pay"]
+				score, err := jsonScore.(json.Number).Float64()
 
-			log.Debug("同步中心服输钱成功:%v", score)
+				log.Debug("同步中心服输钱成功:%v", score)
 
-			if err != nil {
-				log.Error(err.Error())
-				return
+				if err != nil {
+					log.Error(err.Error())
+					return
+				}
 			}
 		}
 	}
@@ -477,14 +496,29 @@ func (c4c *Conn4Center) onLockSettlement(msgBody interface{}) {
 			log.Fatal(err.Error())
 		}
 
-		if code != 200 {
-			log.Error("同步中心服加锁金额失败:%v", data)
-			SendTgMessage("玩家锁钱失败")
-			return
-		}
-
-		if data["status"] == "SUCCESS" && code == 200 {
-			log.Debug("<-------- onLockSettlement SUCCESS~!!! -------->")
+		msgData, ok := data["msg"].(map[string]interface{})
+		if ok {
+			order := msgData["order"]
+			if code != 200 {
+				log.Debug("中心服锁钱失败:%v", data)
+				v, ok := hall.OrderIDRecord.Load(order)
+				if ok {
+					p := v.(*Player)
+					p.LockChan <- false
+					hall.OrderIDRecord.Delete(order)
+				}
+				return
+			}
+			if data["status"] == "SUCCESS" && code == 200 {
+				log.Debug("<-------- onLockSettlement SUCCESS~!!! -------->")
+				v, ok := hall.OrderIDRecord.Load(order)
+				if ok {
+					p := v.(*Player)
+					p.LockChan <- true
+					hall.OrderIDRecord.Delete(order)
+				}
+				return
+			}
 		}
 	}
 }
@@ -656,6 +690,7 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 	userLose.Info.RoundId = roundId
 	baseData.Data = userLose
 	c4c.SendMsg2Center(baseData)
+	hall.OrderIDRecord.Store(userLose.Info.Order, p)
 }
 
 //锁钱
@@ -679,6 +714,7 @@ func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
 	lockMoney.Info.RoundId = roundId
 	baseData.Data = lockMoney
 	c4c.SendMsg2Center(baseData)
+	hall.OrderIDRecord.Store(lockMoney.Info.Order, p)
 }
 
 //解锁

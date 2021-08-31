@@ -20,6 +20,8 @@ type GameHall struct {
 	PiPeiList1 []*Player         // 匹配列表
 	PiPeiList2 []*Player         // 匹配列表
 	PiPeiList3 []*Player         // 匹配列表
+
+	OrderIDRecord sync.Map // orderID对应user
 }
 
 func NewHall() *GameHall {
@@ -32,6 +34,7 @@ func NewHall() *GameHall {
 		PiPeiList1: make([]*Player, 0),
 		PiPeiList2: make([]*Player, 0),
 		PiPeiList3: make([]*Player, 0),
+		OrderIDRecord: sync.Map{},
 	}
 }
 

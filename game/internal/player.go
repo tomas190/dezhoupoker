@@ -67,6 +67,8 @@ type Player struct {
 
 	IsRobot   bool // 是否机器人
 	IsMaxCard bool // 是否最大牌型
+
+	LockChan chan bool // 是否锁钱成功
 }
 
 func (p *Player) Init() {
@@ -103,6 +105,7 @@ func (p *Player) Init() {
 	p.cfgId = ""
 	p.IsRobot = false
 	p.IsMaxCard = false
+	p.LockChan = make(chan bool)
 }
 
 //SendMsg 玩家向客户端发送消息

@@ -284,11 +284,33 @@ func handleAction(args []interface{}) {
 			// 玩家如果已在游戏中，则返回房间数据
 			room := r.(*Room)
 			if room.activeId == p.Id {
-				p.action <- m.Action
-				p.downBets = m.BetAmount
-				p.lunDownBets += m.BetAmount
-				p.totalDownBet += m.BetAmount
-				c4c.LockSettlement(p, m.BetAmount)
+				if m.BetAmount > 0 {
+					c4c.LockSettlement(p, m.BetAmount)
+				}
+				go func() {
+					timeout := time.NewTimer(time.Second * 3)
+					for {
+						select {
+						case <-p.LockChan:
+							Act := <-p.LockChan
+							if Act {
+								p.action <- m.Action
+								p.downBets = m.BetAmount
+								p.lunDownBets += m.BetAmount
+								p.totalDownBet += m.BetAmount
+								return
+							} else {
+								SendTgMessage("玩家锁钱失败,并下注失败")
+								p.action <- msg.ActionStatus_FOLD
+								return
+							}
+						case <-timeout.C:
+							p.action <- msg.ActionStatus_FOLD
+							log.Debug("超时处理锁钱")
+							return
+						}
+					}
+				}()
 			}
 		}
 	}
