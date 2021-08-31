@@ -285,32 +285,35 @@ func handleAction(args []interface{}) {
 			room := r.(*Room)
 			if room.activeId == p.Id {
 				if m.BetAmount > 0 {
+					log.Debug("玩家下注金额:%v", m.BetAmount)
 					c4c.LockSettlement(p, m.BetAmount)
-				}
-				go func() {
-					timeout := time.NewTimer(time.Second * 3)
-					for {
-						select {
-						case Act := <-p.LockChan:
-							log.Debug("玩家行动成功:%v", Act)
-							if Act {
-								p.action <- m.Action
-								p.downBets = m.BetAmount
-								p.lunDownBets += m.BetAmount
-								p.totalDownBet += m.BetAmount
-								return
-							} else {
-								SendTgMessage("玩家锁钱失败,并下注失败")
+
+					go func() {
+						timeout := time.NewTimer(time.Second * 3)
+						for {
+							select {
+							case Act := <-p.LockChan:
+								log.Debug("玩家行动成功:%v", Act)
+								if Act {
+									p.action <- m.Action
+									p.downBets = m.BetAmount
+									p.lunDownBets += m.BetAmount
+									p.totalDownBet += m.BetAmount
+									return
+								} else {
+									SendTgMessage("玩家锁钱失败,并下注失败")
+									p.action <- msg.ActionStatus_FOLD
+									return
+								}
+							case <-timeout.C:
 								p.action <- msg.ActionStatus_FOLD
 								return
 							}
-						case <-timeout.C:
-							p.action <- msg.ActionStatus_FOLD
-							log.Debug("超时处理锁钱")
-							return
 						}
-					}
-				}()
+					}()
+				} else {
+					p.action <- m.Action
+				}
 			}
 		}
 	}
