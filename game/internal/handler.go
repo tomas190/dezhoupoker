@@ -291,8 +291,8 @@ func handleAction(args []interface{}) {
 					timeout := time.NewTimer(time.Second * 3)
 					for {
 						select {
-						case <-p.LockChan:
-							Act := <-p.LockChan
+						case Act := <-p.LockChan:
+							log.Debug("玩家行动成功:%v", Act)
 							if Act {
 								p.action <- m.Action
 								p.downBets = m.BetAmount
