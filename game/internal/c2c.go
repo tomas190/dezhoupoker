@@ -114,37 +114,41 @@ func (c4c *Conn4Center) CreatConnect() {
 	c4c.conn = conn
 	log.Debug("<--- Dial rsp --->: %v", rsp)
 
+	c4c.ServerLoginCenter()
+
 	if err != nil {
 		log.Fatal(err.Error())
 	} else {
 		c4c.Run()
-		SendTgMessage("启动成功")
 	}
 }
 
 func (c4c *Conn4Center) ReConnect() {
-	go func() {
-		for {
-			c4c.closebreathchan <- true
-			c4c.closereceivechan <- true
-			if c4c.LoginStat == true {
-				return
-			}
-			time.Sleep(time.Second * 6)
-			c4c.CreatConnect()
-		}
-	}()
+	if c4c.LoginStat == true {
+		return
+	}
+	time.Sleep(time.Second * 5)
+
+	c4c.centerUrl = conf.Server.CenterUrl
+
+	log.Debug("--- dial: --- : %v", c4c.centerUrl)
+	conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
+	c4c.conn = conn
+	log.Debug("<--- Dial rsp --->: %v", rsp)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	c4c.ServerLoginCenter()
 }
 
 //Run 开始运行,监听中心服务器的返回
 func (c4c *Conn4Center) Run() {
-	ticker := time.NewTicker(time.Second * 5)
+	ticker := time.NewTicker(time.Second * 2)
 	go func() {
 		for { //循环
 			select {
 			case <-ticker.C:
 				c4c.onBreath()
-				break
 			case <-c4c.closebreathchan:
 				return
 			}
@@ -166,16 +170,13 @@ func (c4c *Conn4Center) Run() {
 					log.Debug("中心服异常消息~")
 					c4c.LoginStat = false
 					c4c.ReConnect()
-					return
 				} else {
 					c4c.onReceive(typeId, message)
 				}
-				break
 			}
 		}
 	}()
 
-	c4c.ServerLoginCenter()
 }
 
 //onBreath 中心服心跳
@@ -247,6 +248,8 @@ func (c4c *Conn4Center) onServerLogin(msgBody interface{}) {
 	if data["status"] == "SUCCESS" && code == 200 {
 		log.Debug("<-------- serverLogin SUCCESS~!!! -------->")
 		c4c.LoginStat = true
+
+		SendTgMessage("启动成功")
 
 		msginfo := data["msg"].(map[string]interface{})
 		fmt.Println("globals:", msginfo["globals"], reflect.TypeOf(msginfo["globals"]))
@@ -718,8 +721,7 @@ func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
 }
 
 //解锁
-func (c4c *Conn4Center) UnlockSettlement(p *Player, account float64) {
-	p.LockMoney -= account
+func (c4c *Conn4Center) UnlockSettlement(p *Player) {
 	id, _ := strconv.Atoi(p.Id)
 	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
 	baseData := &BaseMessage{}

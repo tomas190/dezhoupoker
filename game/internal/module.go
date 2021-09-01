@@ -38,5 +38,12 @@ func (m *Module) OnInit() {
 }
 
 func (m *Module) OnDestroy() {
-
+	hall.UserRecord.Range(func(key, value interface{}) bool {
+		p := value.(*Player)
+		if p.LockMoney > 0 {
+			c4c.UnlockSettlement(p)
+		}
+		c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
+		return true
+	})
 }
