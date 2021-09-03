@@ -517,6 +517,8 @@ func (c4c *Conn4Center) onLockSettlement(msgBody interface{}) {
 				v, ok := hall.OrderIDRecord.Load(order)
 				if ok {
 					p := v.(*Player)
+					money, _ := msgData["lock_money"].(json.Number).Float64()
+					p.LockMoney += money
 					p.LockChan <- true
 					hall.OrderIDRecord.Delete(order)
 				}
@@ -698,7 +700,6 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 
 //锁钱
 func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
-	p.LockMoney += lockAccount
 	id, _ := strconv.Atoi(p.Id)
 	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
 	baseData := &BaseMessage{}
