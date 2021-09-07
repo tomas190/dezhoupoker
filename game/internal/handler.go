@@ -287,6 +287,10 @@ func handleAction(args []interface{}) {
 			room := r.(*Room)
 			if room.activeId == p.Id {
 				if m.BetAmount > 0 {
+					if m.BetAmount > p.chips {
+						p.action <- msg.ActionStatus_FOLD
+						return
+					}
 					log.Debug("玩家下注金额:%v", m.BetAmount)
 					c4c.LockSettlement(p, m.BetAmount)
 
