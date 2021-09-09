@@ -755,7 +755,7 @@ func (r *Room) ResultMoney() {
 			if r.PlayerList[i].IsRobot == false {
 
 				if p.LockMoney > 0 {
-					c4c.UnlockSettlement(p)
+					c4c.UnlockSettlement(p.Id, p.LockMoney)
 				}
 
 				p.resultMoney -= p.totalDownBet

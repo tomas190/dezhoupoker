@@ -41,7 +41,7 @@ func (m *Module) OnDestroy() {
 	hall.UserRecord.Range(func(key, value interface{}) bool {
 		p := value.(*Player)
 		if p.LockMoney > 0 {
-			c4c.UnlockSettlement(p)
+			c4c.UnlockSettlement(p.Id, p.LockMoney)
 		}
 		c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 		return true

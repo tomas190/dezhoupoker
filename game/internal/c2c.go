@@ -313,6 +313,17 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 		var floatBalance float64
 		var userData *UserCallback
 		if ok {
+			var lockMoney float64
+			gameAccount, aok := userInfo["game_account"].(map[string]interface{})
+			if aok {
+				jsonMoney := gameAccount["lock_balance"]
+				money, err := jsonMoney.(json.Number).Float64()
+				if err != nil {
+					log.Error(err.Error())
+				}
+				log.Debug("玩家登入锁金额:%v", money)
+				lockMoney = money
+			}
 			gameUser, uok := userInfo["game_user"].(map[string]interface{})
 			if uok {
 				nick := gameUser["game_nick"]
@@ -325,6 +336,10 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 					log.Fatal(err.Error())
 				}
 				strId = strconv.Itoa(int(intID))
+				// 登入存在锁钱将解锁金额
+				if lockMoney > 0 {
+					c4c.UnlockSettlement(strId, lockMoney)
+				}
 
 				pckId, err2 := packageId.(json.Number).Int64()
 				if err2 != nil {
@@ -722,9 +737,9 @@ func (c4c *Conn4Center) LockSettlement(p *Player, lockAccount float64) {
 }
 
 //解锁
-func (c4c *Conn4Center) UnlockSettlement(p *Player) {
-	id, _ := strconv.Atoi(p.Id)
-	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), p.Id)
+func (c4c *Conn4Center) UnlockSettlement(Id string, LockMoney float64) {
+	id, _ := strconv.Atoi(Id)
+	roundId := fmt.Sprintf("%+v-%+v", time.Now().Unix(), Id)
 	baseData := &BaseMessage{}
 	baseData.Event = msgUnlockSettlement
 	lockMoney := &UserChangeScore{}
@@ -733,7 +748,7 @@ func (c4c *Conn4Center) UnlockSettlement(p *Player) {
 	lockMoney.Info.CreateTime = time.Now().Unix()
 	lockMoney.Info.GameId = c4c.GameId
 	lockMoney.Info.ID = id
-	lockMoney.Info.LockMoney = p.LockMoney
+	lockMoney.Info.LockMoney = LockMoney
 	lockMoney.Info.Money = 0
 	lockMoney.Info.Order = bson.NewObjectId().Hex()
 	lockMoney.Info.PayReason = "解锁投注资金"
