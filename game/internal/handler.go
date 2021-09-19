@@ -2,6 +2,7 @@ package internal
 
 import (
 	"dezhoupoker/msg"
+	"fmt"
 	"github.com/name5566/leaf/gate"
 	"github.com/name5566/leaf/log"
 	"reflect"
@@ -307,7 +308,8 @@ func handleAction(args []interface{}) {
 									p.totalDownBet += m.BetAmount
 									return
 								} else {
-									SendTgMessage("玩家锁钱失败,并下注失败")
+									message := fmt.Sprintf("玩家" + p.Id + "锁钱失败并下注失败")
+									SendTgMessage(message)
 									p.action <- msg.ActionStatus_FOLD
 									return
 								}

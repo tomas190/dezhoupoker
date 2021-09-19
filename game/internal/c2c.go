@@ -465,10 +465,11 @@ func (c4c *Conn4Center) onUserLoseScore(msgBody interface{}) {
 		order := msgData["order"]
 		if code != 200 {
 			log.Debug("同步中心服输钱失败:%v", data)
-			SendTgMessage("玩家输钱失败并登出")
 			v, ok := hall.OrderIDRecord.Load(order)
 			if ok {
 				p := v.(*Player)
+				message := fmt.Sprintf("玩家" + p.Id + "输钱失败并登出")
+				SendTgMessage(message)
 				c4c.UserLogoutCenter(p.Id, p.Password, p.Token) //, p.PassWord
 				p.IsOnline = false
 				p.IsInGame = false
