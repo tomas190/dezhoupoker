@@ -9858,7 +9858,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../proj_bcbm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../proj_bcbm_2" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -9987,10 +9987,10 @@
     <proxy>direct</proxy>
   </component>
   <component name="WindowStateProjectService">
-    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1632025325532">
+    <state x="421" y="96" key="FileChooserDialogImpl" timestamp="1632308877043">
       <screen x="0" y="0" width="1280" height="680" />
     </state>
-    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1632025325532" />
+    <state x="421" y="96" key="FileChooserDialogImpl/0.0.1280.680@0.0.1280.680" timestamp="1632308877043" />
     <state x="321" y="73" width="638" height="534" key="find.popup" timestamp="1630945839295">
       <screen x="0" y="0" width="1280" height="680" />
     </state>

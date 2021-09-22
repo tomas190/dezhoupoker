@@ -100,7 +100,6 @@ func handleLogin(args []interface{}) {
 					login.Backroom = true
 				}
 				a.WriteMsg(login)
-				//p.ConnAgent.Destroy()
 				p.ConnAgent = a
 				p.ConnAgent.SetUserData(u) //p
 				p.IsOnline = true
@@ -111,18 +110,6 @@ func handleLogin(args []interface{}) {
 					enter := &msg.EnterRoom_S2C{}
 					enter.RoomData = roomData
 					p.SendMsg(enter)
-				}
-			}
-
-			// 处理重连
-			for _, r := range hall.roomList {
-				for _, v := range r.PlayerList {
-					if v != nil && v.Id == p.Id {
-						roomData := r.RespRoomData()
-						enter := &msg.EnterRoom_S2C{}
-						enter.RoomData = roomData
-						p.SendMsg(enter)
-					}
 				}
 			}
 		}
@@ -146,8 +133,6 @@ func handleLogin(args []interface{}) {
 			u.Token = m.GetToken()
 
 			hall.UserRecord.Store(u.Id, u)
-
-			//c4c.LockSettlement(u, u.Account)
 
 			rId := hall.UserRoom[u.Id]
 			v, _ := hall.RoomRecord.Load(rId)
@@ -196,7 +181,6 @@ func handleLogout(args []interface{}) {
 				a.WriteMsg(leaveHall)
 			}
 		} else {
-			//c4c.UnlockSettlement(p,0)
 			c4c.UserLogoutCenter(p.Id, p.Password, p.Token)
 			p.IsOnline = false
 			hall.UserRecord.Delete(p.Id)
