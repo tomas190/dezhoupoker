@@ -9858,7 +9858,7 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../proj_bcbm_2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -9960,9 +9960,9 @@
     </configuration>
     <list>
       <item itemvalue="Go Test.dezhoupoker" />
+      <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (2)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (3)" />
-      <item itemvalue="Go Test.TestCards_FLUSH in dezhoupoker/game/internal/algorithm" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm (4)" />
       <item itemvalue="Go Test.TestCards_Straight in dezhoupoker/game/internal/algorithm" />
     </list>
