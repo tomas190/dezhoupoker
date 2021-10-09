@@ -106,21 +106,21 @@ func (c4c *Conn4Center) ReqCenterToken() {
 //CreatConnect 和Center建立链接
 func (c4c *Conn4Center) CreatConnect() {
 	c4c.centerUrl = conf.Server.CenterUrl
-	//c4c.centerUrl = "ws://172.16.1.41:9502/" //Pre
-	//c4c.centerUrl = "ws://172.16.100.2:9502/" //上线
 
 	log.Debug("--- dial: --- : %v", c4c.centerUrl)
-	conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
-	c4c.conn = conn
-	log.Debug("<--- Dial rsp --->: %v", rsp)
+	for {
+		conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
+		log.Debug("<--- Dial rsp --->: %v", rsp)
+		if err == nil {
+			c4c.conn = conn
+			break
+		}
+		time.Sleep(time.Second * 5)
+	}
 
 	c4c.ServerLoginCenter()
 
-	if err != nil {
-		log.Fatal(err.Error())
-	} else {
-		c4c.Run()
-	}
+	c4c.Run()
 }
 
 func (c4c *Conn4Center) ReConnect() {
@@ -132,12 +132,16 @@ func (c4c *Conn4Center) ReConnect() {
 	c4c.centerUrl = conf.Server.CenterUrl
 
 	log.Debug("--- dial: --- : %v", c4c.centerUrl)
-	conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
-	c4c.conn = conn
-	log.Debug("<--- Dial rsp --->: %v", rsp)
-	if err != nil {
-		log.Fatal(err.Error())
+	for {
+		conn, rsp, err := websocket.DefaultDialer.Dial(c4c.centerUrl, nil)
+		log.Debug("<--- Dial rsp --->: %v", rsp)
+		if err == nil {
+			c4c.conn = conn
+			break
+		}
+		time.Sleep(time.Second * 5)
 	}
+
 	c4c.ServerLoginCenter()
 }
 
