@@ -341,8 +341,18 @@ func (c4c *Conn4Center) onUserLogin(msgBody interface{}) {
 				}
 				strId = strconv.Itoa(int(intID))
 				// 登入存在锁钱将解锁金额
-				if lockMoney > 0 {
-					c4c.UnlockSettlement(strId, lockMoney)
+				user, _ := hall.UserRecord.Load(strId)
+				if user != nil {
+					u := user.(*Player)
+					if u.totalDownBet == 0 {
+						if lockMoney > 0 {
+							c4c.UnlockSettlement(strId, lockMoney)
+						}
+					}
+				}else {
+					if lockMoney > 0 {
+						c4c.UnlockSettlement(strId, lockMoney)
+					}
 				}
 
 				pckId, err2 := packageId.(json.Number).Int64()
