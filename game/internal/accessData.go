@@ -110,8 +110,8 @@ type OnlineTotal struct {
 }
 
 type OnlinePlayer struct {
-	PackageId  uint16   `json:"package_id" bson:"package_id"`
-	PlayerList []string `json:"player_list" bson:"player_list"`
+	PackageId uint16   `json:"packageID" bson:"packageID"`
+	UserData  []string `json:"userData" bson:"userData"`
 }
 
 const (
@@ -551,7 +551,7 @@ func getOnlineTotal(w http.ResponseWriter, r *http.Request) {
 			hall.UserRecord.Range(func(key, value interface{}) bool {
 				user := value.(*Player)
 				if v == user.PackageId {
-					data.PlayerList = append(data.PlayerList, user.Id)
+					data.UserData = append(data.UserData, user.Id)
 				}
 				return true
 			})
@@ -564,7 +564,7 @@ func getOnlineTotal(w http.ResponseWriter, r *http.Request) {
 		hall.UserRecord.Range(func(key, value interface{}) bool {
 			user := value.(*Player)
 			if user.PackageId == uint16(packId) {
-				data.PlayerList = append(data.PlayerList, user.Id)
+				data.UserData = append(data.UserData, user.Id)
 				log.Debug("获取玩家信息:%v", user)
 			}
 			return true
