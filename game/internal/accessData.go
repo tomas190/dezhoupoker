@@ -569,6 +569,9 @@ func getOnlineTotal(w http.ResponseWriter, r *http.Request) {
 			}
 			return true
 		})
+		if data.UserData == nil {
+			data.PackageId = 0
+		}
 		total.GameData = append(total.GameData, data)
 	}
 
