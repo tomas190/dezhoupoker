@@ -105,7 +105,6 @@ func (r *Room) InsertRoomData() error {
 	return err
 }
 
-
 //InsertWinMoney 插入房间数据
 func InsertWinMoney(base interface{}) {
 	s, c := connect(dbName, settleWinMoney)
@@ -175,6 +174,11 @@ func InsertSurplusPool(sur *SurplusPoolDB) {
 	SurPool.CoefficientToTotalPlayer = sur.PlayerNum * 0
 	SurPool.PlayerLoseRateAfterSurplusPool = 0.7
 	SurPool.DataCorrection = 0
+	SurPool.PlayerWinRate = 0
+	SurPool.RandomCountAfterWin = 1
+	SurPool.RandomCountAfterLose = 0
+	SurPool.RandomPercentageAfterWin = 0.65
+	SurPool.RandomPercentageAfterLose = 0
 	FindSurPool(SurPool)
 }
 
@@ -195,6 +199,11 @@ func FindSurPool(SurP *SurPool) {
 		SurP.CoefficientToTotalPlayer = sur.CoefficientToTotalPlayer
 		SurP.PlayerLoseRateAfterSurplusPool = sur.PlayerLoseRateAfterSurplusPool
 		SurP.DataCorrection = sur.DataCorrection
+		SurP.PlayerWinRate = sur.PlayerWinRate
+		SurP.RandomCountAfterWin = sur.RandomCountAfterWin
+		SurP.RandomCountAfterLose = sur.RandomCountAfterLose
+		SurP.RandomPercentageAfterWin = sur.RandomPercentageAfterWin
+		SurP.RandomPercentageAfterLose = sur.RandomPercentageAfterLose
 		UpdateSurPool(SurP)
 	}
 }
@@ -332,6 +341,11 @@ type SurPool struct {
 	SurplusPool                    float64 `json:"surplus_pool" bson:"surplus_pool"`
 	PlayerLoseRateAfterSurplusPool float64 `json:"player_lose_rate_after_surplus_pool" bson:"player_lose_rate_after_surplus_pool"`
 	DataCorrection                 float64 `json:"data_correction" bson:"data_correction"`
+	PlayerWinRate                  float64 `json:"player_win_rate" bson:"player_win_rate"`
+	RandomCountAfterWin            float64 `json:"random_count_after_win" bson:"random_count_after_win"`
+	RandomCountAfterLose           float64 `json:"random_count_after_lose" bson:"random_count_after_lose"`
+	RandomPercentageAfterWin       float64 `json:"random_percentage_after_win" bson:"random_percentage_after_win"`
+	RandomPercentageAfterLose      float64 `json:"random_percentage_after_lose" bson:"random_percentage_after_lose"`
 }
 
 //GetDownRecodeList 获取盈余池数据
@@ -396,7 +410,7 @@ type StatementData struct {
 	PackageId          uint16  `json:"package_id" bson:"package_id"`
 	WinStatementTotal  float64 `json:"win_statement_total" bson:"win_statement_total"`
 	LoseStatementTotal float64 `json:"lose_statement_total" bson:"lose_statement_total"`
-	BetMoney           float64   `json:"bet_money" bson:"bet_money"`
+	BetMoney           float64 `json:"bet_money" bson:"bet_money"`
 }
 
 func InsertStatementDB(sd *StatementData) {

@@ -942,96 +942,9 @@ func (r *Room) ReadyTimer() {
 				r.Status = msg.GameStep_PreFlop
 				log.Debug("GameStep_PreFlop 阶段: %v", r.Status)
 
-				sur := GetFindSurPool()
-				loseRate := sur.PlayerLoseRateAfterSurplusPool * 100
+				// 玩家设定牌值
+				r.GameCheckout()
 
-				if r.GetRobotsNum() <= 0 {
-					// 洗牌
-					r.Cards.Shuffle()
-					r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
-					r.Each(0, func(p *Player) bool {
-						// 生成玩家手牌,获取的是对应牌型生成二进制的数
-						p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-						p.cardData.HandCardKeys = p.cards.HexInt()
-
-						kind, _ := algorithm.De(p.cards.GetType())
-						p.cardData.SuitPattern = msg.CardSuit(kind)
-						//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
-						return true
-					})
-				} else {
-					resultGold := GetSurPlus()
-					log.Debug("当前盈余池金额为:%v", resultGold)
-					if resultGold > 0 {
-						// 洗牌
-						r.Cards.Shuffle()
-						r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
-						r.Each(0, func(p *Player) bool {
-							// 生成玩家手牌,获取的是对应牌型生成二进制的数
-							p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-							p.cardData.HandCardKeys = p.cards.HexInt()
-
-							kind, _ := algorithm.De(p.cards.GetType())
-							p.cardData.SuitPattern = msg.CardSuit(kind)
-							//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
-							return true
-						})
-					} else {
-						num := RandInRange(0, 100)
-						if num > int(loseRate) {
-							// 洗牌
-							r.Cards.Shuffle()
-							r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
-							r.Each(0, func(p *Player) bool {
-								// 生成玩家手牌,获取的是对应牌型生成二进制的数
-								p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-								p.cardData.HandCardKeys = p.cards.HexInt()
-
-								kind, _ := algorithm.De(p.cards.GetType())
-								p.cardData.SuitPattern = msg.CardSuit(kind)
-								//log.Debug("preFlop玩家手牌和类型 ~ :%v, %v", p.cards.HexInt(), kind)
-								return true
-							})
-						} else {
-							for {
-								// 洗牌
-								r.Cards.Shuffle()
-								r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
-								r.Each(0, func(p *Player) bool {
-									// 生成玩家手牌,获取的是对应牌型生成二进制的数
-									p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
-									p.cardData.HandCardKeys = p.cards.HexInt()
-
-									kind, _ := algorithm.De(p.cards.GetType())
-									p.cardData.SuitPattern = msg.CardSuit(kind)
-
-									// 用于来判断玩家手牌大小
-									cs := r.tableCards.Append(p.cards...)
-									p.HandValue = cs.GetType()
-									return true
-								})
-
-								var maxPlayer *Player
-								for _, v := range r.PlayerList {
-									if v != nil && v.gameStep == emInGaming {
-										if maxPlayer == nil {
-											maxPlayer = v
-											continue
-										}
-										if v.HandValue > maxPlayer.HandValue {
-											maxPlayer = v
-										}
-									}
-								}
-								if maxPlayer.IsRobot == true {
-									maxPlayer.IsMaxCard = true
-									log.Debug("机器人设为最大牌值~")
-									break
-								}
-							}
-						}
-					}
-				}
 				game := &msg.GameStepChange_S2C{}
 				game.RoomData = r.RespRoomData()
 				r.Broadcast(game)
@@ -1048,6 +961,232 @@ func (r *Room) ReadyTimer() {
 			}
 		}
 	}()
+}
+
+//PlayerAction 玩家游戏结算
+func (r *Room) GameCheckout() {
+
+	sur := GetFindSurPool()
+	loseRate := sur.PlayerLoseRateAfterSurplusPool * 100
+	percentageWin := sur.RandomPercentageAfterWin * 100
+	percentageLose := sur.RandomPercentageAfterLose * 100
+	countWin := sur.RandomCountAfterWin
+	countLose := sur.RandomCountAfterLose
+	surplusPool := sur.SurplusPool
+
+	settle := r.GetCardSettle()
+	if settle > 0 { // 玩家赢钱
+		for {
+			loseRateNum := RandInRange(1, 101)
+			percentageWinNum := RandInRange(1, 101)
+			if countWin > 0 {
+				if percentageWinNum > int(percentageWin) { // 盈余池判定
+					if surplusPool > settle { // 盈余池足够
+						break
+					} else {                             // 盈余池不足
+						if loseRateNum > int(loseRate) { // 30%玩家赢钱
+							break
+						} else { // 70%玩家输钱
+							for {
+								settle := r.GetCardSettle()
+								if settle <= 0 {
+									return
+								}
+							}
+						}
+					}
+				} else { // 又随机生成牌型
+					settle := r.GetCardSettle()
+					if settle > 0 { // 玩家赢
+						countWin--
+					} else {
+						break
+					}
+				}
+			} else {
+				// 盈余池判定
+				if surplusPool > settle { // 盈余池足够
+					break
+				} else {                             // 盈余池不足
+					if loseRateNum > int(loseRate) { // 30%玩家赢钱
+						break
+					} else { // 70%玩家输钱
+						for {
+							settle := r.GetCardSettle()
+							if settle <= 0 {
+								return
+							}
+						}
+					}
+				}
+			}
+		}
+	} else { // 玩家输钱
+		for {
+			loseRateNum := RandInRange(1, 101)
+			percentageLoseNum := RandInRange(1, 101)
+			if countLose > 0 {
+				if percentageLoseNum > int(percentageLose) {
+					break
+				} else { // 又随机生成牌型
+					settle := r.GetCardSettle()
+					if settle > 0 { // 玩家赢
+						// 盈余池判定
+						if surplusPool > settle { // 盈余池足够
+							break
+						} else {                             // 盈余池不足
+							if loseRateNum > int(loseRate) { // 30%玩家赢钱
+								for {
+									settle := r.GetCardSettle()
+									if settle > 0 {
+										return
+									}
+								}
+							} else { // 70%玩家输钱
+								for {
+									settle := r.GetCardSettle()
+									if settle <= 0 {
+										return
+									}
+								}
+							}
+						}
+					} else {
+						countLose--
+					}
+				}
+			} else { // 玩家输钱
+				for {
+					settle := r.GetCardSettle()
+					if settle <= 0 {
+						return
+					}
+				}
+			}
+		}
+	}
+}
+
+func (r *Room) GetCardSettle() float64 {
+	if r.GetRobotsNum() <= 0 {
+		for {
+			// 洗牌
+			r.Cards.Shuffle()
+			r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+			r.Each(0, func(p *Player) bool {
+				// 生成玩家手牌,获取的是对应牌型生成二进制的数
+				p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+				p.cardData.HandCardKeys = p.cards.HexInt()
+
+				kind, _ := algorithm.De(p.cards.GetType())
+				p.cardData.SuitPattern = msg.CardSuit(kind)
+
+				// 用于来判断玩家手牌大小
+				cs := r.tableCards.Append(p.cards...)
+				p.HandValue = cs.GetType()
+				return true
+			})
+
+			var maxPlayer *Player
+			for _, v := range r.PlayerList {
+				if v != nil && v.gameStep == emInGaming {
+					if maxPlayer == nil {
+						maxPlayer = v
+						continue
+					}
+					if v.HandValue > maxPlayer.HandValue {
+						maxPlayer = v
+					}
+				}
+			}
+			if maxPlayer.IsRobot == false {
+				maxPlayer.IsMaxCard = true
+				log.Debug("玩家1设为最大牌值~")
+				break
+			}
+		}
+		return 1
+	} else {
+		num := RandInRange(0, 100)
+		if num >= 50 {
+			for {
+				// 洗牌
+				r.Cards.Shuffle()
+				r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+				r.Each(0, func(p *Player) bool {
+					// 生成玩家手牌,获取的是对应牌型生成二进制的数
+					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+					p.cardData.HandCardKeys = p.cards.HexInt()
+
+					kind, _ := algorithm.De(p.cards.GetType())
+					p.cardData.SuitPattern = msg.CardSuit(kind)
+
+					// 用于来判断玩家手牌大小
+					cs := r.tableCards.Append(p.cards...)
+					p.HandValue = cs.GetType()
+					return true
+				})
+
+				var maxPlayer *Player
+				for _, v := range r.PlayerList {
+					if v != nil && v.gameStep == emInGaming {
+						if maxPlayer == nil {
+							maxPlayer = v
+							continue
+						}
+						if v.HandValue > maxPlayer.HandValue {
+							maxPlayer = v
+						}
+					}
+				}
+				if maxPlayer.IsRobot == false {
+					maxPlayer.IsMaxCard = true
+					log.Debug("玩家2设为最大牌值~")
+					break
+				}
+			}
+			return 1
+		} else {
+			for {
+				// 洗牌
+				r.Cards.Shuffle()
+				r.tableCards = algorithm.Cards{r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take(), r.Cards.Take()}
+				r.Each(0, func(p *Player) bool {
+					// 生成玩家手牌,获取的是对应牌型生成二进制的数
+					p.cards = algorithm.Cards{r.Cards.Take(), r.Cards.Take()}
+					p.cardData.HandCardKeys = p.cards.HexInt()
+
+					kind, _ := algorithm.De(p.cards.GetType())
+					p.cardData.SuitPattern = msg.CardSuit(kind)
+
+					// 用于来判断玩家手牌大小
+					cs := r.tableCards.Append(p.cards...)
+					p.HandValue = cs.GetType()
+					return true
+				})
+
+				var maxPlayer *Player
+				for _, v := range r.PlayerList {
+					if v != nil && v.gameStep == emInGaming {
+						if maxPlayer == nil {
+							maxPlayer = v
+							continue
+						}
+						if v.HandValue > maxPlayer.HandValue {
+							maxPlayer = v
+						}
+					}
+				}
+				if maxPlayer.IsRobot == true {
+					maxPlayer.IsMaxCard = true
+					log.Debug("机器人设为最大牌值~")
+					break
+				}
+			}
+			return 0
+		}
+	}
+	return 0
 }
 
 //TimerTask 游戏准备阶段定时器任务
