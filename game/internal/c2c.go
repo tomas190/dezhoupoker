@@ -147,7 +147,8 @@ func (c4c *Conn4Center) ReConnect() {
 
 //Run 开始运行,监听中心服务器的返回
 func (c4c *Conn4Center) Run() {
-	ticker := time.NewTicker(time.Second * 2)
+	ticker := time.NewTicker(time.Second * 3)
+	log.Debug("发送心跳!")
 	go func() {
 		for { //循环
 			select {
