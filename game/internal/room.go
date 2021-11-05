@@ -473,6 +473,16 @@ func (r *Room) GetRobotsNum() int {
 	return num
 }
 
+func (r *Room) GetPlayerNum() int {
+	var num int
+	for _, v := range r.PlayerList {
+		if v != nil && v.IsRobot == false {
+			num++
+		}
+	}
+	return num
+}
+
 func (r *Room) CalBet() {
 	for i, v := range r.PlayerList {
 		if v != nil {
@@ -1139,10 +1149,18 @@ func (r *Room) GetCardSettle() float64 {
 						}
 					}
 				}
-				if maxPlayer.IsRobot == false {
-					maxPlayer.IsMaxCard = true
-					log.Debug("玩家2设为最大牌值~")
-					break
+				if r.GetPlayerNum() == 0 {
+					if maxPlayer.IsRobot == true {
+						maxPlayer.IsMaxCard = true
+						log.Debug("机器人1设为最大牌值~")
+						break
+					}
+				} else {
+					if maxPlayer.IsRobot == false {
+						maxPlayer.IsMaxCard = true
+						log.Debug("玩家2设为最大牌值~")
+						break
+					}
 				}
 			}
 			return 1
@@ -1179,7 +1197,7 @@ func (r *Room) GetCardSettle() float64 {
 				}
 				if maxPlayer.IsRobot == true {
 					maxPlayer.IsMaxCard = true
-					log.Debug("机器人设为最大牌值~")
+					log.Debug("机器人2设为最大牌值~")
 					break
 				}
 			}
