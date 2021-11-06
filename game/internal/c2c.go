@@ -15,6 +15,7 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -50,6 +51,9 @@ type Conn4Center struct {
 
 var winChan chan bool
 var loseChan chan bool
+
+// 添加互斥锁，防止websocket写并发
+var writeMutex sync.Mutex
 
 //Init 初始化
 func (c4c *Conn4Center) Init() {
@@ -186,6 +190,8 @@ func (c4c *Conn4Center) Run() {
 
 //onBreath 中心服心跳
 func (c4c *Conn4Center) onBreath() {
+	writeMutex.Lock()
+	defer writeMutex.Unlock()
 	err := c4c.conn.WriteMessage(websocket.TextMessage, []byte(""))
 	if err != nil {
 		log.Error(err.Error())
@@ -677,6 +683,8 @@ func (c4c *Conn4Center) SendMsg2Center(data interface{}) {
 	}
 	log.Debug("Msg to Send Center:%v", string(codeData))
 
+	writeMutex.Lock()
+	defer writeMutex.Unlock()
 	err2 := c4c.conn.WriteMessage(websocket.TextMessage, []byte(codeData))
 	if err2 != nil {
 		log.Fatal(err2.Error())
