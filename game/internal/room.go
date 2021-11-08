@@ -1078,6 +1078,12 @@ func (r *Room) GameCheckout() {
 }
 
 func (r *Room) GetCardSettle() float64 {
+	for _, v := range r.PlayerList {
+		if v != nil {
+			v.IsMaxCard = false
+		}
+	}
+
 	if r.GetRobotsNum() <= 0 {
 		for {
 			// 洗牌
@@ -1115,7 +1121,8 @@ func (r *Room) GetCardSettle() float64 {
 				break
 			}
 		}
-		return 1
+		data := SetRoomConfig(r.cfgId)
+		return data.MaxTakeIn
 	} else {
 		num := RandInRange(0, 100)
 		if num >= 50 {
@@ -1163,7 +1170,8 @@ func (r *Room) GetCardSettle() float64 {
 					}
 				}
 			}
-			return 1
+			data := SetRoomConfig(r.cfgId)
+			return data.MaxTakeIn
 		} else {
 			for {
 				// 洗牌
@@ -1204,7 +1212,6 @@ func (r *Room) GetCardSettle() float64 {
 			return 0
 		}
 	}
-	return 0
 }
 
 //TimerTask 游戏准备阶段定时器任务
