@@ -2,7 +2,6 @@ package internal
 
 import (
 	"dezhoupoker/conf"
-	"dezhoupoker/msg"
 	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/log"
@@ -492,33 +491,18 @@ func getPlayInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func unLockUserMoney(w http.ResponseWriter, r *http.Request) {
-	id := r.FormValue("id")
+	Id := r.FormValue("id")
 	lockMoney := r.FormValue("lock_money")
+	log.Debug("unLockUserMoney 解锁金额:%v,%v", Id, lockMoney)
+	money, _ := strconv.ParseFloat(lockMoney, 64)
+	c4c.UnlockSettlement(Id, money)
 
-	user, _ := hall.UserRecord.Load(id)
-	if user != nil {
-		u := user.(*Player)
-		money, _ := strconv.ParseFloat(lockMoney, 64)
-		u.LockMoney = money
-		//c4c.UnlockSettlement(u, 0)
-
-		time.Sleep(time.Second)
-
-		c4c.UserLogoutCenter(u.Id, u.Password, u.Token)
-		u.IsOnline = false
-		hall.UserRecord.Delete(u.Id)
-		leaveHall := &msg.Logout_S2C{}
-		u.SendMsg(leaveHall)
-		u.ConnAgent.Close()
-
-		js, err := json.Marshal(NewResp(SuccCode, "ok", "解锁成功！"))
-		if err != nil {
-			fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "ok", Data: nil})
-			return
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(js)
+	js, err := json.Marshal(NewResp(SuccCode, "", "操作解锁玩家金额!"))
+	if err != nil {
+		fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "", Data: nil})
+		return
 	}
+	w.Write(js)
 }
 
 func getStatementTotal(w http.ResponseWriter, r *http.Request) {
