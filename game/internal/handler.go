@@ -82,7 +82,7 @@ func handleLogin(args []interface{}) {
 				}
 			}
 
-			//c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {})
+			c4c.UserLoginCenter(m.GetId(), m.GetPassWord(), m.GetToken(), func(u *Player) {})
 
 			login := &msg.Login_S2C{}
 			user, _ := hall.UserRecord.Load(p.Id)
