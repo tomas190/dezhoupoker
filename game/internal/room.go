@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/name5566/leaf/log"
 	"math/rand"
+	"sync"
 	"time"
 )
 
@@ -73,6 +74,9 @@ const (
 )
 
 var packageTax map[uint16]float64
+
+// 添加互斥锁，防止并发操作
+var recodeMutex sync.Mutex
 
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
@@ -1271,6 +1275,7 @@ func (r *Room) RestartGame() {
 					log.Debug("RestartGame 开始运行游戏~")
 					r.StartGameRun()
 				}
+				log.Debug("退出RestartGame定时器")
 				return
 			}
 		}
@@ -1419,10 +1424,12 @@ func (r *Room) PiPeiHandle() bool {
 
 	for k, v := range hall.roomList {
 		if v.roomId == r.roomId {
+			recodeMutex.Lock()
 			r.IsCloseSend = true
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
 			log.Debug("Quick PiPei Room，so Delete this Room~,房间id:%v,目前数量为:%v", r.roomId, len(hall.roomList))
+			recodeMutex.Unlock()
 		}
 	}
 

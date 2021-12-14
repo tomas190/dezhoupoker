@@ -2,6 +2,7 @@ package internal
 
 import (
 	"dezhoupoker/conf"
+	"dezhoupoker/msg"
 	"encoding/json"
 	"fmt"
 	"github.com/name5566/leaf/log"
@@ -414,12 +415,20 @@ func reqPlayerLeave(w http.ResponseWriter, r *http.Request) {
 		u.gameStep = emNotGaming
 		u.totalDownBet = 0
 		u.PlayerExitRoom()
+		c4c.UserLogoutCenter(u.Id, u.Password, u.Token)
+		u.IsOnline = false
+		hall.UserRecord.Delete(u.Id)
+		leaveHall := &msg.Logout_S2C{}
+		u.ConnAgent.WriteMsg(leaveHall)
+		u.ConnAgent.Close()
 		js, err := json.Marshal(NewResp(SuccCode, "", "已成功T出房间!"))
 		if err != nil {
 			fmt.Fprintf(w, "%+v", ApiResp{Code: ErrCode, Msg: "", Data: nil})
 			return
 		}
 		w.Write(js)
+	} else {
+		c4c.UserLogoutCenter(Id, "", "")
 	}
 }
 
@@ -560,7 +569,7 @@ func getStatementTotal(w http.ResponseWriter, r *http.Request) {
 
 func getOnlineTotal(w http.ResponseWriter, r *http.Request) {
 	packageId := r.FormValue("package_id")
-	log.Debug("获取getOnlineTotal接口 packageId:%v", packageId)
+	//log.Debug("获取getOnlineTotal接口 packageId:%v", packageId)
 
 	total := &OnlineTotal{}
 	total.GameId = conf.Server.GameID
