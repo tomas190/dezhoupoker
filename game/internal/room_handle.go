@@ -272,14 +272,6 @@ showdown:
 	result.RoomData = r.RespRoomData()
 	r.Broadcast(result)
 
-	// 打印数据
-	//r.PlantData()
-
-	//err := r.InsertRoomData()
-	//if err != nil {
-	//	log.Debug("插入房间数据失败: %v", err)
-	//}
-
 	// 清除房间数据
 	r.ClearRoomData()
 

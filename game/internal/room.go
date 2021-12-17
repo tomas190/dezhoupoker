@@ -254,20 +254,14 @@ func (r *Room) KickPlayer() {
 	}
 
 	// 遍历站起玩家，是否在该房间站起超时
-	for _, v := range r.AllPlayer {
-		if v != nil && v.IsRobot == false && v.chair == -1 {
-			v.standUPNum++
-			if v.standUPNum >= 6 {
-				//ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
-				v.PlayerExitRoom()
-				log.Debug("玩家站起次数6次:%v", v)
-			}
-		}
-	}
-
-	//for _, v := range r.PlayerList {
-	//	if v != nil && v.chair == -1 {
-	//		r.PlayerList[v.chair] = nil
+	//for _, v := range r.AllPlayer {
+	//	if v != nil && v.IsRobot == false && v.chair == -1 {
+	//		v.standUPNum++
+	//		if v.standUPNum >= 6 {
+	//			//ErrorResp(v.ConnAgent, msg.ErrorMsg_UserStandUpTimeOut, "玩家站起超时")
+	//			v.PlayerExitRoom()
+	//			log.Debug("玩家站起次数6次:%v", v)
+	//		}
 	//	}
 	//}
 }
@@ -1424,12 +1418,10 @@ func (r *Room) PiPeiHandle() bool {
 
 	for k, v := range hall.roomList {
 		if v.roomId == r.roomId {
-			recodeMutex.Lock()
 			r.IsCloseSend = true
 			hall.roomList = append(hall.roomList[:k], hall.roomList[k+1:]...)
 			hall.RoomRecord.Delete(r.roomId)
 			log.Debug("Quick PiPei Room，so Delete this Room~,房间id:%v,目前数量为:%v", r.roomId, len(hall.roomList))
-			recodeMutex.Unlock()
 		}
 	}
 
@@ -1440,15 +1432,6 @@ func (r *Room) ClearPiPeiData(p *Player) {
 	if p.chair != -1 {
 		r.PlayerList[p.chair] = nil
 	}
-
-	//for k, v := range r.AllPlayer {
-	//	if v != nil && v.Id == p.Id {
-	//		r.AllPlayer = append(r.AllPlayer[:k], r.AllPlayer[k+1:]...)
-	//	}
-	//}
-
-	//p.Account += p.chips
-	//p.Account += p.roomChips
 
 	delete(hall.UserRoom, p.Id)
 
