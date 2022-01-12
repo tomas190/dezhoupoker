@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"github.com/name5566/leaf/log"
 	"math/rand"
-	"sync"
 	"time"
 )
 
@@ -22,6 +21,7 @@ const (
 type Room struct {
 	roomId     string
 	cfgId      string    // 房间配置ID
+	PackageId  uint16    // 品牌ID
 	PlayerList []*Player // 座位玩家列表，最高9人
 	AllPlayer  []*Player // 房间，包括站起玩家座位号为-1
 
@@ -60,6 +60,8 @@ type Room struct {
 
 	ReadyTimeChan  chan bool // 准备时间chan
 	ActionTimeChan chan bool // 行动时间chan
+
+	IsSpecial bool // 是否为特殊品牌
 }
 
 const (
@@ -75,13 +77,11 @@ const (
 
 var packageTax map[uint16]float64
 
-// 添加互斥锁，防止并发操作
-var recodeMutex sync.Mutex
-
 func (r *Room) Init(cfgId string) {
 	roomId := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
 	r.roomId = roomId
 	r.cfgId = cfgId
+	r.PackageId = 0
 	r.AllPlayer = nil
 	r.PlayerList = make([]*Player, MaxPlayer)
 	for i := 0; i < len(r.PlayerList); i++ {
@@ -124,6 +124,8 @@ func (r *Room) Init(cfgId string) {
 
 	winChan = make(chan bool)
 	loseChan = make(chan bool)
+
+	r.IsSpecial = false
 }
 
 //BroadCastExcept 向指定玩家之外的玩家广播
@@ -785,12 +787,10 @@ func (r *Room) ResultMoney() {
 					c4c.UserSyncWinScore(p, nowTime, p.RoundId, winReason)
 					sur.HistoryWin += Decimal(p.WinResultMoney)
 					sur.TotalWinMoney += Decimal(p.WinResultMoney)
-					//c4c.LockSettlement(p, p.WinResultMoney-taxMoney)
 
 				}
 				if p.resultMoney < 0 {
 					p.LoseResultMoney = p.resultMoney
-					//c4c.UnlockSettlement(p, p.LoseResultMoney)
 
 					loseReason := "德州扑克输钱"
 					c4c.UserSyncLoseScore(p, nowTime, p.RoundId, loseReason)
@@ -827,22 +827,24 @@ func (r *Room) ResultMoney() {
 				}
 
 				// 插入盈余池数据
-				if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
-					InsertSurplusPool(sur)
+				if !r.IsSpecial {
+					if sur.TotalWinMoney != 0 || sur.TotalLoseMoney != 0 {
+						InsertSurplusPool(sur)
 
-					// 插入游戏统计数据
-					sd := &StatementData{}
-					sd.Id = p.Id
-					sd.GameId = conf.Server.GameID
-					sd.GameName = "德州扑克"
-					sd.StartTime = r.StartTime
-					sd.EndTime = r.EndTime
-					sd.DownBetTime = nowTime
-					sd.PackageId = p.PackageId
-					sd.WinStatementTotal = p.WinResultMoney
-					sd.LoseStatementTotal = p.LoseResultMoney
-					sd.BetMoney = p.totalDownBet
-					InsertStatementDB(sd)
+						// 插入游戏统计数据
+						sd := &StatementData{}
+						sd.Id = p.Id
+						sd.GameId = conf.Server.GameID
+						sd.GameName = "德州扑克"
+						sd.StartTime = r.StartTime
+						sd.EndTime = r.EndTime
+						sd.DownBetTime = nowTime
+						sd.PackageId = p.PackageId
+						sd.WinStatementTotal = p.WinResultMoney
+						sd.LoseStatementTotal = p.LoseResultMoney
+						sd.BetMoney = p.totalDownBet
+						InsertStatementDB(sd)
+					}
 				}
 				// 跑马灯
 				if p.resultMoney > PaoMaDeng {
@@ -981,6 +983,13 @@ func (r *Room) GameCheckout() {
 	countWin := sur.RandomCountAfterWin
 	countLose := sur.RandomCountAfterLose
 	surplusPool := sur.SurplusPool
+
+	if r.IsSpecial {
+		percentageWin = 94
+		percentageLose = 0
+		countWin = 4
+		countLose = 0
+	}
 
 	settle := r.GetCardSettle()
 	if settle > 0 { // 玩家赢钱

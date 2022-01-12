@@ -14,8 +14,6 @@ func (r *Room) PlayerJoinRoom(p *Player) {
 		p.FindPlayerInfo()
 	}
 
-	//log.Debug("Player Join Game Room ~")
-
 	hall.UserRoom[p.Id] = r.roomId
 
 	p.PreRoomId = r.roomId
