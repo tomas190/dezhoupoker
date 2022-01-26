@@ -345,7 +345,7 @@ func (hall *GameHall) PlayerCreateRoom(cfgId string, p *Player) {
 	r := &Room{}
 	r.Init(cfgId)
 	r.PackageId = p.PackageId
-	if r.PackageId == 8 || r.PackageId == 11 {
+	if r.PackageId == 8 || r.PackageId == 11 || r.PackageId == 12 {
 		r.IsSpecial = true
 	}
 	hall.roomList = append(hall.roomList, r)
@@ -392,7 +392,7 @@ func (hall *GameHall) CreatPiPeiRoom(cfgId string, p *Player) *Room {
 	r := &Room{}
 	r.Init(cfgId)
 	r.PackageId = p.PackageId
-	if r.PackageId == 8 || r.PackageId == 11 {
+	if r.PackageId == 8 || r.PackageId == 11 || r.PackageId == 12 {
 		r.IsSpecial = true
 	}
 	hall.roomList = append(hall.roomList, r)
