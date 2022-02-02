@@ -316,7 +316,7 @@ func handleAddChips(args []interface{}) {
 	a := args[1].(gate.Agent)
 
 	p, ok := a.UserData().(*Player)
-	log.Debug("handleAction 玩家添加筹码~ :%v", p.Id)
+	log.Debug("handleAction 玩家添加筹码~ :%v,%v", p.Id, m.AddChips)
 
 	if ok {
 		p.chips += m.AddChips

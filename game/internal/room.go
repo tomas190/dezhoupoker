@@ -777,7 +777,7 @@ func (r *Room) ResultMoney() {
 					pac := packageTax[p.PackageId]
 					log.Debug("package :%v", p.PackageId)
 					log.Debug("tax:%v", packageTax[p.PackageId])
-					taxR := float64(pac) / 100
+					taxR := pac / 100
 					TaxRate = taxR
 					taxMoney = p.resultMoney * taxR
 					log.Debug("结算金额为:%v", p.resultMoney)
