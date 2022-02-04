@@ -840,7 +840,9 @@ func (r *Room) ResultMoney() {
 						sd.EndTime = r.EndTime
 						sd.DownBetTime = nowTime
 						sd.PackageId = p.PackageId
-						sd.WinStatementTotal = p.WinResultMoney
+						if p.IsWinner {
+							sd.WinStatementTotal = p.WinResultMoney
+						}
 						sd.LoseStatementTotal = p.LoseResultMoney
 						sd.BetMoney = p.LoseResultMoney
 						InsertStatementDB(sd)
