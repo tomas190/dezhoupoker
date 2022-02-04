@@ -842,7 +842,11 @@ func (r *Room) ResultMoney() {
 						sd.PackageId = p.PackageId
 						sd.WinStatementTotal = p.WinResultMoney
 						sd.LoseStatementTotal = p.LoseResultMoney
-						sd.BetMoney = p.totalDownBet
+						if p.WinResultMoney > 0 {
+							sd.BetMoney = 0
+						} else {
+							sd.BetMoney = p.LoseResultMoney
+						}
 						InsertStatementDB(sd)
 					}
 				}
