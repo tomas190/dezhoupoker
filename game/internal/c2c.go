@@ -727,7 +727,7 @@ func (c4c *Conn4Center) UserSyncLoseScore(p *Player, timeUnix int64, roundId, re
 	userLose.Info.ID = id
 	userLose.Info.LockMoney = 0
 	userLose.Info.Money = p.LoseResultMoney
-	userLose.Info.BetMoney = p.totalDownBet
+	userLose.Info.BetMoney = p.LoseResultMoney
 	userLose.Info.Order = bson.NewObjectId().Hex()
 	userLose.Info.PayReason = reason
 	userLose.Info.PreMoney = 0
